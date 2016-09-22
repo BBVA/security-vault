@@ -2,8 +2,8 @@ package main
 
 import (
 	
-	"fmt"
-	"log"
+	//"fmt"
+	//"log"
 	"os"
 
 	"bazil.org/fuse"
@@ -14,7 +14,8 @@ import (
 )
 
 
-type FS struct{}
+type FS struct {
+}
 
 func (FS) Root() (fs.Node, error) {
 	return Dir{}, nil
@@ -29,14 +30,14 @@ func (Dir) Attr(ctx context.Context, a *fuse.Attr) error {
 }
 
 func (Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
-	if name == //nombre de fichero {
+	if name == "credential" {
 		return File{}, nil
 	}
 	return nil, fuse.ENOENT
 }
 
 var dirDirs = []fuse.Dirent{
-	{Inode: 2, Name: /*nombre de fichero*/, Type: fuse.DT_File},
+	{Inode: 2, Name: "credential", Type: fuse.DT_File},
 }
 
 func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
@@ -46,7 +47,7 @@ func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 // File implements both Node and Handle for the hello file.
 type File struct{}
 
-
+const greeting = "hello cloudframe\n"
 
 func (File) Attr(ctx context.Context, a *fuse.Attr) error {
 	a.Inode = 2
@@ -56,5 +57,5 @@ func (File) Attr(ctx context.Context, a *fuse.Attr) error {
 }
 
 func (File) ReadAll(ctx context.Context) ([]byte, error) {
-	return /*contenido del fichero*/, nil
+	return []byte(greeting), nil
 }

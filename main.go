@@ -19,13 +19,12 @@ var (
 /* hay que implementar argumentos para recibir:
 *
 *  -path de la configuración ( aquí pondremos todo lo que ahora está como constantes )
-*  -tipo de autenticación contra vault
 *
  */
 
 func main() {
 
-	d := NewVaultTokenDriver(DefaultPath, ServerUrl, VaultToken)
+	d := NewVaultDriver(DefaultPath, ServerUrl, VaultToken)
 	h := volume.NewHandler(d)
 	fmt.Printf("Listening on %s\n", SocketAddress)
 	fmt.Println(h.ServeUnix("root", SocketAddress))

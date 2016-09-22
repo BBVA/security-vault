@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bazil.org/fuse"
-	"bazil.org/fuse/fs"
-	"github.com/docker/go-plugins-helpers/volume"
-	"log"
-	"os"
 	"fmt"
+	"github.com/docker/go-plugins-helpers/volume"
+	"os"
 )
 
 type VaultDriver struct {
@@ -60,33 +57,16 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 	}
 
 	fmt.Println("mount volume", mountpoint)
-	fuseConnection, err := fuse.Mount(
-		mountpoint,
-		fuse.FSName(r.ID),
-		fuse.Subtype("hellofs"),
-		fuse.LocalVolume(),
-		fuse.VolumeName("Hello world!"),
-	)
 
+	fs, err := NewFS(mountpoint)
 	if err != nil {
-		log.Fatal(err)
+		fs.errChan <- err
 	}
-	//defer fuseConnection.Close()
 
-	fmt.Println("serve")
-	go func() {
-		err = fs.Serve(fuseConnection, FS{})
-		if err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	fmt.Println("expect response from channel Ready")
-	// check if the mount process has an error to report
-	<-fuseConnection.Ready
-	if err := fuseConnection.MountError; err != nil {
-		log.Fatal(err)
+	if err := fs.Mount(r.Name); err != nil {
+		fs.errChan <- err
 	}
+
 	fmt.Printf("response: %v\n", mountpoint)
 	return volume.Response{Mountpoint: mountpoint}
 

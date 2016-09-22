@@ -1,20 +1,72 @@
 package main
 
 import (
-	
-	//"fmt"
-	//"log"
-	"os"
-
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
 	_ "bazil.org/fuse/fs/fstestutil"
-    "golang.org/x/net/context"
-
+	"golang.org/x/net/context"
+	"log"
+	"os"
 )
 
-
 type FS struct {
+	mountpoint string
+	volumeName string
+	conn       *fuse.Conn
+	errChan    chan (error)
+	server     *fs.Server
+	//store      store.SecretStore
+	//files      map[string]*File
+	//tick       *time.Ticker
+}
+
+func NewFS(mountpoint string) (*FS, error) {
+	c := make(chan error)
+	go func() {
+		err := <-c
+		log.Fatalf("fs: %s", err.Error())
+	}()
+
+	return &FS{
+		mountpoint: mountpoint,
+		errChan:    c,
+	}, nil
+}
+
+func (f *FS) Mount(volumeName string) error {
+	log.Printf("setting up fuse: volume=%s", volumeName)
+	c, err := fuse.Mount(
+		f.mountpoint,
+		fuse.FSName("vault"),
+		fuse.Subtype("vaultfs"),
+		fuse.LocalVolume(),
+		fuse.VolumeName(volumeName),
+	)
+	if err != nil {
+		return err
+	}
+
+	srv := fs.New(c, nil)
+
+	f.server = srv
+	f.volumeName = volumeName
+	f.conn = c
+
+	go func() {
+		err = f.server.Serve(f)
+		if err != nil {
+			f.errChan <- err
+		}
+	}()
+
+	// check if the mount process has an error to report
+	log.Println("waiting for mount")
+	<-c.Ready
+	if err := c.MountError; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (FS) Root() (fs.Node, error) {

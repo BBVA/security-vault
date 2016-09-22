@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bazil.org/fuse"
 	"fmt"
 	"github.com/docker/go-plugins-helpers/volume"
 	"os"
@@ -73,6 +74,15 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 }
 
 func (d VaultDriver) Unmount(r volume.UnmountRequest) volume.Response {
+
+	mountpoint := d.VolumePath + "/" + r.ID + "/" + r.Name
+
+	err := fuse.Unmount(mountpoint)
+	if err != nil {
+		return volume.Response{Err: err.Error()}
+	}
+
+	fmt.Printf("Unmounted: %s\n", mountpoint)
 	return volume.Response{}
 }
 

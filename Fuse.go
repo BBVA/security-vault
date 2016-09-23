@@ -41,6 +41,8 @@ func (f *FS) Mount(volumeName string) error {
 		fuse.Subtype("vaultfs"),
 		fuse.LocalVolume(),
 		fuse.VolumeName(volumeName),
+		fuse.ReadOnly(),
+		//fuse.NoExec(),
 	)
 	if err != nil {
 		return err
@@ -68,6 +70,10 @@ func (f *FS) Mount(volumeName string) error {
 
 	return nil
 
+}
+
+func (f *FS) Unmount() error {
+	return fuse.Unmount(f.mountpoint)
 }
 
 func (FS) Root() (fs.Node, error) {

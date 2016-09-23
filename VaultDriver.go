@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bazil.org/fuse"
 	"fmt"
 	"github.com/docker/go-plugins-helpers/volume"
 	"os"
@@ -11,6 +10,7 @@ type VaultDriver struct {
 	VolumePath string
 	ServerUrl  string
 	VaultToken string
+	fs         map[string]*FS
 }
 
 func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string) VaultDriver {
@@ -18,6 +18,7 @@ func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string) Vaul
 		VolumePath: VolumePath,
 		ServerUrl:  ServerUrl,
 		VaultToken: VaultToken,
+		fs: map[string]*FS{},
 	}
 }
 
@@ -68,22 +69,26 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 		fs.errChan <- err
 	}
 
+	d.fs[r.ID] = fs
+
 	fmt.Printf("response: %v\n", mountpoint)
 	return volume.Response{Mountpoint: mountpoint}
 
 }
 
 func (d VaultDriver) Unmount(r volume.UnmountRequest) volume.Response {
+	if fs, ok := d.fs[r.ID]; ok {
+		err := fs.Unmount()
+		if err != nil {
+			return volume.Response{Err: err.Error()}
+		}
 
-	mountpoint := d.VolumePath + "/" + r.ID + "/" + r.Name
-
-	err := fuse.Unmount(mountpoint)
-	if err != nil {
-		return volume.Response{Err: err.Error()}
+		fmt.Printf("Unmounted: %s\n", fs.mountpoint)
+		return volume.Response{}
+	} else {
+		return volume.Response{Err: "Volume not found"}
 	}
 
-	fmt.Printf("Unmounted: %s\n", mountpoint)
-	return volume.Response{}
 }
 
 func (d VaultDriver) Capabilities(r volume.Request) volume.Response {

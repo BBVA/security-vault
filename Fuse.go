@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bazil.org/fuse"
+	"github.com/RobSkye/fuse"
 	"bazil.org/fuse/fs"
 	_ "bazil.org/fuse/fs/fstestutil"
 	"golang.org/x/net/context"
@@ -42,7 +42,7 @@ func (f *FS) Mount(volumeName string) error {
 		fuse.LocalVolume(),
 		fuse.VolumeName(volumeName),
 		fuse.ReadOnly(),
-		//fuse.NoExec(),
+		fuse.NoExec(),
 	)
 	if err != nil {
 		return err

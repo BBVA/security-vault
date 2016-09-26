@@ -42,7 +42,7 @@ func (f *FS) Mount(volumeName string) error {
 		fuse.LocalVolume(),
 		fuse.VolumeName(volumeName),
 		fuse.ReadOnly(),
-		//fuse.NoExec(),
+		fuse.NoExec(),
 	)
 	if err != nil {
 		return err
@@ -69,13 +69,10 @@ func (f *FS) Mount(volumeName string) error {
 	}
 
 	return nil
-
 }
 
 func (f *FS) Unmount() error {
-	if err := f.conn.Close(); err != nil {
-		return err
-	}
+	defer f.conn.Close()
 
 	return fuse.Unmount(f.mountpoint)
 }

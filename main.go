@@ -24,7 +24,8 @@ var (
 
 func main() {
 
-	d := NewVaultDriver(DefaultPath, ServerUrl, VaultToken)
+	dirUtils := DefaultDirUtils{}
+	d := NewVaultDriver(DefaultPath, ServerUrl, VaultToken, dirUtils)
 	h := volume.NewHandler(d)
 	fmt.Printf("Listening on %s\n", SocketAddress)
 	fmt.Println(h.ServeUnix("root", SocketAddress))

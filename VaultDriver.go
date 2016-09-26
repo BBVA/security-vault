@@ -7,19 +7,36 @@ import (
 	"path"
 )
 
+type DirUtils interface {
+	Lstat(mountPoint string) (os.FileInfo, error)
+	MkdirAll(path string, perm os.FileMode) error
+}
+
+type DefaultDirUtils struct {}
+
+func (d DefaultDirUtils) MkdirAll(path string, perm os.FileMode) (error) {
+	return os.MkdirAll(path,perm)
+}
+
+func (d DefaultDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
+	return os.Lstat(mountPoint)
+}
+
 type VaultDriver struct {
 	VolumePath string
 	ServerUrl  string
 	VaultToken string
 	fs         map[string]*FS
+	dirUtils   DirUtils
 }
 
-func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string) VaultDriver {
+func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils DirUtils) VaultDriver {
 	return VaultDriver{
 		VolumePath: VolumePath,
 		ServerUrl:  ServerUrl,
 		VaultToken: VaultToken,
 		fs: map[string]*FS{},
+		dirUtils: &dirUtils,
 	}
 }
 
@@ -46,22 +63,22 @@ func (d VaultDriver) Path(r volume.Request) volume.Response {
 
 func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 
-	mountpoint := path.Join(d.VolumePath, r.ID,  r.Name)
+	mountPoint := path.Join(d.VolumePath, r.ID, r.Name)
 
-	fmt.Println("check mountpoint", mountpoint)
-	_, err := os.Lstat(mountpoint)
+	fmt.Println("check mountpoint", mountPoint)
+	_, err := d.dirUtils.Lstat(mountPoint)
 
 	if os.IsNotExist(err) {
-		if err := os.MkdirAll(mountpoint, 0755); err != nil {
+		if err := d.dirUtils.MkdirAll(mountPoint, 0755); err != nil {
 			return volume.Response{Err: err.Error()}
 		}
 	} else if err != nil {
 		return volume.Response{Err: err.Error()}
 	}
 
-	fmt.Println("mount volume", mountpoint)
+	fmt.Println("mount volume", mountPoint)
 
-	fs, err := NewFS(mountpoint)
+	fs, err := NewFS(mountPoint)
 	if err != nil {
 		fs.errChan <- err
 	}
@@ -72,8 +89,8 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 
 	d.fs[r.ID] = fs
 
-	fmt.Printf("response: %v\n", mountpoint)
-	return volume.Response{Mountpoint: mountpoint}
+	fmt.Printf("response: %v\n", mountPoint)
+	return volume.Response{Mountpoint: mountPoint}
 
 }
 

@@ -1,13 +1,15 @@
 package main
 
 import (
-	"github.com/RobSkye/fuse"
 	"bazil.org/fuse/fs"
+	"bazil.org/fuse"
 	_ "bazil.org/fuse/fs/fstestutil"
 	"golang.org/x/net/context"
 	"log"
 	"os"
 )
+
+
 
 type FS struct {
 	mountpoint string
@@ -42,7 +44,7 @@ func (f *FS) Mount(volumeName string) error {
 		fuse.LocalVolume(),
 		fuse.VolumeName(volumeName),
 		fuse.ReadOnly(),
-		fuse.NoExec(),
+		//fuse.NoExec(),
 	)
 	if err != nil {
 		return err

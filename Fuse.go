@@ -69,10 +69,11 @@ func (f *FS) Mount(volumeName string) error {
 	}
 
 	return nil
-
 }
 
 func (f *FS) Unmount() error {
+	defer f.conn.Close()
+
 	return fuse.Unmount(f.mountpoint)
 }
 

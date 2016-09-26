@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/docker/go-plugins-helpers/volume"
 	"os"
+	"path"
 )
 
 type VaultDriver struct {
@@ -45,7 +46,7 @@ func (d VaultDriver) Path(r volume.Request) volume.Response {
 
 func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 
-	mountpoint := d.VolumePath + "/" + r.ID + "/" + r.Name
+	mountpoint := path.Join(d.VolumePath, r.ID,  r.Name)
 
 	fmt.Println("check mountpoint", mountpoint)
 	_, err := os.Lstat(mountpoint)

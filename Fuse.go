@@ -1,15 +1,13 @@
 package main
 
 import (
-	"bazil.org/fuse/fs"
 	"bazil.org/fuse"
+	"bazil.org/fuse/fs"
 	_ "bazil.org/fuse/fs/fstestutil"
 	"golang.org/x/net/context"
 	"log"
 	"os"
 )
-
-
 
 type FS struct {
 	mountpoint string

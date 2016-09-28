@@ -7,16 +7,15 @@ import (
 	"path"
 )
 
-
 type DirUtils interface {
 	Lstat(mountPoint string) (os.FileInfo, error)
 	MkdirAll(path string, perm os.FileMode) error
 }
 
-type DefaultDirUtils struct {}
+type DefaultDirUtils struct{}
 
-func (d DefaultDirUtils) MkdirAll(path string, perm os.FileMode) (error) {
-	return os.MkdirAll(path,perm)
+func (d DefaultDirUtils) MkdirAll(path string, perm os.FileMode) error {
+	return os.MkdirAll(path, perm)
 }
 
 func (d DefaultDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
@@ -24,14 +23,13 @@ func (d DefaultDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
 }
 
 type FuseUtils interface {
-	Mount(f *FS,VolumeName string) error
+	Mount(f *FS, VolumeName string) error
 }
 
 type DefaultFuseUtils struct {
-
 }
 
-func (d DefaultFuseUtils) Mount(f *FS,VolumeName string) error {
+func (d DefaultFuseUtils) Mount(f *FS, VolumeName string) error {
 	return f.Mount(VolumeName)
 }
 
@@ -44,14 +42,14 @@ type VaultDriver struct {
 	fuseUtils  FuseUtils
 }
 
-func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils DirUtils,fuseUtils FuseUtils) VaultDriver {
+func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils DirUtils, fuseUtils FuseUtils) VaultDriver {
 	return VaultDriver{
 		VolumePath: VolumePath,
 		ServerUrl:  ServerUrl,
 		VaultToken: VaultToken,
-		fs: map[string]*FS{},
-		dirUtils: dirUtils,
-		fuseUtils: fuseUtils,
+		fs:         map[string]*FS{},
+		dirUtils:   dirUtils,
+		fuseUtils:  fuseUtils,
 	}
 }
 

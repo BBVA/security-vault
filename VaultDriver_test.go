@@ -1,11 +1,11 @@
 package main
 
 import (
-	"testing"
-	"os"
 	"github.com/docker/go-plugins-helpers/volume"
+	"os"
 	"path"
 	"reflect"
+	"testing"
 )
 
 type FakeDirUtils struct {
@@ -23,7 +23,7 @@ func (f FakeDirUtils) MkdirAll(path string, perm os.FileMode) error {
 }
 
 type FakeFuseUtils struct {
-	MountError	error
+	MountError error
 }
 
 func (f FakeFuseUtils) Mount(fs *FS, volumeName string) error {
@@ -31,41 +31,29 @@ func (f FakeFuseUtils) Mount(fs *FS, volumeName string) error {
 }
 
 func TestVaultDriver_Mount(t *testing.T) {
-
-	r:= volume.MountRequest{
+	r := volume.MountRequest{
 		Name: "Test_volume",
-		ID: "abcdef1234567890",
+		ID:   "abcdef1234567890",
 	}
 
-	fd:= FakeDirUtils{
-		lstatError: nil,
+	fd := FakeDirUtils{
+		lstatError:    nil,
 		lstatFileInfo: nil,
-		mkdirError: nil,
-		}
+		mkdirError:    nil,
+	}
 
-	ff:= FakeFuseUtils{
+	ff := FakeFuseUtils{
 		MountError: nil,
 	}
 
-
-
-
-	d:= NewVaultDriver("testpath","testserver","testtoken",fd,ff)
+	d := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
 	expectedMountPoint := path.Join(d.VolumePath, r.ID, r.Name)
 
-
 	expectedResponse := volume.Response{Mountpoint: expectedMountPoint}
-
-
 
 	response := d.Mount(r)
 
 	if !reflect.DeepEqual(response, expectedResponse) {
-		t.Errorf("Expected %v, received %v\n",expectedResponse,response)
+		t.Errorf("Expected %v, received %v\n", expectedResponse, response)
 	}
-
-
 }
-
-
-

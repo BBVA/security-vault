@@ -1,16 +1,17 @@
 package credentials
 
 import (
-	"errors"
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
 	. "github.com/gucumber/gucumber"
+	"reflect"
 	"strings"
-	"bytes"
 )
 
 type Container struct {
@@ -23,6 +24,12 @@ func init() {
 
 	containers := make(map[string]*Container)
 	cli := createDockerClient()
+
+	BeforeAll(func() {
+	})
+
+	AfterAll(func() {
+	})
 
 	After("@destroyContainers", func() {
 		destroyContainer(cli, containers)
@@ -53,21 +60,14 @@ func init() {
 	Then(`^the container "(.+?)" credentials will be the following$`, func(containerName string, credentialInfo [][]string) {
 		containerId := containers[containerName].id
 
-		reader, err := cli.ContainerLogs(context.Background(), containerId, types.ContainerLogsOptions{
-			ShowStdout: true,
-			ShowStderr: false,
-		})
+		expectedContent := strings.TrimSpace(credentialInfo[1][1])
+		content := strings.TrimSpace(getContainerLogs(cli, containerId))
 
-		if err != nil {
-			panic(err)
-		}
+		fmt.Println(expectedContent, len(expectedContent))
+		fmt.Println(content, len(content))
 
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(reader)
-		content := buf.String()
-
-		if (strings.Compare(credentialInfo[1][1], content) == 0) {
-			panic(errors.New("Expected: " + content + " Actual: " + credentialInfo[1][1]))
+		if !reflect.DeepEqual(expectedContent, content) {
+			panic(errors.New("Expected: " + expectedContent + " Actual: " + content))
 		}
 	})
 }
@@ -87,7 +87,7 @@ func createContainerConfiguration(volume string) *container.Config {
 	vols[volume] = struct{}{}
 
 	return &container.Config{
-		Cmd:     strings.Split("cat " + volume + "/credential", " "),
+		Cmd:     strings.Split("cat "+volume+"/credential", " "),
 		Image:   "alpine",
 		Volumes: vols,
 	}
@@ -130,9 +130,25 @@ func runContainer(cli *client.Client, containerName string, hostConfiguration *c
 	return response.ID
 }
 
+func getContainerLogs(cli *client.Client, containerId string) string {
+	reader, err := cli.ContainerLogs(context.Background(), containerId, types.ContainerLogsOptions{
+		ShowStdout: true,
+		ShowStderr: false,
+		Timestamps: false,
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	buf := new(bytes.Buffer)
+	l, err := buf.ReadFrom(reader)
+	fmt.Printf("read %d bytes\n", l)
+	return buf.String()[8:]
+}
+
 func destroyContainer(cli *client.Client, containers map[string]*Container) {
 	for _, c := range containers {
-		fmt.Println(c.id)
 		if err := cli.ContainerRemove(context.Background(), c.id, types.ContainerRemoveOptions{
 			RemoveLinks:   false,
 			RemoveVolumes: true,
@@ -140,6 +156,5 @@ func destroyContainer(cli *client.Client, containers map[string]*Container) {
 		}); err != nil {
 			panic(err)
 		}
-
 	}
 }

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"strings"
 	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/mount"
 )
 
 type Container struct {
@@ -61,7 +62,23 @@ func init() {
 		hostConfig := &container.HostConfig{
 			AutoRemove: true,
 			VolumeDriver: c.options[0],
-			// TODO Mounts:
+			Binds: []string{
+				strings.Join(c.options[1:], ":"),
+			},
+			Mounts: []mount.Mount{
+				{
+					Type: mount.TypeVolume,
+					Target: c.options[2],
+					BindOptions: &mount.BindOptions{
+						Propagation: mount.PropagationRPrivate,
+					},
+					VolumeOptions: &mount.VolumeOptions{
+						DriverConfig: &mount.Driver{
+							Name: c.options[1],
+						},
+					},
+				},
+			},
 		}
 
 		fmt.Println(containerConfig)

@@ -7,47 +7,20 @@ import (
 	"path"
 )
 
-type DirUtils interface {
-	Lstat(mountPoint string) (os.FileInfo, error)
-	MkdirAll(path string, perm os.FileMode) error
-}
-
-type DefaultDirUtils struct{}
-
-func (d DefaultDirUtils) MkdirAll(path string, perm os.FileMode) error {
-	return os.MkdirAll(path, perm)
-}
-
-func (d DefaultDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
-	return os.Lstat(mountPoint)
-}
-
-type FuseUtils interface {
-	Mount(f *FS, VolumeName string) error
-}
-
-type DefaultFuseUtils struct {
-}
-
-func (d DefaultFuseUtils) Mount(f *FS, VolumeName string) error {
-	return f.Mount(VolumeName)
-}
-
 type VaultDriver struct {
 	VolumePath string
 	ServerUrl  string
 	VaultToken string
-	fs         map[string]*FS
 	dirUtils   DirUtils
 	fuseUtils  FuseUtils
 }
 
 func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils DirUtils, fuseUtils FuseUtils) VaultDriver {
+	fmt.Println(fuseUtils)
 	return VaultDriver{
 		VolumePath: VolumePath,
 		ServerUrl:  ServerUrl,
 		VaultToken: VaultToken,
-		fs:         map[string]*FS{},
 		dirUtils:   dirUtils,
 		fuseUtils:  fuseUtils,
 	}
@@ -91,16 +64,9 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 
 	fmt.Println("mount volume", mountPoint)
 
-	fs, err := NewFS(mountPoint)
-	if err != nil {
-		fs.errChan <- err
+	if err := d.fuseUtils.Mount(r.ID, mountPoint, r.Name); err != nil {
+		//fs.errChan <- err
 	}
-
-	if err := d.fuseUtils.Mount(fs, r.Name); err != nil {
-		fs.errChan <- err
-	}
-
-	d.fs[r.ID] = fs
 
 	fmt.Printf("response: %v\n", mountPoint)
 	return volume.Response{Mountpoint: mountPoint}
@@ -108,17 +74,14 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 }
 
 func (d VaultDriver) Unmount(r volume.UnmountRequest) volume.Response {
-	if fs, ok := d.fs[r.ID]; ok {
-		err := fs.Unmount()
-		if err != nil {
-			return volume.Response{Err: err.Error()}
-		}
 
-		fmt.Printf("Unmounted: %s\n", fs.mountpoint)
-		return volume.Response{}
-	} else {
-		return volume.Response{Err: "Volume not found"}
+	err := d.fuseUtils.Unmount(r.ID)
+	if err != nil {
+		return volume.Response{Err: err.Error()}
 	}
+
+	fmt.Printf("Unmounted: %s\n", r.ID)
+	return volume.Response{}
 
 }
 

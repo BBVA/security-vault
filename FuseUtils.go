@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
 	Unmount(volumeId string) error

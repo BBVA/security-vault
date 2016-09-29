@@ -3,6 +3,7 @@ package main
 type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
 	Unmount(volumeId string) error
+	Path(volumeName string) string
 }
 
 type DefaultFuseUtils struct {
@@ -21,11 +22,19 @@ func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
 		fs.errChan <- err
 	}
 
-	d.fs[volumeId] = fs
+	d.fs[volumeName] = fs
 
 	return fs.Mount(volumeName)
 }
 
-func (d DefaultFuseUtils) Unmount(volumeId string) error {
-	return d.fs[volumeId].Unmount()
+func (d DefaultFuseUtils) Unmount(volumeName string) error {
+	return d.fs[volumeName].Unmount()
+}
+
+func (d DefaultFuseUtils) Path(volumeName string) string {
+	fs, ok := d.fs[volumeName]
+	if ok {
+		return fs.mountpoint
+	}
+	return nil
 }

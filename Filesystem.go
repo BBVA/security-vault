@@ -11,7 +11,7 @@ import (
 
 type FS struct {
 	mountpoint string
-	volumeName string
+	volumeId string
 	conn       *fuse.Conn
 	errChan    chan (error)
 	server     *fs.Server
@@ -51,7 +51,6 @@ func (f *FS) Mount(volumeName string) error {
 	srv := fs.New(c, nil)
 
 	f.server = srv
-	f.volumeName = volumeName
 	f.conn = c
 
 	go func() {

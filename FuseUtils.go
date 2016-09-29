@@ -21,7 +21,7 @@ func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
 	if err != nil {
 		fs.errChan <- err
 	}
-
+	fs.volumeId = volumeId
 	d.fs[volumeName] = fs
 
 	return fs.Mount(volumeName)
@@ -36,5 +36,5 @@ func (d DefaultFuseUtils) Path(volumeName string) string {
 	if ok {
 		return fs.mountpoint
 	}
-	return nil
+	return ""
 }

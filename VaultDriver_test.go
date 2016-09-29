@@ -6,8 +6,8 @@ import (
 	"path"
 	"reflect"
 	"testing"
-	"fmt"
 )
+
 
 type FakeDirUtils struct {
 	lstatError    error
@@ -26,14 +26,21 @@ func (f FakeDirUtils) MkdirAll(path string, perm os.FileMode) error {
 type FakeFuseUtils struct {
 	MountError   error
 	UnmountError error
+	fs map[string]*FS
 }
 
 func (f FakeFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
+	f.fs[volumeName].volumeId = volumeId
+	f.fs[volumeName].mountpoint = mountPoint
 	return f.MountError
 }
 
-func (f FakeFuseUtils) Unmount(volumeId string) error {
+func (f FakeFuseUtils) Unmount (volumeName string) error {
 	return f.UnmountError
+}
+
+func (f FakeFuseUtils) Path (volumeName string) string {
+	return f.fs[volumeName].mountpoint
 }
 
 func TestVaultDriver_Mount(t *testing.T) {
@@ -48,9 +55,15 @@ func TestVaultDriver_Mount(t *testing.T) {
 		mkdirError:    nil,
 	}
 
+	fs:= make(map[string]*FS)
+
+	fs[r.Name] = &FS{
+	}
+
 	ff := FakeFuseUtils{
 		MountError:   nil,
 		UnmountError: nil,
+		fs:	fs,
 	}
 
 	d := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
@@ -82,10 +95,18 @@ func TestVaultDriver_Unmount(t *testing.T) {
 		mkdirError:    nil,
 	}
 
+	fs:= make(map[string]*FS)
+
+	fs[mountRequest.Name] = &FS{
+	}
+
+
 	ff := FakeFuseUtils{
 		MountError:   nil,
 		UnmountError: nil,
+		fs: 	fs,
 	}
+
 
 	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
 
@@ -98,3 +119,50 @@ func TestVaultDriver_Unmount(t *testing.T) {
 	}
 
 }
+
+func TestVaultDriver_Path(t *testing.T) {
+
+	mountRequest := volume.MountRequest{
+		Name: "Test_volume",
+		ID:   "abcdef1234567890",
+	}
+
+	request := volume.Request{
+		Name: "Test_volume",
+	}
+
+
+	fd := FakeDirUtils{
+		lstatError:    nil,
+		lstatFileInfo: nil,
+		mkdirError:    nil,
+	}
+
+        fs:= make(map[string]*FS)
+
+	fs[mountRequest.Name] = &FS{
+	}
+
+	ff := FakeFuseUtils{
+		MountError:   nil,
+		UnmountError: nil,
+		fs:	fs,
+	}
+
+
+
+	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
+
+	mountresponse := driver.Mount(mountRequest)
+	response := driver.Path(request)
+
+
+	if !reflect.DeepEqual(response.Mountpoint,mountresponse.Mountpoint) {
+		t.Errorf("Expected %v, received %v\n", mountresponse.Mountpoint,response.Mountpoint)
+	}
+}
+
+
+
+
+

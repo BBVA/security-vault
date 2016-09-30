@@ -2,20 +2,24 @@ package main
 
 import (
 	"fmt"
-	"github.com/docker/go-plugins-helpers/volume"
 	"os"
 	"path"
+
+	"cloudframe-security-vault/utils/filesystem"
+	"cloudframe-security-vault/utils/fuse"
+
+	"github.com/docker/go-plugins-helpers/volume"
 )
 
 type VaultDriver struct {
 	VolumePath string
 	ServerUrl  string
 	VaultToken string
-	dirUtils   DirUtils
-	fuseUtils  FuseUtils
+	dirUtils   filesystem.DirUtils
+	fuseUtils  fuseutils.FuseUtils
 }
 
-func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils DirUtils, fuseUtils FuseUtils) VaultDriver {
+func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils filesystem.DirUtils, fuseUtils fuseutils.FuseUtils) VaultDriver {
 	fmt.Println(fuseUtils)
 	return VaultDriver{
 		VolumePath: VolumePath,
@@ -46,7 +50,7 @@ func (d VaultDriver) Remove(r volume.Request) volume.Response {
 func (d VaultDriver) Path(r volume.Request) volume.Response {
 	mountPoint := d.fuseUtils.Path(r.Name)
 	if mountPoint != "" {
-		return volume.Response{Mountpoint: mountPoint }
+		return volume.Response{Mountpoint: mountPoint}
 	}
 	return volume.Response{Err: "Volume not found"}
 }

@@ -5,13 +5,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+	"strings"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
 	. "github.com/gucumber/gucumber"
-	"reflect"
-	"strings"
 )
 
 type Container struct {

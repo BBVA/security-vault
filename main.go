@@ -1,9 +1,12 @@
 package main
 
 import (
+	"cloudframe-security-vault/utils/filesystem"
+	"cloudframe-security-vault/utils/fuse"
 	"fmt"
-	"github.com/docker/go-plugins-helpers/volume"
 	"path/filepath"
+
+	"github.com/docker/go-plugins-helpers/volume"
 )
 
 const (
@@ -24,8 +27,8 @@ var (
 
 func main() {
 
-	dirUtils := DefaultDirUtils{}
-	fuseUtils := NewFuseUtils()
+	dirUtils := filesystem.DefaultDirUtils{}
+	fuseUtils := fuseutils.NewFuseUtils()
 	d := NewVaultDriver(DefaultPath, ServerUrl, VaultToken, dirUtils, fuseUtils)
 	h := volume.NewHandler(d)
 	fmt.Printf("Listening on %s\n", SocketAddress)

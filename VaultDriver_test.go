@@ -1,13 +1,15 @@
 package main
 
 import (
-	"github.com/docker/go-plugins-helpers/volume"
 	"os"
 	"path"
 	"reflect"
 	"testing"
-)
 
+	"cloudframe-security-vault/utils/filesystem"
+
+	"github.com/docker/go-plugins-helpers/volume"
+)
 
 type FakeDirUtils struct {
 	lstatError    error
@@ -26,21 +28,21 @@ func (f FakeDirUtils) MkdirAll(path string, perm os.FileMode) error {
 type FakeFuseUtils struct {
 	MountError   error
 	UnmountError error
-	fs map[string]*FS
+	fs           map[string]*filesystem.FS
 }
 
 func (f FakeFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
-	f.fs[volumeName].volumeId = volumeId
-	f.fs[volumeName].mountpoint = mountPoint
+	f.fs[volumeName].VolumeId = volumeId
+	f.fs[volumeName].Mountpoint = mountPoint
 	return f.MountError
 }
 
-func (f FakeFuseUtils) Unmount (volumeName string) error {
+func (f FakeFuseUtils) Unmount(volumeName string) error {
 	return f.UnmountError
 }
 
-func (f FakeFuseUtils) Path (volumeName string) string {
-	return f.fs[volumeName].mountpoint
+func (f FakeFuseUtils) Path(volumeName string) string {
+	return f.fs[volumeName].Mountpoint
 }
 
 func TestVaultDriver_Mount(t *testing.T) {
@@ -55,15 +57,14 @@ func TestVaultDriver_Mount(t *testing.T) {
 		mkdirError:    nil,
 	}
 
-	fs:= make(map[string]*FS)
+	fs := make(map[string]*filesystem.FS)
 
-	fs[r.Name] = &FS{
-	}
+	fs[r.Name] = &filesystem.FS{}
 
 	ff := FakeFuseUtils{
 		MountError:   nil,
 		UnmountError: nil,
-		fs:	fs,
+		fs:           fs,
 	}
 
 	d := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
@@ -95,18 +96,15 @@ func TestVaultDriver_Unmount(t *testing.T) {
 		mkdirError:    nil,
 	}
 
-	fs:= make(map[string]*FS)
+	fs := make(map[string]*filesystem.FS)
 
-	fs[mountRequest.Name] = &FS{
-	}
-
+	fs[mountRequest.Name] = &filesystem.FS{}
 
 	ff := FakeFuseUtils{
 		MountError:   nil,
 		UnmountError: nil,
-		fs: 	fs,
+		fs:           fs,
 	}
-
 
 	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
 
@@ -131,38 +129,28 @@ func TestVaultDriver_Path(t *testing.T) {
 		Name: "Test_volume",
 	}
 
-
 	fd := FakeDirUtils{
 		lstatError:    nil,
 		lstatFileInfo: nil,
 		mkdirError:    nil,
 	}
 
-        fs:= make(map[string]*FS)
+	fs := make(map[string]*filesystem.FS)
 
-	fs[mountRequest.Name] = &FS{
-	}
+	fs[mountRequest.Name] = &filesystem.FS{}
 
 	ff := FakeFuseUtils{
 		MountError:   nil,
 		UnmountError: nil,
-		fs:	fs,
+		fs:           fs,
 	}
-
-
 
 	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
 
 	mountresponse := driver.Mount(mountRequest)
 	response := driver.Path(request)
 
-
-	if !reflect.DeepEqual(response.Mountpoint,mountresponse.Mountpoint) {
-		t.Errorf("Expected %v, received %v\n", mountresponse.Mountpoint,response.Mountpoint)
+	if !reflect.DeepEqual(response.Mountpoint, mountresponse.Mountpoint) {
+		t.Errorf("Expected %v, received %v\n", mountresponse.Mountpoint, response.Mountpoint)
 	}
 }
-
-
-
-
-

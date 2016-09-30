@@ -1,19 +1,20 @@
-package main
+package filesystem
 
 import (
+	"log"
+	"os"
+
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
 	_ "bazil.org/fuse/fs/fstestutil"
 	"golang.org/x/net/context"
-	"log"
-	"os"
 )
 
 type FS struct {
-	mountpoint string
-	volumeId string
+	Mountpoint string
+	VolumeId   string
 	conn       *fuse.Conn
-	errChan    chan (error)
+	ErrChan    chan (error)
 	server     *fs.Server
 	//store      store.SecretStore
 	//files      map[string]*File
@@ -28,15 +29,15 @@ func NewFS(mountpoint string) (*FS, error) {
 	}()
 
 	return &FS{
-		mountpoint: mountpoint,
-		errChan:    c,
+		Mountpoint: mountpoint,
+		ErrChan:    c,
 	}, nil
 }
 
 func (f *FS) Mount(volumeName string) error {
 	log.Printf("setting up fuse: volume=%s", volumeName)
 	c, err := fuse.Mount(
-		f.mountpoint,
+		f.Mountpoint,
 		fuse.FSName("vault"),
 		fuse.Subtype("vaultfs"),
 		fuse.LocalVolume(),
@@ -56,7 +57,7 @@ func (f *FS) Mount(volumeName string) error {
 	go func() {
 		err = f.server.Serve(f)
 		if err != nil {
-			f.errChan <- err
+			f.ErrChan <- err
 		}
 	}()
 
@@ -73,7 +74,7 @@ func (f *FS) Mount(volumeName string) error {
 func (f *FS) Unmount() error {
 	defer f.conn.Close()
 
-	return fuse.Unmount(f.mountpoint)
+	return fuse.Unmount(f.Mountpoint)
 }
 
 func (FS) Root() (fs.Node, error) {

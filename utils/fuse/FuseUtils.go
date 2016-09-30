@@ -1,4 +1,8 @@
-package main
+package fuseutils
+
+import (
+	. "cloudframe-security-vault/utils/filesystem"
+)
 
 type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
@@ -19,9 +23,9 @@ func NewFuseUtils() FuseUtils {
 func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
 	fs, err := NewFS(mountPoint)
 	if err != nil {
-		fs.errChan <- err
+		fs.ErrChan <- err
 	}
-	fs.volumeId = volumeId
+	fs.VolumeId = volumeId
 	d.fs[volumeName] = fs
 
 	return fs.Mount(volumeName)
@@ -34,7 +38,7 @@ func (d DefaultFuseUtils) Unmount(volumeName string) error {
 func (d DefaultFuseUtils) Path(volumeName string) string {
 	fs, ok := d.fs[volumeName]
 	if ok {
-		return fs.mountpoint
+		return fs.Mountpoint
 	}
 	return ""
 }

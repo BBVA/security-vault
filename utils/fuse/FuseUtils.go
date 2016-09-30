@@ -1,7 +1,7 @@
 package fuseutils
 
 import (
-	. "cloudframe-security-vault/utils/filesystem"
+	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type FuseUtils interface {

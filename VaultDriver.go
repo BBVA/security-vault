@@ -5,10 +5,9 @@ import (
 	"os"
 	"path"
 
-	"cloudframe-security-vault/utils/filesystem"
-	"cloudframe-security-vault/utils/fuse"
-
 	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type VaultDriver struct {

@@ -6,9 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"cloudframe-security-vault/utils/filesystem"
-
 	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type FakeDirUtils struct {

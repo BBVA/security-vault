@@ -1,12 +1,12 @@
 package main
 
 import (
-	"cloudframe-security-vault/utils/filesystem"
-	"cloudframe-security-vault/utils/fuse"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"fmt"
 	"path/filepath"
 
 	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 const (

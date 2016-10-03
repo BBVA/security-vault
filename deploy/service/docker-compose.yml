@@ -2,11 +2,10 @@
 
 vault-volumedriver:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/cloudframe-security-vault:0.1.0-dev
-  privileged: true
-#  cap_add:
-#    - SYS_ADMIN
-#  security_opt:
-#    - label:apparmor:unconfined
+  cap_add:
+    - SYS_ADMIN
+  security_opt:
+    - apparmor:unconfined
   devices:
     - "/dev/fuse:/dev/fuse"
   volumes:

@@ -2,4 +2,4 @@
 
 set -x
 
-go test && CGO_ENABLED=0 go build -v -a
+go test -v && CGO_ENABLED=0 go build -v -a

@@ -1,12 +1,13 @@
 package main
 
 import (
-	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"fmt"
 	"path/filepath"
 
-	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
+
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"github.com/docker/go-plugins-helpers/volume"
 )
 
 const (
@@ -16,7 +17,8 @@ const (
 )
 
 var (
-	DefaultPath = filepath.Join(volume.DefaultDockerRootDirectory, "_vault")
+	//DefaultPath = filepath.Join(volume.DefaultDockerRootDirectory, "_vault")
+	DefaultPath = filepath.Join("/mnt/volumes", "_vault")
 )
 
 /* hay que implementar argumentos para recibir:

@@ -72,7 +72,7 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 	fmt.Println("mount volume", mountPoint)
 
 	if err := d.fuseUtils.Mount(r.ID, mountPoint, r.Name); err != nil {
-		//fs.errChan <- err
+		fmt.Println(err.Error())
 	}
 
 	fmt.Printf("response: %v\n", mountPoint)

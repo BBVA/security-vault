@@ -1,0 +1,6 @@
+vault-volumedriver:
+  scale: 1
+
+vault-volumedriver-acceptance-tests:
+  scale: 1
+

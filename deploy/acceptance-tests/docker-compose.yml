@@ -14,3 +14,15 @@ cloudframe-security-vault:
   labels:
     service: vault-volumedriver
     io.rancher.scheduler.global: 'true'
+
+cloudframe-security-vault-at:
+  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/cloudframe-security-vault-at:VERSION
+  links:
+    - cloudframe-security-vault
+  depends_on:
+    - cloudframe-security-vault
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+  labels:
+      - "io.rancher.container.start_once=true"
+

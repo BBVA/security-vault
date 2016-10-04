@@ -1,0 +1,11 @@
+FROM golang:1.7-wheezy
+
+ENV PATH $GOPATH/bin:$PATH
+
+RUN go get github.com/gucumber/gucumber/cmd/gucumber
+
+ADD . $GOPATH/src/descinet.bbva.es/cloudframe-security-vault
+
+WORKDIR $GOPATH/src/descinet.bbva.es/cloudframe-security-vault
+
+ENTRYPOINT ["/bin/sh", "-c", "/go/bin/gucumber && echo SUCCESS"]

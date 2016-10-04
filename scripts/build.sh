@@ -12,7 +12,7 @@ BUILD_UID=${BUILD_UID:-`id -u`}
 BUILD_GID=${BUILD_GID:-`getent group docker | cut -d: -f3`}
 
 docker run  \
-       -u $BUILD_UID:$BUILD_GID \
+       -u ${BUILD_UID}:${BUILD_GID} \
        -e HOME=/tmp \
        -e GOPATH=/go \
        -v $(pwd)/..:/go/src/${SOURCE_PACKAGE}/${SERVICE_NAME}/ \

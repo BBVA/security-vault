@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
+	//"fmt"
 	"reflect"
 	"strings"
 
@@ -64,8 +64,8 @@ func init() {
 		expectedContent := strings.TrimSpace(credentialInfo[1][1])
 		content := strings.TrimSpace(getContainerLogs(cli, containerId))
 
-		fmt.Println(expectedContent, len(expectedContent))
-		fmt.Println(content, len(content))
+		//fmt.Println(expectedContent, len(expectedContent))
+		//fmt.Println(content, len(content))
 
 		if !reflect.DeepEqual(expectedContent, content) {
 			panic(errors.New("Expected: " + expectedContent + " Actual: " + content))
@@ -143,8 +143,9 @@ func getContainerLogs(cli *client.Client, containerId string) string {
 	}
 
 	buf := new(bytes.Buffer)
-	l, err := buf.ReadFrom(reader)
-	fmt.Printf("read %d bytes\n", l)
+	//l, err := buf.ReadFrom(reader)
+	buf.ReadFrom(reader)
+	//fmt.Printf("read %d bytes\n", l)
 	return buf.String()[8:]
 }
 

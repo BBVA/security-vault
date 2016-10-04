@@ -8,14 +8,13 @@ source ./common.sh
 
 case "$1" in
     push-tag)
-        #docker-sbt sbt push-tag
         cd ..
         git tag -f `cat version`
         git push --force origin --tags
       ;;
 
     publish-rancher-catalog)
-        # 1 - Clone Liquidadores catalog
+        # 1 - Clone catalog
         git clone ${RANCHER_CATALOG_URI} ../target/catalog && \
         mkdir -p "../target/catalog/templates/${SERVICE_NAME}/${GO_PIPELINE_COUNTER}"
 

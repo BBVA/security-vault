@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export SERVICE_NAME="security-vault"
+export CONTAINER_NAME="security-vault"
+export SERVICE_NAME="cloudframe-${CONTAINER_NAME}"
 export SOURCE_PACKAGE="descinet.bbva.es"
 export AT_DOCKER_NAME="security-vault-at"  # defined in ../deploy/acceptance-test/docker-compose.yml
 export VERSION="0.1.0"

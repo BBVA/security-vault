@@ -21,10 +21,10 @@ docker run  \
        ${GO_BUILDER} \
        ./scripts/compile.sh
 
-docker build --force-rm -f  ../Dockerfile -t ${REGISTRY_URL}/${SERVICE_NAME}:${VERSION} ..
+docker build --force-rm -f  ../Dockerfile -t ${REGISTRY_URL}/${CONTAINER_NAME}:${VERSION} ..
 docker build --force-rm -f ../Dockerfile_at -t ${REGISTRY_URL}/${AT_DOCKER_NAME}:${VERSION} ..
 
 if $aws ; then
-    docker push ${REGISTRY_URL}/${SERVICE_NAME}:${VERSION}
+    docker push ${REGISTRY_URL}/${CONTAINER_NAME}:${VERSION}
     docker push ${REGISTRY_URL}/${AT_DOCKER_NAME}:${VERSION}
 fi

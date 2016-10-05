@@ -16,7 +16,7 @@ case "$1" in
     publish-rancher-catalog)
         # 1 - Clone catalog
         git clone ${RANCHER_CATALOG_URI} ../target/catalog && \
-        mkdir -p "../target/catalog/templates/${SERVICE_NAME}/${GO_PIPELINE_COUNTER}"
+        mkdir -p "../target/catalog/templates/${CONTAINER_NAME}/${GO_PIPELINE_COUNTER}"
 
         # 2 - Include service files - new version
         VERSION=$(getVersion)
@@ -25,10 +25,10 @@ case "$1" in
         mkdir -p ../target/service
 
         sed "s#REPO#${REGISTRY_URL}#g; s#VERSION#${VERSION}#g" ../deploy/service/docker-compose.yml > ../target/service/docker-compose.yml
-        sed "s#SERVICE_NAME#${SERVICE_NAME}#g; s#VERSION#${VERSION}#g" ../deploy/service/rancher-compose.yml > ../target/service/rancher-compose.yml
+        sed "s#SERVICE_NAME#${CONTAINER_NAME}#g; s#VERSION#${VERSION}#g" ../deploy/service/rancher-compose.yml > ../target/service/rancher-compose.yml
 
-        cp -f ../target/service/docker-compose.yml ../target/catalog/templates/${SERVICE_NAME}/${GO_PIPELINE_COUNTER}/
-        cp -f ../target/service/rancher-compose.yml ../target/catalog/templates/${SERVICE_NAME}/${GO_PIPELINE_COUNTER}/
+        cp -f ../target/service/docker-compose.yml ../target/catalog/templates/${CONTAINER_NAME}/${GO_PIPELINE_COUNTER}/
+        cp -f ../target/service/rancher-compose.yml ../target/catalog/templates/${CONTAINER_NAME}/${GO_PIPELINE_COUNTER}/
 
         # 3 - Push changes
         (cd ../target/catalog ; git add -A && git diff-index --quiet HEAD || (git commit -a -m "feat (${VERSION}): New version" && git push origin master))

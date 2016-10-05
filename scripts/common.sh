@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-export SERVICE_NAME="cloudframe-security-vault"
+export SERVICE_NAME="security-vault"
 export SOURCE_PACKAGE="descinet.bbva.es"
-export AT_DOCKER_NAME="cloudframe-security-vault-at"  # defined in ../deploy/acceptance-test/docker-compose.yml
+export AT_DOCKER_NAME="security-vault-at"  # defined in ../deploy/acceptance-test/docker-compose.yml
 export VERSION="0.1.0"
 
 export REGISTRY_URL="894431722748.dkr.ecr.us-east-1.amazonaws.com"
-export STACK_NAME="cloudframe-security-vault"
+export STACK_NAME="security-vault"
 export RANCHER_CATALOG_URI="https://descinet.bbva.es/stash/scm/cloudframe/rancher-security-catalog.git"
 export GO_BUILDER=golang:1.7-wheezy
 

@@ -1,7 +1,7 @@
 # docker run -ti --device=/dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -v /run/docker/plugins:/run/docker/plugins -v /mnt/volumes:/mnt/volumes:shared sec-vault
 
-cloudframe-security-vault:
-  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/cloudframe-security-vault:VERSION
+security-vault:
+  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/security-vault:VERSION
   cap_add:
     - SYS_ADMIN
   security_opt:
@@ -15,8 +15,8 @@ cloudframe-security-vault:
     service: vault-volumedriver
     io.rancher.scheduler.global: 'true'
 
-cloudframe-security-vault-at:
-  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/cloudframe-security-vault-at:VERSION
+security-vault-at:
+  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/security-vault-at:VERSION
   links:
     - cloudframe-security-vault
   depends_on:

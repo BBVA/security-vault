@@ -13,7 +13,6 @@ security-vault:
     - "/mnt/volumes:/mnt/volumes:shared"
   labels:
     service: vault-volumedriver
-    io.rancher.scheduler.global: 'true'
 
 security-vault-at:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/security-vault-at:VERSION
@@ -24,5 +23,5 @@ security-vault-at:
   volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
   labels:
-      - "io.rancher.container.start_once=true"
+    - "io.rancher.container.start_once=true"
 

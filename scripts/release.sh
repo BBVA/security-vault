@@ -35,10 +35,10 @@ case "$1" in
       ;;
 
     publish-api-docs)
-        BUILD_UID=${BUILD_UID:-`id -u`}
-        BUILD_GID=${BUILD_GID:-`getent group docker | cut -d: -f3`}
-
-        docker run -i --rm -u ${BUILD_UID}:${BUILD_GID} -v $PWD/../documentation:/docs humangeo/aglio -i apiary.apib -o api-docs.html --theme-variables slate --verbose
+#        BUILD_UID=${BUILD_UID:-`id -u`}
+#        BUILD_GID=${BUILD_GID:-`getent group docker | cut -d: -f3`}
+#
+#        docker run -i --rm -u ${BUILD_UID}:${BUILD_GID} -v $PWD/../documentation:/docs humangeo/aglio -i apiary.apib -o api-docs.html --theme-variables slate --verbose
       ;;
 
     *)

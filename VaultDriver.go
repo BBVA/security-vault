@@ -49,9 +49,9 @@ func (d VaultDriver) Remove(r volume.Request) volume.Response {
 func (d VaultDriver) Path(r volume.Request) volume.Response {
 	mountPoint, err := d.fuseUtils.Path(r.Name)
 	if err != nil {
-		return volume.Response{Mountpoint: mountPoint}
+		return volume.Response{Err: err.Error()}
 	}
-	return volume.Response{Err: "Volume not found"}
+	return volume.Response{Mountpoint: mountPoint}
 }
 
 func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {

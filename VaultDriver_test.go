@@ -40,8 +40,8 @@ func (f FakeFuseUtils) Unmount(volumeName string) error {
 	return f.UnmountError
 }
 
-func (f FakeFuseUtils) Path(volumeName string) string {
-	return f.fs[volumeName].Mountpoint
+func (f FakeFuseUtils) Path(volumeName string) (string, error) {
+	return f.fs[volumeName].Mountpoint, nil
 }
 
 func TestVaultDriver_Mount(t *testing.T) {

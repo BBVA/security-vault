@@ -2,6 +2,7 @@ package fuseutils
 
 import (
 	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"errors"
 )
 
 type FuseUtils interface {
@@ -40,5 +41,5 @@ func (d DefaultFuseUtils) Path(volumeName string) (string, error){
 	if ok {
 		return fs.Mountpoint, nil
 	}
-	return nil, ok
+	return "", errors.New("Volume not found")
 }

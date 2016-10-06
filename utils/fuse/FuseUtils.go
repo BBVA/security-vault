@@ -7,7 +7,7 @@ import (
 type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
 	Unmount(volumeId string) error
-	Path(volumeName string) string
+	Path(volumeName string) (string, error)
 }
 
 type DefaultFuseUtils struct {
@@ -35,10 +35,10 @@ func (d DefaultFuseUtils) Unmount(volumeName string) error {
 	return d.fs[volumeName].Unmount()
 }
 
-func (d DefaultFuseUtils) Path(volumeName string) string {
+func (d DefaultFuseUtils) Path(volumeName string) (string, error){
 	fs, ok := d.fs[volumeName]
 	if ok {
-		return fs.Mountpoint
+		return fs.Mountpoint, nil
 	}
-	return ""
+	return nil, ok
 }

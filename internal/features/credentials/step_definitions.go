@@ -88,7 +88,7 @@ func createContainerConfiguration(volume string) *container.Config {
 	vols[volume] = struct{}{}
 
 	return &container.Config{
-		Cmd:     strings.Split("cat "+volume+"/credential", " "),
+		Cmd:     strings.Split("cat "+volume+"/cert", " "),
 		Image:   "alpine",
 		Volumes: vols,
 	}

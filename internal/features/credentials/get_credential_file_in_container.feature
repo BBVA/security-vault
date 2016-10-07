@@ -11,4 +11,4 @@ Feature:
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
       | file               | content          |
-      | /secret/credential | hello cloudframe |
+      | /secret/cert | certificadooorr |

@@ -1,17 +1,18 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"path"
 	"reflect"
 	"testing"
 
 	"github.com/docker/go-plugins-helpers/volume"
-	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type FakeDirUtils struct {
 	lstatError    error
+	exist         bool
 	lstatFileInfo os.FileInfo
 	mkdirError    error
 }
@@ -24,15 +25,22 @@ func (f FakeDirUtils) MkdirAll(path string, perm os.FileMode) error {
 	return f.mkdirError
 }
 
+func (f FakeDirUtils) IsNotExist(err error) bool {
+	return !f.exist
+}
+
+type Path4FakeFuse struct {
+	path string
+	err  error
+}
+
 type FakeFuseUtils struct {
 	MountError   error
 	UnmountError error
-	fs           map[string]*filesystem.FS
+	path         Path4FakeFuse
 }
 
 func (f FakeFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
-	f.fs[volumeName].VolumeId = volumeId
-	f.fs[volumeName].Mountpoint = mountPoint
 	return f.MountError
 }
 
@@ -41,150 +49,249 @@ func (f FakeFuseUtils) Unmount(volumeName string) error {
 }
 
 func (f FakeFuseUtils) Path(volumeName string) (string, error) {
-	return f.fs[volumeName].Mountpoint, nil
+	return f.path.path, f.path.err
 }
 
 func TestVaultDriver_Mount(t *testing.T) {
-	r := volume.MountRequest{
-		Name: "Test_volume",
-		ID:   "abcdef1234567890",
+	fixtures := []struct {
+		mountRequest     volume.MountRequest
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			mountRequest: volume.MountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+			},
+			expectedResponse: volume.Response{Mountpoint: path.Join("testpath", "abcdef1234567890", "Test_volume")},
+		},
+		{
+			mountRequest: volume.MountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    errors.New("error"),
+				exist:         true,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+			},
+			expectedResponse: volume.Response{Err: "error"},
+		},
+		{
+			mountRequest: volume.MountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    errors.New("error"),
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+			},
+			expectedResponse: volume.Response{Err: "error"},
+		},
+		{
+			mountRequest: volume.MountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         true,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   errors.New("error"),
+				UnmountError: nil,
+			},
+			expectedResponse: volume.Response{Err: "error"},
+		},
 	}
 
-	fd := FakeDirUtils{
-		lstatError:    nil,
-		lstatFileInfo: nil,
-		mkdirError:    nil,
-	}
+	for i, fixture := range fixtures {
+		d := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		response := d.Mount(fixture.mountRequest)
 
-	fs := make(map[string]*filesystem.FS)
-
-	fs[r.Name] = &filesystem.FS{}
-
-	ff := FakeFuseUtils{
-		MountError:   nil,
-		UnmountError: nil,
-		fs:           fs,
-	}
-
-	d := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
-	expectedMountPoint := path.Join(d.VolumePath, r.ID, r.Name)
-
-	expectedResponse := volume.Response{Mountpoint: expectedMountPoint}
-
-	response := d.Mount(r)
-
-	if !reflect.DeepEqual(response, expectedResponse) {
-		t.Errorf("Expected %v, received %v\n", expectedResponse, response)
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
 	}
 }
 
 func TestVaultDriver_Unmount(t *testing.T) {
-	mountRequest := volume.MountRequest{
-		Name: "Test_volume",
-		ID:   "abcdef1234567890",
+	fixtures := []struct {
+		unmountRequest   volume.UnmountRequest
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			unmountRequest: volume.UnmountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+			},
+			expectedResponse: volume.Response{},
+		},
+		{
+			unmountRequest: volume.UnmountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: errors.New("error"),
+			},
+			expectedResponse: volume.Response{Err: "error"},
+		},
 	}
 
-	unmountRequest := volume.UnmountRequest{
-		Name: "Test_volume",
-		ID:   "abcdef1234567890",
-	}
+	for i, fixture := range fixtures {
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
 
-	fd := FakeDirUtils{
-		lstatError:    nil,
-		lstatFileInfo: nil,
-		mkdirError:    nil,
-	}
+		response := driver.Unmount(fixture.unmountRequest)
 
-	fs := make(map[string]*filesystem.FS)
-
-	fs[mountRequest.Name] = &filesystem.FS{}
-
-	ff := FakeFuseUtils{
-		MountError:   nil,
-		UnmountError: nil,
-		fs:           fs,
-	}
-
-	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
-
-	driver.Mount(mountRequest)
-	response := driver.Unmount(unmountRequest)
-
-	expectedResponse := volume.Response{}
-	if !reflect.DeepEqual(response, expectedResponse) {
-		t.Errorf("Expected %v, received %v\n", expectedResponse, response)
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
 	}
 
 }
 
 func TestVaultDriver_Path(t *testing.T) {
-
-	mountRequest := volume.MountRequest{
-		Name: "Test_volume",
-		ID:   "abcdef1234567890",
+	fixtures := []struct {
+		request          volume.Request
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			request: volume.Request{
+				Name: "Test_volume",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+				path: Path4FakeFuse{
+					path: "Test_volume",
+					err:  nil,
+				},
+			},
+			expectedResponse: volume.Response{Mountpoint: "Test_volume"},
+		},
+		{
+			request: volume.Request{
+				Name: "Test_volume",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+				path: Path4FakeFuse{
+					path: "",
+					err:  errors.New("error"),
+				},
+			},
+			expectedResponse: volume.Response{Err: "error"},
+		},
 	}
 
-	request := volume.Request{
-		Name: "Test_volume",
-	}
+	for i, fixture := range fixtures {
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
 
-	fd := FakeDirUtils{
-		lstatError:    nil,
-		lstatFileInfo: nil,
-		mkdirError:    nil,
-	}
+		response := driver.Path(fixture.request)
 
-	fs := make(map[string]*filesystem.FS)
-
-	fs[mountRequest.Name] = &filesystem.FS{}
-
-	ff := FakeFuseUtils{
-		MountError:   nil,
-		UnmountError: nil,
-		fs:           fs,
-	}
-
-	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
-
-	mountresponse := driver.Mount(mountRequest)
-	response := driver.Path(request)
-
-	if !reflect.DeepEqual(response.Mountpoint, mountresponse.Mountpoint) {
-		t.Errorf("Expected %v, received %v\n", mountresponse.Mountpoint, response.Mountpoint)
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
 	}
 }
 
 func TestVaultDriver_Capabilities(t *testing.T) {
-	mountRequest := volume.MountRequest{
-		Name: "Test_volume",
-		ID:   "abcdef1234567890",
+	fixtures := []struct {
+		request          volume.Request
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			request: volume.Request{},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+				path: Path4FakeFuse{
+					path: "Test_volume",
+					err:  nil,
+				},
+			},
+			expectedResponse: volume.Response{
+				Capabilities: volume.Capability{
+					Scope: "local",
+				},
+			},
+		},
 	}
 
-	request := volume.Request{
-	}
+	for i, fixture := range fixtures {
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
 
-	fd := FakeDirUtils{
-		lstatError:    nil,
-		lstatFileInfo: nil,
-		mkdirError:    nil,
-	}
+		response := driver.Capabilities(fixture.request)
 
-	fs := make(map[string]*filesystem.FS)
-
-	fs[mountRequest.Name] = &filesystem.FS{}
-
-	ff := FakeFuseUtils{
-		MountError:   nil,
-		UnmountError: nil,
-		fs:           fs,
-	}
-
-	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
-
-	driver.Mount(mountRequest)
-	response := driver.Capabilities(request)
-
-	if response.Capabilities.Scope != "local" {
-		t.Errorf("Expected %v, received %v\n", "local", response.Capabilities.Scope)
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
 	}
 }

@@ -5,6 +5,13 @@ import (
 	"errors"
 )
 
+type VolumeOptions map[string]string
+
+type Volume struct {
+	Filesystem *FS
+	Options    VolumeOptions
+}
+
 type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
 	Unmount(volumeId string) error
@@ -12,13 +19,22 @@ type FuseUtils interface {
 }
 
 type DefaultFuseUtils struct {
-	fs map[string]*FS
+	vols map[string]*Volume
 }
 
 func NewFuseUtils() FuseUtils {
 	return DefaultFuseUtils{
-		fs: make(map[string]*FS),
+		vols: make(map[string]*Volume),
 	}
+}
+
+func (d DefaultFuseUtils) Create(name string, options VolumeOptions)  error {
+	d.vols[name] = &Volume{
+		Options: options,
+		Filesystem: nil,
+	}
+
+	return nil
 }
 
 func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
@@ -27,19 +43,19 @@ func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
 		fs.ErrChan <- err
 	}
 	fs.VolumeId = volumeId
-	d.fs[volumeName] = fs
+	d.vols[volumeName].Filesystem = fs
 
 	return fs.Mount(volumeName)
 }
 
 func (d DefaultFuseUtils) Unmount(volumeName string) error {
-	return d.fs[volumeName].Unmount()
+	return d.vols[volumeName].Filesystem.Unmount()
 }
 
-func (d DefaultFuseUtils) Path(volumeName string) (string, error){
-	fs, ok := d.fs[volumeName]
+func (d DefaultFuseUtils) Path(volumeName string) (string, error) {
+	vol, ok := d.vols[volumeName]
 	if ok {
-		return fs.Mountpoint, nil
+		return vol.Filesystem.Mountpoint, nil
 	}
 	return "", errors.New("Volume not found")
 }

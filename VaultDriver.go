@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path"
 
-	"github.com/docker/go-plugins-helpers/volume"
-	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
+	"github.com/docker/go-plugins-helpers/volume"
 )
 
 type VaultDriver struct {
@@ -59,7 +58,7 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 	fmt.Println("check mountpoint", mountPoint)
 	_, err := d.dirUtils.Lstat(mountPoint)
 
-	if os.IsNotExist(err) {
+	if d.dirUtils.IsNotExist(err) {
 		if err := d.dirUtils.MkdirAll(mountPoint, 0755); err != nil {
 			return volume.Response{Err: err.Error()}
 		}
@@ -71,6 +70,8 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 
 	if err := d.fuseUtils.Mount(r.ID, mountPoint, r.Name); err != nil {
 		fmt.Println(err.Error())
+		return volume.Response{Err: err.Error()}
+
 	}
 
 	fmt.Printf("response: %v\n", mountPoint)

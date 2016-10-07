@@ -19,7 +19,6 @@ type VaultDriver struct {
 }
 
 func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirUtils filesystem.DirUtils, fuseUtils fuseutils.FuseUtils) VaultDriver {
-	fmt.Println(fuseUtils)
 	return VaultDriver{
 		VolumePath: VolumePath,
 		ServerUrl:  ServerUrl,
@@ -30,7 +29,6 @@ func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirU
 }
 
 func (d VaultDriver) Create(r volume.Request) volume.Response {
-
 	return volume.Response{}
 }
 
@@ -93,5 +91,9 @@ func (d VaultDriver) Unmount(r volume.UnmountRequest) volume.Response {
 }
 
 func (d VaultDriver) Capabilities(r volume.Request) volume.Response {
-	return volume.Response{}
+	return volume.Response{
+		Capabilities: volume.Capability{
+			Scope: "local",
+		},
+	}
 }

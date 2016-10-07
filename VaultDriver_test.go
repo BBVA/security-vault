@@ -153,3 +153,38 @@ func TestVaultDriver_Path(t *testing.T) {
 		t.Errorf("Expected %v, received %v\n", mountresponse.Mountpoint, response.Mountpoint)
 	}
 }
+
+func TestVaultDriver_Capabilities(t *testing.T) {
+	mountRequest := volume.MountRequest{
+		Name: "Test_volume",
+		ID:   "abcdef1234567890",
+	}
+
+	request := volume.Request{
+	}
+
+	fd := FakeDirUtils{
+		lstatError:    nil,
+		lstatFileInfo: nil,
+		mkdirError:    nil,
+	}
+
+	fs := make(map[string]*filesystem.FS)
+
+	fs[mountRequest.Name] = &filesystem.FS{}
+
+	ff := FakeFuseUtils{
+		MountError:   nil,
+		UnmountError: nil,
+		fs:           fs,
+	}
+
+	driver := NewVaultDriver("testpath", "testserver", "testtoken", fd, ff)
+
+	driver.Mount(mountRequest)
+	response := driver.Capabilities(request)
+
+	if response.Capabilities.Scope != "local" {
+		t.Errorf("Expected %v, received %v\n", "local", response.Capabilities.Scope)
+	}
+}

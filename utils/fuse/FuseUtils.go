@@ -28,7 +28,7 @@ func NewFuseUtils() FuseUtils {
 	}
 }
 
-func (d DefaultFuseUtils) Create(name string, options VolumeOptions)  error {
+func (d DefaultFuseUtils) Create(name string, options VolumeOptions) error {
 	d.vols[name] = &Volume{
 		Options: options,
 		Filesystem: nil,
@@ -42,7 +42,16 @@ func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
 	if err != nil {
 		fs.ErrChan <- err
 	}
+
 	fs.VolumeId = volumeId
+
+	if _, ok := d.vols[volumeName]; !ok {
+		d.vols[volumeName] = &Volume{
+			Options: make(VolumeOptions),
+			Filesystem: nil,
+		}
+	}
+
 	d.vols[volumeName].Filesystem = fs
 
 	return fs.Mount(volumeName)

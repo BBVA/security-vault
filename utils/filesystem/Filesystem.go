@@ -89,14 +89,28 @@ func (Dir) Attr(ctx context.Context, a *fuse.Attr) error {
 }
 
 func (Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
-	if name == "credential" {
-		return File{}, nil
+	if name == "cert" {
+		return &File{
+			name: "cert",
+			inode: 2,
+			content: []byte("certificadooorr\n"),
+			mode: 0444,
+		}, nil
+	}
+	if name == "private" {
+		return &File{
+			name: "private",
+			inode: 3,
+			content: []byte("clave super privada\n"),
+			mode: 0444,
+		}, nil
 	}
 	return nil, fuse.ENOENT
 }
 
 var dirDirs = []fuse.Dirent{
-	{Inode: 2, Name: "credential", Type: fuse.DT_File},
+	{Inode: 2, Name: "cert", Type: fuse.DT_File},
+	{Inode: 3, Name: "private", Type: fuse.DT_File},
 }
 
 func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
@@ -104,17 +118,21 @@ func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 }
 
 // File implements both Node and Handle for the hello file.
-type File struct{}
+type File struct{
+	name string
+	inode uint64
+	content []byte
+	mode os.FileMode
+}
 
-const greeting = "hello cloudframe\n"
 
-func (File) Attr(ctx context.Context, a *fuse.Attr) error {
-	a.Inode = 2
-	a.Mode = 0444
-	a.Size = uint64(len(greeting))
+func (f *File) Attr(ctx context.Context, a *fuse.Attr) error {
+	a.Inode = f.inode
+	a.Mode = f.mode
+	a.Size = uint64(len(f.content))
 	return nil
 }
 
-func (File) ReadAll(ctx context.Context) ([]byte, error) {
-	return []byte(greeting), nil
+func (f *File) ReadAll(ctx context.Context) ([]byte, error) {
+	return f.content, nil
 }

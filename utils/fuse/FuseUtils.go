@@ -92,8 +92,7 @@ func (d DefaultFuseUtils) Unmount(volumeName string) error {
 }
 
 func (d DefaultFuseUtils) Path(volumeName string) (string, error) {
-	vol, ok := d.vols[volumeName]
-	if ok {
+	if vol, ok := d.vols[volumeName]; ok {
 		return vol.Filesystem.Mountpoint, nil
 	}
 	return "", errors.New("Volume not found")

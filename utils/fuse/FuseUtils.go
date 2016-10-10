@@ -12,12 +12,18 @@ type Volume struct {
 	Options    VolumeOptions
 }
 
+type VolumeData struct {
+	Name       string
+	Mountpoint string
+}
+
 type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
 	Unmount(volumeId string) error
 	Path(volumeName string) (string, error)
 	Create(volumeName string, options VolumeOptions) error
 	Remove(volumeName string) error
+	List() ([]VolumeData, error)
 }
 
 type DefaultFuseUtils struct {
@@ -29,6 +35,18 @@ func NewFuseUtils() FuseUtils {
 		vols: make(map[string]*Volume),
 
 	}
+}
+
+func (d DefaultFuseUtils) List() ([]VolumeData, error) {
+	var vols []VolumeData
+	for name, data := range d.vols{
+		vols = append(vols, VolumeData{
+			Name: name,
+			Mountpoint: data.Filesystem.Mountpoint,
+		})
+	}
+
+	return vols, nil
 }
 
 func (d DefaultFuseUtils) Create(name string, options VolumeOptions) error {

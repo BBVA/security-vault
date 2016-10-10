@@ -35,7 +35,20 @@ func (d VaultDriver) Create(r volume.Request) volume.Response {
 }
 
 func (d VaultDriver) List(r volume.Request) volume.Response {
-	return volume.Response{}
+	if volumes, err := d.fuseUtils.List(); err == nil {
+		var v []*volume.Volume
+		for _, vol := range volumes {
+			v = append(v, &volume.Volume{
+				Name: vol.Name,
+				Mountpoint: vol.Mountpoint,
+			})
+		}
+
+		return volume.Response{Volumes:v}
+	} else {
+		return volume.Response{Err: err.Error()}
+	}
+
 }
 
 func (d VaultDriver) Get(r volume.Request) volume.Response {

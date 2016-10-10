@@ -35,11 +35,17 @@ type Path4FakeFuse struct {
 	err  error
 }
 
+type List4FakeFuse struct {
+	volumes []fuseutils.VolumeData
+	err     error
+}
+
 type FakeFuseUtils struct {
 	MountError   error
 	UnmountError error
 	CreateError  error
 	RemoveError  error
+	list         List4FakeFuse
 	path         Path4FakeFuse
 }
 
@@ -61,6 +67,10 @@ func (f FakeFuseUtils) Create(volumeName string, options fuseutils.VolumeOptions
 
 func (f FakeFuseUtils) Remove(volumeName string) error {
 	return f.RemoveError
+}
+
+func (f FakeFuseUtils) List() ([]fuseutils.VolumeData, error) {
+	return f.list.volumes, f.list.err
 }
 
 func TestVaultDriver_Mount(t *testing.T) {
@@ -412,7 +422,7 @@ func TestVaultDriver_Remove(t *testing.T) {
 			},
 			fuseUtils: FakeFuseUtils{
 				RemoveError: errors.New("error"),
-							},
+			},
 			expectedResponse: volume.Response{Err:"error"},
 		},
 	}
@@ -421,6 +431,81 @@ func TestVaultDriver_Remove(t *testing.T) {
 		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Remove(fixture.request)
+
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
+	}
+}
+
+func TestVaultDriver_List(t *testing.T) {
+	fixtures := []struct {
+		request          volume.Request
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			request: volume.Request{},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				list: List4FakeFuse{
+					volumes: []fuseutils.VolumeData{
+						{
+							Name: "test1",
+							Mountpoint: "test1",
+
+						},
+						{
+							Name: "test2",
+							Mountpoint: "test2",
+
+						},
+					},
+					err: nil,
+				},
+
+			},
+			expectedResponse: volume.Response{
+				Volumes: []*volume.Volume{
+					{
+						Name: "test1",
+						Mountpoint: "test1",
+					},
+					{
+						Name: "test2",
+						Mountpoint: "test2",
+
+					},
+				},
+			},
+		},
+		{
+			request: volume.Request{},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				list: List4FakeFuse{
+					err: errors.New("error"),
+				},
+			},
+			expectedResponse: volume.Response{Err:"error"},
+		},
+	}
+
+	for i, fixture := range fixtures {
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+
+		response := driver.List(fixture.request)
 
 		if !reflect.DeepEqual(response, fixture.expectedResponse) {
 			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)

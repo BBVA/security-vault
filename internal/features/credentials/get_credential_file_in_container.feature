@@ -10,5 +10,5 @@ Feature:
       | Vault         | test/mountpoint  | /secret               |
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
-      | file               | content          |
+      | file         | content         |
       | /secret/cert | certificadooorr |

@@ -2,10 +2,7 @@
 
 security-vault:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/security-vault:VERSION
-  cap_add:
-    - SYS_ADMIN
-  security_opt:
-    - apparmor:unconfined
+  privileged: true
   devices:
     - "/dev/fuse:/dev/fuse"
   volumes:

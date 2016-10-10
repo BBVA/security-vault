@@ -8,6 +8,8 @@ import (
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"github.com/docker/go-plugins-helpers/volume"
+	"syscall"
+	"golang.org/x/sys/unix"
 )
 
 const (
@@ -27,7 +29,13 @@ var (
 *
  */
 
+
+
 func main() {
+
+	if err := syscall.Mlockall(unix.MCL_CURRENT | unix.MCL_FUTURE); err != nil {
+		panic ("PANIC: Unable to lock pages into RAM\n")
+	}
 
 	dirUtils := filesystem.DefaultDirUtils{}
 	fuseUtils := fuseutils.NewFuseUtils()

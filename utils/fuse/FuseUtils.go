@@ -16,6 +16,8 @@ type FuseUtils interface {
 	Mount(volumeId, mountPoint, volumeName string) error
 	Unmount(volumeId string) error
 	Path(volumeName string) (string, error)
+	Create(volumeName string, options VolumeOptions) error
+	Remove(volumeName string) error
 }
 
 type DefaultFuseUtils struct {
@@ -25,6 +27,7 @@ type DefaultFuseUtils struct {
 func NewFuseUtils() FuseUtils {
 	return DefaultFuseUtils{
 		vols: make(map[string]*Volume),
+
 	}
 }
 
@@ -35,6 +38,15 @@ func (d DefaultFuseUtils) Create(name string, options VolumeOptions) error {
 	}
 
 	return nil
+}
+
+func (d DefaultFuseUtils) Remove(volumeName string) error {
+	if _, ok := d.vols[volumeName]; ok {
+		delete(d.vols, volumeName)
+		return nil
+	} else {
+		return errors.New("Volume not found")
+	}
 }
 
 func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {

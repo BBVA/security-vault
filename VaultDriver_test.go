@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 )
 
 type FakeDirUtils struct {
@@ -37,6 +38,8 @@ type Path4FakeFuse struct {
 type FakeFuseUtils struct {
 	MountError   error
 	UnmountError error
+	CreateError  error
+	RemoveError  error
 	path         Path4FakeFuse
 }
 
@@ -50,6 +53,14 @@ func (f FakeFuseUtils) Unmount(volumeName string) error {
 
 func (f FakeFuseUtils) Path(volumeName string) (string, error) {
 	return f.path.path, f.path.err
+}
+
+func (f FakeFuseUtils) Create(volumeName string, options fuseutils.VolumeOptions) error {
+	return f.CreateError
+}
+
+func (f FakeFuseUtils) Remove(volumeName string) error {
+	return f.RemoveError
 }
 
 func TestVaultDriver_Mount(t *testing.T) {
@@ -289,6 +300,127 @@ func TestVaultDriver_Capabilities(t *testing.T) {
 		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Capabilities(fixture.request)
+
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
+	}
+}
+
+func TestVaultDriver_Create(t *testing.T) {
+	fixtures := []struct {
+		request          volume.Request
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			request: volume.Request{
+				Name: "test_vol",
+				Options: map[string]string{
+					"key1": "val1",
+				},
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+				CreateError: nil,
+				path: Path4FakeFuse{
+					path: "Test_volume",
+					err:  nil,
+				},
+			},
+			expectedResponse: volume.Response{},
+		},
+		{
+			request: volume.Request{
+				Name: "test_vol",
+				Options: map[string]string{
+					"key1": "val1",
+				},
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
+				CreateError: errors.New("error"),
+				path: Path4FakeFuse{
+					path: "Test_volume",
+					err:  nil,
+				},
+			},
+			expectedResponse: volume.Response{Err:"error"},
+		},
+	}
+
+	for i, fixture := range fixtures {
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+
+		response := driver.Create(fixture.request)
+
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)
+		}
+	}
+}
+
+func TestVaultDriver_Remove(t *testing.T) {
+	fixtures := []struct {
+		request          volume.Request
+		dirUtils         FakeDirUtils
+		fuseUtils        FakeFuseUtils
+		expectedResponse volume.Response
+	}{
+		{
+			request: volume.Request{
+				Name: "test_vol",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				RemoveError: nil,
+			},
+			expectedResponse: volume.Response{},
+		},
+		{
+			request: volume.Request{
+				Name: "test_vol",
+				Options: map[string]string{
+					"key1": "val1",
+				},
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+			},
+			fuseUtils: FakeFuseUtils{
+				RemoveError: errors.New("error"),
+							},
+			expectedResponse: volume.Response{Err:"error"},
+		},
+	}
+
+	for i, fixture := range fixtures {
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+
+		response := driver.Remove(fixture.request)
 
 		if !reflect.DeepEqual(response, fixture.expectedResponse) {
 			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, response)

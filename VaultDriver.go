@@ -28,6 +28,9 @@ func NewVaultDriver(VolumePath string, ServerUrl string, VaultToken string, dirU
 }
 
 func (d VaultDriver) Create(r volume.Request) volume.Response {
+	if err := d.fuseUtils.Create(r.Name, r.Options); err != nil {
+		return volume.Response{Err: err.Error()}
+	}
 	return volume.Response{}
 }
 
@@ -40,6 +43,9 @@ func (d VaultDriver) Get(r volume.Request) volume.Response {
 }
 
 func (d VaultDriver) Remove(r volume.Request) volume.Response {
+	if err := d.fuseUtils.Remove(r.Name); err != nil {
+		return volume.Response{Err: err.Error()}
+	}
 	return volume.Response{}
 }
 

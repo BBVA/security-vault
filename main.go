@@ -33,8 +33,8 @@ var (
 
 func main() {
 
-	if err := syscall.Mlockall(unix.MCL_CURRENT | unix.MCL_FUTURE); err != nil {
-		panic ("PANIC: Unable to lock pages into RAM\n")
+	if err := syscall.Mlockall(unix.MCL_FUTURE | unix.MCL_CURRENT); err != nil {
+		panic (err.Error())
 	}
 
 	dirUtils := filesystem.DefaultDirUtils{}

@@ -89,23 +89,25 @@ func (Dir) Attr(ctx context.Context, a *fuse.Attr) error {
 }
 
 func (Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
-	if name == "cert" {
+	switch name {
+	case "cert":
 		return &File{
-			name: "cert",
-			inode: 2,
+			name:    "cert",
+			inode:   2,
 			content: []byte("certificadooorr\n"),
-			mode: 0444,
+			mode:    0444,
 		}, nil
-	}
-	if name == "private" {
+	case "private":
 		return &File{
-			name: "private",
-			inode: 3,
+			name:    "private",
+			inode:   3,
 			content: []byte("clave super privada\n"),
-			mode: 0444,
+			mode:    0444,
 		}, nil
+	default:
+		return nil, fuse.ENOENT
+
 	}
-	return nil, fuse.ENOENT
 }
 
 var dirDirs = []fuse.Dirent{
@@ -118,13 +120,12 @@ func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 }
 
 // File implements both Node and Handle for the hello file.
-type File struct{
-	name string
-	inode uint64
+type File struct {
+	name    string
+	inode   uint64
 	content []byte
-	mode os.FileMode
+	mode    os.FileMode
 }
-
 
 func (f *File) Attr(ctx context.Context, a *fuse.Attr) error {
 	a.Inode = f.inode

@@ -24,6 +24,7 @@ type FuseUtils interface {
 	Create(volumeName string, options VolumeOptions) error
 	Remove(volumeName string) error
 	List() ([]VolumeData, error)
+	Get(volumeName string) (VolumeData, error)
 }
 
 type DefaultFuseUtils struct {
@@ -33,15 +34,14 @@ type DefaultFuseUtils struct {
 func NewFuseUtils() FuseUtils {
 	return DefaultFuseUtils{
 		vols: make(map[string]*Volume),
-
 	}
 }
 
 func (d DefaultFuseUtils) List() ([]VolumeData, error) {
 	var vols []VolumeData
-	for name, data := range d.vols{
+	for name, data := range d.vols {
 		vols = append(vols, VolumeData{
-			Name: name,
+			Name:       name,
 			Mountpoint: data.Filesystem.Mountpoint,
 		})
 	}
@@ -51,7 +51,7 @@ func (d DefaultFuseUtils) List() ([]VolumeData, error) {
 
 func (d DefaultFuseUtils) Create(name string, options VolumeOptions) error {
 	d.vols[name] = &Volume{
-		Options: options,
+		Options:    options,
 		Filesystem: nil,
 	}
 
@@ -77,7 +77,7 @@ func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
 
 	if _, ok := d.vols[volumeName]; !ok {
 		d.vols[volumeName] = &Volume{
-			Options: make(VolumeOptions),
+			Options:    make(VolumeOptions),
 			Filesystem: nil,
 		}
 	}
@@ -96,4 +96,16 @@ func (d DefaultFuseUtils) Path(volumeName string) (string, error) {
 		return vol.Filesystem.Mountpoint, nil
 	}
 	return "", errors.New("Volume not found")
+}
+
+func (d DefaultFuseUtils) Get(volumeName string) (VolumeData, error) {
+	if vol, ok := d.vols[volumeName]; ok {
+		data := VolumeData{
+			Name:       volumeName,
+			Mountpoint: vol.Filesystem.Mountpoint,
+		}
+
+		return data, nil
+	}
+	return VolumeData{}, errors.New("Volume not found")
 }

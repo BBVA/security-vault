@@ -8,8 +8,8 @@ import (
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"github.com/docker/go-plugins-helpers/volume"
-	"syscall"
 	"golang.org/x/sys/unix"
+	"syscall"
 )
 
 const (
@@ -29,12 +29,10 @@ var (
 *
  */
 
-
-
 func main() {
 
 	if err := syscall.Mlockall(unix.MCL_FUTURE | unix.MCL_CURRENT); err != nil {
-		panic (err.Error())
+		panic(err.Error())
 	}
 
 	dirUtils := filesystem.DefaultDirUtils{}

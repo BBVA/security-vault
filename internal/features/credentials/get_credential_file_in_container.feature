@@ -12,3 +12,4 @@ Feature:
     Then the container "cred-test" credentials will be the following
       | file         | content         |
       | /secret/cert | certificadooorr |
+      | /secret/private | clave super privada |

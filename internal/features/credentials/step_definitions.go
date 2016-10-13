@@ -1,13 +1,12 @@
 package credentials
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	//"fmt"
 	"reflect"
 	"strings"
 
+	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
@@ -59,16 +58,18 @@ func init() {
 	})
 
 	Then(`^the container "(.+?)" credentials will be the following$`, func(containerName string, credentialInfo [][]string) {
-		containerId := containers[containerName].id
 
-		expectedContent := strings.TrimSpace(credentialInfo[1][1])
-		content := strings.TrimSpace(getContainerLogs(cli, containerId))
+		for _, cred := range credentialInfo[1:] {
+			expectedContent := strings.TrimSpace(cred[1])
+			fmt.Printf("nombre del fichero: %s\n", cred[0])
+			content := strings.TrimSpace(getFileContent(cli, containerName, cred[0]))
 
-		//fmt.Println(expectedContent, len(expectedContent))
-		//fmt.Println(content, len(content))
+			//fmt.Println(expectedContent, len(expectedContent))
+			//fmt.Println(content, len(content))
 
-		if !reflect.DeepEqual(expectedContent, content) {
-			panic(errors.New("Expected: " + expectedContent + " Actual: " + content))
+			if !reflect.DeepEqual(expectedContent, content) {
+				panic(errors.New("Expected: " + expectedContent + " Actual: " + content))
+			}
 		}
 	})
 }
@@ -86,9 +87,10 @@ func createDockerClient() *client.Client {
 func createContainerConfiguration(volume string) *container.Config {
 	vols := make(map[string]struct{})
 	vols[volume] = struct{}{}
+	cmd := []string{"/bin/ash", "-c", "while true; do sleep 5; done"}
 
 	return &container.Config{
-		Cmd:     strings.Split("cat "+volume+"/cert", " "),
+		Cmd:     cmd,
 		Image:   "alpine",
 		Volumes: vols,
 	}
@@ -131,22 +133,37 @@ func runContainer(cli *client.Client, containerName string, hostConfiguration *c
 	return response.ID
 }
 
-func getContainerLogs(cli *client.Client, containerId string) string {
-	reader, err := cli.ContainerLogs(context.Background(), containerId, types.ContainerLogsOptions{
-		ShowStdout: true,
-		ShowStderr: false,
-		Timestamps: false,
-	})
+func getFileContent(cli *client.Client, container string, fileName string) string {
 
+	cmd := []string{"/bin/cat", fileName}
+
+	options := types.ExecConfig{
+		AttachStdin:  false,
+		AttachStdout: true,
+		AttachStderr: true,
+		Cmd:          cmd,
+	}
+	execresponse, err := cli.ContainerExecCreate(context.Background(), container, options)
 	if err != nil {
 		panic(err)
 	}
 
-	buf := new(bytes.Buffer)
-	//l, err := buf.ReadFrom(reader)
-	buf.ReadFrom(reader)
-	//fmt.Printf("read %d bytes\n", l)
-	return buf.String()[8:]
+	connection, err := cli.ContainerExecAttach(context.Background(), execresponse.ID, options)
+	if err != nil {
+		panic(err)
+	}
+
+	defer connection.Close()
+
+	output, err := connection.Reader.ReadString('\n')
+	if err != nil {
+		panic(err)
+	}
+	if len(output) == 0 {
+		panic("no data returned\n")
+	}
+
+	return output[8:]
 }
 
 func destroyContainer(cli *client.Client, containers map[string]*Container) {

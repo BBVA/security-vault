@@ -83,12 +83,14 @@ func (FS) Root() (fs.Node, error) {
 type Dir struct{}
 
 func (Dir) Attr(ctx context.Context, a *fuse.Attr) error {
+	log.Println("Fuse Dir Attr")
 	a.Inode = 1
 	a.Mode = os.ModeDir | 0555
 	return nil
 }
 
 func (Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
+	log.Println("Fuse Dir Lookup")
 	switch name {
 	case "cert":
 		return &File{
@@ -116,6 +118,7 @@ var dirDirs = []fuse.Dirent{
 }
 
 func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
+	log.Println("Fuse Dir ReadDirAll")
 	return dirDirs, nil
 }
 
@@ -128,6 +131,7 @@ type File struct {
 }
 
 func (f *File) Attr(ctx context.Context, a *fuse.Attr) error {
+	log.Println("Fuse File Attr")
 	a.Inode = f.inode
 	a.Mode = f.mode
 	a.Size = uint64(len(f.content))
@@ -135,5 +139,6 @@ func (f *File) Attr(ctx context.Context, a *fuse.Attr) error {
 }
 
 func (f *File) ReadAll(ctx context.Context) ([]byte, error) {
+	log.Println("Fuse File ReadAll")
 	return f.content, nil
 }

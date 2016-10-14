@@ -16,6 +16,7 @@ type FakeDirUtils struct {
 	exist         bool
 	lstatFileInfo os.FileInfo
 	mkdirError    error
+	removeAllError    error
 }
 
 func (f FakeDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
@@ -28,6 +29,10 @@ func (f FakeDirUtils) MkdirAll(path string, perm os.FileMode) error {
 
 func (f FakeDirUtils) IsNotExist(err error) bool {
 	return !f.exist
+}
+
+func (f FakeDirUtils) RemoveAll(path string) error {
+	return f.removeAllError
 }
 
 type Path4FakeFuse struct {
@@ -208,6 +213,24 @@ func TestVaultDriver_Unmount(t *testing.T) {
 			fuseUtils: FakeFuseUtils{
 				MountError:   nil,
 				UnmountError: errors.New("error"),
+			},
+			expectedResponse: volume.Response{Err: "error"},
+		},
+		{
+			unmountRequest: volume.UnmountRequest{
+				Name: "Test_volume",
+				ID:   "abcdef1234567890",
+			},
+			dirUtils: FakeDirUtils{
+				lstatError:    nil,
+				exist:         false,
+				lstatFileInfo: nil,
+				mkdirError:    nil,
+				removeAllError: errors.New("error"),
+			},
+			fuseUtils: FakeFuseUtils{
+				MountError:   nil,
+				UnmountError: nil,
 			},
 			expectedResponse: volume.Response{Err: "error"},
 		},

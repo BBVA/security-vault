@@ -116,12 +116,16 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 func (d VaultDriver) Unmount(r volume.UnmountRequest) volume.Response {
 	log.Println("Unmount Volume", r)
 
-	err := d.fuseUtils.Unmount(r.Name)
-	if err != nil {
+	if err := d.fuseUtils.Unmount(r.Name); err != nil {
 		return volume.Response{Err: err.Error()}
 	}
 
-	log.Printf("Unmounted: %s\n", r.ID)
+	mountPoint := path.Join(d.VolumePath, r.ID)
+	if err := d.dirUtils.RemoveAll(mountPoint); err != nil {
+		return volume.Response{Err: err.Error()}
+	}
+
+	log.Printf("Unmounted: %s\n", mountPoint)
 	return volume.Response{}
 
 }

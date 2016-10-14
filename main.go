@@ -9,6 +9,7 @@ import (
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"github.com/docker/go-plugins-helpers/volume"
 	"golang.org/x/sys/unix"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 )
 
 const (

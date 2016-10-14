@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 )
 
 type FakeDirUtils struct {

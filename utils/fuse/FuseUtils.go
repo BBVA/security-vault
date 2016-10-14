@@ -1,8 +1,9 @@
 package fuseutils
 
 import (
-	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"errors"
+
+	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type VolumeOptions map[string]string

@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"testing"
 
-	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"github.com/docker/go-plugins-helpers/volume"
 )
 

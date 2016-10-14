@@ -5,7 +5,6 @@ import (
 	"path"
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
-	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"github.com/docker/go-plugins-helpers/volume"
 )
 

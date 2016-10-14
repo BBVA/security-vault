@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
+	"syscall"
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"github.com/docker/go-plugins-helpers/volume"
 	"golang.org/x/sys/unix"
-	"syscall"
 )
 
 const (

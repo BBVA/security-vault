@@ -9,7 +9,44 @@ import (
 	"golang.org/x/net/context"
 )
 
+type FuseConnection interface {
+	Close() error
+	Protocol() fuse.Protocol
+	ReadRequest() (fuse.Request, error)
+}
+
+type Fuse interface {
+	Mount(dir string, options ...fuse.MountOption) (*fuse.Conn, error)
+	Unmount(dir string) error
+	Serve(*fuse.Conn, *FS) error
+	WaitReady(*fuse.Conn)
+	GetError(*fuse.Conn) error
+}
+
+type DefaultFuseWrapper struct{}
+
+func (DefaultFuseWrapper) Mount(dir string, options ...fuse.MountOption) (*fuse.Conn, error) {
+	return fuse.Mount(dir, options...)
+}
+
+func (DefaultFuseWrapper) Unmount(dir string) error {
+	return fuse.Unmount(dir)
+}
+
+func (DefaultFuseWrapper) Serve(conn *fuse.Conn, f *FS) error {
+	return fs.Serve(conn, f)
+}
+
+func (DefaultFuseWrapper) WaitReady(conn *fuse.Conn) {
+	<-conn.Ready
+}
+
+func (DefaultFuseWrapper) GetError(conn *fuse.Conn) error {
+	return conn.MountError
+}
+
 type FS struct {
+	fuse       Fuse
 	Mountpoint string
 	VolumeId   string
 	conn       *fuse.Conn
@@ -20,7 +57,7 @@ type FS struct {
 	//tick       *time.Ticker
 }
 
-func NewFS(mountpoint string) (*FS, error) {
+func NewFS(mountpoint string, fuse Fuse) (*FS, error) {
 	c := make(chan error)
 	go func() {
 		err := <-c
@@ -28,6 +65,7 @@ func NewFS(mountpoint string) (*FS, error) {
 	}()
 
 	return &FS{
+		fuse: fuse,
 		Mountpoint: mountpoint,
 		ErrChan:    c,
 	}, nil
@@ -35,7 +73,7 @@ func NewFS(mountpoint string) (*FS, error) {
 
 func (f *FS) Mount(volumeName string) error {
 	log.Printf("setting up fuse: volume=%s", volumeName)
-	c, err := fuse.Mount(
+	c, err := f.fuse.Mount(
 		f.Mountpoint,
 		fuse.FSName("vault"),
 		fuse.Subtype("vaultfs"),
@@ -48,13 +86,10 @@ func (f *FS) Mount(volumeName string) error {
 		return err
 	}
 
-	srv := fs.New(c, nil)
-
-	f.server = srv
 	f.conn = c
 
 	go func() {
-		err = f.server.Serve(f)
+		err := f.fuse.Serve(c, f)
 		if err != nil {
 			f.ErrChan <- err
 		}
@@ -62,8 +97,8 @@ func (f *FS) Mount(volumeName string) error {
 
 	// check if the mount process has an error to report
 	log.Println("waiting for mount")
-	<-c.Ready
-	if err := c.MountError; err != nil {
+	f.fuse.WaitReady(f.conn)
+	if err := f.fuse.GetError(f.conn); err != nil {
 		return err
 	}
 

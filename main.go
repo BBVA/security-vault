@@ -35,8 +35,9 @@ func main() {
 		panic(err.Error())
 	}
 
+	fuse := filesystem.DefaultFuseWrapper{}
 	dirUtils := filesystem.DefaultDirUtils{}
-	fuseUtils := fuseutils.NewFuseUtils()
+	fuseUtils := fuseutils.NewFuseUtils(fuse)
 	d := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, dirUtils, fuseUtils)
 	h := volume.NewHandler(d)
 	fmt.Printf("Listening on %s\n", SocketAddress)

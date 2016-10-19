@@ -30,11 +30,13 @@ type FuseUtils interface {
 
 type DefaultFuseUtils struct {
 	vols map[string]*Volume
+	fuse Fuse
 }
 
-func NewFuseUtils() FuseUtils {
+func NewFuseUtils(fuse Fuse) FuseUtils {
 	return DefaultFuseUtils{
 		vols: make(map[string]*Volume),
+		fuse: fuse,
 	}
 }
 
@@ -69,7 +71,7 @@ func (d DefaultFuseUtils) Remove(volumeName string) error {
 }
 
 func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
-	fs, err := NewFS(mountPoint)
+	fs, err := NewFS(mountPoint, d.fuse)
 	if err != nil {
 		fs.ErrChan <- err
 	}

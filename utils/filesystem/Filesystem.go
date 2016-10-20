@@ -9,18 +9,13 @@ import (
 	"golang.org/x/net/context"
 )
 
-type FuseConnection interface {
-	Close() error
-	Protocol() fuse.Protocol
-	ReadRequest() (fuse.Request, error)
-}
-
 type Fuse interface {
 	Mount(dir string, options ...fuse.MountOption) (*fuse.Conn, error)
 	Unmount(dir string) error
 	Serve(*fuse.Conn, *FS) error
 	WaitReady(*fuse.Conn)
 	GetError(*fuse.Conn) error
+	CloseConnection(*fuse.Conn) error
 }
 
 type DefaultFuseWrapper struct{}
@@ -45,6 +40,10 @@ func (DefaultFuseWrapper) GetError(conn *fuse.Conn) error {
 	return conn.MountError
 }
 
+func (DefaultFuseWrapper) CloseConnection(conn *fuse.Conn) error {
+	return conn.Close()
+}
+
 type FS struct {
 	fuse       Fuse
 	Mountpoint string
@@ -65,7 +64,7 @@ func NewFS(mountpoint string, fuse Fuse) (*FS, error) {
 	}()
 
 	return &FS{
-		fuse: fuse,
+		fuse:       fuse,
 		Mountpoint: mountpoint,
 		ErrChan:    c,
 	}, nil
@@ -106,9 +105,9 @@ func (f *FS) Mount(volumeName string) error {
 }
 
 func (f *FS) Unmount() error {
-	defer f.conn.Close()
+	defer f.fuse.CloseConnection(f.conn)
 
-	return fuse.Unmount(f.Mountpoint)
+	return f.fuse.Unmount(f.Mountpoint)
 }
 
 func (FS) Root() (fs.Node, error) {

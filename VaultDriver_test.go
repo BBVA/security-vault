@@ -7,16 +7,16 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/docker/go-plugins-helpers/volume"
 	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
+	"github.com/docker/go-plugins-helpers/volume"
 )
 
 type FakeDirUtils struct {
-	lstatError    error
-	exist         bool
-	lstatFileInfo os.FileInfo
-	mkdirError    error
-	removeAllError    error
+	lstatError     error
+	exist          bool
+	lstatFileInfo  os.FileInfo
+	mkdirError     error
+	removeAllError error
 }
 
 func (f FakeDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
@@ -222,10 +222,10 @@ func TestVaultDriver_Unmount(t *testing.T) {
 				ID:   "abcdef1234567890",
 			},
 			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
+				lstatError:     nil,
+				exist:          false,
+				lstatFileInfo:  nil,
+				mkdirError:     nil,
 				removeAllError: errors.New("error"),
 			},
 			fuseUtils: FakeFuseUtils{

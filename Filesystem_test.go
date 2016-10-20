@@ -39,6 +39,10 @@ func (f FakeFuseWrapper) GetError(conn *fuse.Conn) error {
 	return f.connMountError
 }
 
+func (f FakeFuseWrapper) CloseConnection(conn *fuse.Conn) error {
+	return nil
+}
+
 func TestFS_Mount(t *testing.T) {
 
 	fixtures := []struct {
@@ -86,9 +90,8 @@ func TestFS_Mount(t *testing.T) {
 func TestFS_MountCrashOnServe(t *testing.T) {
 
 	fixtures := []struct {
-		fuse             FakeFuseWrapper
-		mountPoint       string
-		expectedResponse error
+		fuse       FakeFuseWrapper
+		mountPoint string
 	}{
 		{
 			fuse: FakeFuseWrapper{
@@ -98,11 +101,10 @@ func TestFS_MountCrashOnServe(t *testing.T) {
 				},
 			},
 			mountPoint: "test",
-			expectedResponse: errors.New("error"),
 		},
 	}
 
-	wrapperForTestingCrashingFunction(t, func() {
+	wrapperForTestingCrashingFunction(t, "TestFS_MountCrashOnServe", func() {
 		fixture := fixtures[0]
 
 		f, _ := NewFS(fixture.mountPoint, fixture.fuse)
@@ -111,13 +113,13 @@ func TestFS_MountCrashOnServe(t *testing.T) {
 	})
 }
 
-func wrapperForTestingCrashingFunction(t *testing.T, crasher func()) {
+func wrapperForTestingCrashingFunction(t *testing.T, test string, crasher func()) {
 	if os.Getenv("BE_CRASHER") == "1" {
 		crasher()
 		return
 	}
 
-	cmd := exec.Command(os.Args[0], "-test.run=TestFS_MountCrashOnServe")
+	cmd := exec.Command(os.Args[0], "-test.run=" + test)
 	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
 
 	// Check that the program exited
@@ -130,5 +132,35 @@ func wrapperForTestingCrashingFunction(t *testing.T, crasher func()) {
 }
 
 func TestFS_Unmount(t *testing.T) {
+	fixtures := []struct {
+		fuse             FakeFuseWrapper
+		mountPoint       string
+		expectedResponse error
+	}{
+		{
+			fuse: FakeFuseWrapper{
+				waitReady: func() {},
+			},
+			mountPoint: "test",
+			expectedResponse: nil,
+		},
+		{
+			fuse: FakeFuseWrapper{
+				unmountError: errors.New("error"),
+				waitReady: func() {},
+			},
+			mountPoint: "test",
+			expectedResponse: errors.New("error"),
+		},
+	}
 
+	for i, fixture := range fixtures {
+		f, _ := NewFS(fixture.mountPoint, fixture.fuse)
+
+		err := f.Unmount()
+
+		if !reflect.DeepEqual(err, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, err)
+		}
+	}
 }

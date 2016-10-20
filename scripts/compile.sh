@@ -2,4 +2,8 @@
 
 set -x
 
-go test -v && CGO_ENABLED=0 go build -v -a
+pushd test
+    go test -v
+popd
+
+CGO_ENABLED=0 go build -v -a

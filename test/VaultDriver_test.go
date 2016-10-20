@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"errors"
@@ -9,6 +9,7 @@ import (
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"github.com/docker/go-plugins-helpers/volume"
+	. "descinet.bbva.es/cloudframe-security-vault"
 )
 
 type FakeDirUtils struct {
@@ -29,6 +30,10 @@ func (f FakeDirUtils) MkdirAll(path string, perm os.FileMode) error {
 
 func (f FakeDirUtils) IsNotExist(err error) bool {
 	return !f.exist
+}
+
+func (f FakeDirUtils) IsExist(err error) bool {
+	return f.exist
 }
 
 func (f FakeDirUtils) RemoveAll(path string) error {

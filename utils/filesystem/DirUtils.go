@@ -6,6 +6,7 @@ type DirUtils interface {
 	Lstat(mountPoint string) (os.FileInfo, error)
 	MkdirAll(path string, perm os.FileMode) error
 	IsNotExist(err error) bool
+	IsExist(err error) bool
 	RemoveAll(path string) error
 }
 
@@ -21,6 +22,10 @@ func (d DefaultDirUtils) Lstat(mountPoint string) (os.FileInfo, error) {
 
 func (d DefaultDirUtils) IsNotExist(err error) bool {
 	return os.IsNotExist(err)
+}
+
+func (d DefaultDirUtils) IsExist(err error) bool {
+	return os.IsExist(err)
 }
 
 func (d DefaultDirUtils) RemoveAll(path string) error {

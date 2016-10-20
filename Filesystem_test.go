@@ -1,14 +1,15 @@
 package main
 
 import (
-	"testing"
-	"bazil.org/fuse"
-	"reflect"
-	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"errors"
 	"os"
 	"os/exec"
+	"reflect"
+	"testing"
 	"time"
+
+	"bazil.org/fuse"
+	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type FakeFuseWrapper struct {
@@ -54,23 +55,23 @@ func TestFS_Mount(t *testing.T) {
 			fuse: FakeFuseWrapper{
 				waitReady: func() {},
 			},
-			mountPoint: "test",
+			mountPoint:       "test",
 			expectedResponse: nil,
 		},
 		{
 			fuse: FakeFuseWrapper{
 				mountError: errors.New("error"),
-				waitReady: func() {},
+				waitReady:  func() {},
 			},
-			mountPoint: "test",
+			mountPoint:       "test",
 			expectedResponse: errors.New("error"),
 		},
 		{
 			fuse: FakeFuseWrapper{
 				connMountError: errors.New("error"),
-				waitReady: func() {},
+				waitReady:      func() {},
 			},
-			mountPoint: "test",
+			mountPoint:       "test",
 			expectedResponse: errors.New("error"),
 		},
 	}
@@ -119,7 +120,7 @@ func wrapperForTestingCrashingFunction(t *testing.T, test string, crasher func()
 		return
 	}
 
-	cmd := exec.Command(os.Args[0], "-test.run=" + test)
+	cmd := exec.Command(os.Args[0], "-test.run="+test)
 	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
 
 	// Check that the program exited
@@ -141,15 +142,15 @@ func TestFS_Unmount(t *testing.T) {
 			fuse: FakeFuseWrapper{
 				waitReady: func() {},
 			},
-			mountPoint: "test",
+			mountPoint:       "test",
 			expectedResponse: nil,
 		},
 		{
 			fuse: FakeFuseWrapper{
 				unmountError: errors.New("error"),
-				waitReady: func() {},
+				waitReady:    func() {},
 			},
-			mountPoint: "test",
+			mountPoint:       "test",
 			expectedResponse: errors.New("error"),
 		},
 	}

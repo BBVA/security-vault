@@ -23,6 +23,6 @@ func (d DefaultDirUtils) IsNotExist(err error) bool {
 	return os.IsNotExist(err)
 }
 
-func (d DefaultDirUtils) RemoveAll(path string) error{
+func (d DefaultDirUtils) RemoveAll(path string) error {
 	return os.RemoveAll(path)
 }

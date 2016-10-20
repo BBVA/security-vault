@@ -64,7 +64,7 @@ func NewFS(mountpoint string, fuse Fuse) (*FS, error) {
 	}()
 
 	return &FS{
-		fuse: fuse,
+		fuse:       fuse,
 		Mountpoint: mountpoint,
 		ErrChan:    c,
 	}, nil

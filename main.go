@@ -37,11 +37,14 @@ func main() {
 	}
 
 	fuse := filesystem.DefaultFuseWrapper{}
-	dirUtils := filesystem.DefaultDirUtils{}
 	fuseUtils := fuseutils.NewFuseUtils(fuse)
-	d := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, dirUtils, fuseUtils)
-	persitor, _ := NewVolumePersistor(DefaultConfigPath, d, dirUtils)
-	h := volume.NewHandler(persitor)
+	dirUtils := filesystem.DefaultDirUtils{}
+
+	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, dirUtils, fuseUtils)
+	persitor, _ := NewVolumePersistor(DefaultConfigPath, driver, dirUtils)
+	handler := volume.NewHandler(persitor)
+
 	fmt.Printf("Listening on %s\n", SocketAddress)
-	fmt.Println(h.ServeUnix("root", SocketAddress))
+	fmt.Println(handler.ServeUnix("root", SocketAddress))
 }
+

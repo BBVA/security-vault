@@ -89,7 +89,7 @@ func TestVaultDriver_Mount(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		d := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		d := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 		response := d.Mount(fixture.mountRequest)
 
 		if !reflect.DeepEqual(response, fixture.expectedResponse) {
@@ -160,7 +160,7 @@ func TestVaultDriver_Unmount(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Unmount(fixture.unmountRequest)
 
@@ -221,7 +221,7 @@ func TestVaultDriver_Path(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Path(fixture.request)
 
@@ -263,7 +263,7 @@ func TestVaultDriver_Capabilities(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Capabilities(fixture.request)
 
@@ -331,7 +331,7 @@ func TestVaultDriver_Create(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Create(fixture.request)
 
@@ -384,7 +384,7 @@ func TestVaultDriver_Remove(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Remove(fixture.request)
 
@@ -455,7 +455,7 @@ func TestVaultDriver_List(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.List(fixture.request)
 
@@ -521,7 +521,7 @@ func TestVaultDriver_Get(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver := NewVaultDriver("testpath", "testserver", "testtoken", fixture.dirUtils, fixture.fuseUtils)
+		driver := NewVaultDriver("testpath", "testserver", "testtoken", &fixture.dirUtils, fixture.fuseUtils)
 
 		response := driver.Get(fixture.request)
 

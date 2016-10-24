@@ -7,6 +7,7 @@ type FakeVolumeDriver struct{
 	getResponse volume.Response
 	listResponse volume.Response
 	pathResponse volume.Response
+	mountResponse volume.Response
 }
 
 func (p FakeVolumeDriver) Create(r volume.Request) volume.Response {
@@ -30,7 +31,7 @@ func (p FakeVolumeDriver) Path(r volume.Request) volume.Response {
 }
 
 func (p FakeVolumeDriver) Mount(r volume.MountRequest) volume.Response {
-	return volume.Response{}
+	return p.mountResponse
 }
 
 func (p FakeVolumeDriver) Unmount(r volume.UnmountRequest) volume.Response {

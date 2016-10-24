@@ -21,7 +21,7 @@ const (
 var (
 	//DefaultPath = filepath.Join(volume.DefaultDockerRootDirectory, "_vault")
 	DefaultMountPath = filepath.Join("/mnt/volumes", "_vault")
-	DefaultConfigPath = filepath.Join("/opt", "security-vault")
+	DefaultConfigPath = filepath.Join("/tmp", "security-vault")
 )
 
 /* hay que implementar argumentos para recibir:
@@ -39,9 +39,10 @@ func main() {
 	fuse := filesystem.DefaultFuseWrapper{}
 	fuseUtils := fuseutils.NewFuseUtils(fuse)
 	dirUtils := filesystem.DefaultDirUtils{}
+	fileUtils := filesystem.DefaultFileUtils{}
 
-	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, dirUtils, fuseUtils)
-	persitor, _ := NewVolumePersistor(DefaultConfigPath, driver, dirUtils)
+	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, &dirUtils, fuseUtils)
+	persitor, _ := NewVolumePersistor(DefaultConfigPath, driver, &dirUtils, &fileUtils)
 	handler := volume.NewHandler(persitor)
 
 	fmt.Printf("Listening on %s\n", SocketAddress)

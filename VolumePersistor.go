@@ -3,15 +3,20 @@ package main
 import (
 	"github.com/docker/go-plugins-helpers/volume"
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"path"
+	"strings"
+	"encoding/json"
+	"fmt"
 )
 
 type VolumePersistor struct {
-	driver volume.Driver
-	dirUtils filesystem.DirUtils
-	path   string
+	driver    volume.Driver
+	dirUtils  filesystem.DirUtils
+	fileUtils filesystem.FileUtils
+	path      string
 }
 
-func NewVolumePersistor(path string, volumeDriver volume.Driver, dirUtils filesystem.DirUtils) (*VolumePersistor, error) {
+func NewVolumePersistor(path string, volumeDriver volume.Driver, dirUtils filesystem.DirUtils, fileUtils filesystem.FileUtils) (*VolumePersistor, error) {
 
 	_, err := dirUtils.Lstat(path)
 
@@ -28,6 +33,7 @@ func NewVolumePersistor(path string, volumeDriver volume.Driver, dirUtils filesy
 	return &VolumePersistor{
 		driver: volumeDriver,
 		dirUtils: dirUtils,
+		fileUtils: fileUtils,
 		path: path,
 	}, nil
 }
@@ -55,15 +61,38 @@ func (p VolumePersistor) Path(r volume.Request) volume.Response {
 }
 
 func (p VolumePersistor) Mount(r volume.MountRequest) volume.Response {
-	// TODO save volume data
+	fullFileName := fullFilePath(p.path, r.ID, ".json")
+
+	fileContent, err := mountRequestToJson(r)
+	if err != nil {
+		return volume.Response{Err: fmt.Sprintf("Could not marshal volume data: %s", err.Error())}
+	}
+	if err := p.fileUtils.Write(fullFileName, fileContent, 0644); err != nil {
+		return volume.Response{Err: fmt.Sprintf("Could not persist volume data: %s", err.Error())}
+	}
+
 	return p.driver.Mount(r)
 }
 
 func (p VolumePersistor) Unmount(r volume.UnmountRequest) volume.Response {
-	// TODO remove volume data
+	fullFileName := fullFilePath(p.path, r.ID, ".json")
+
+	if err := p.dirUtils.RemoveAll(fullFileName); err != nil {
+		return volume.Response{Err: fmt.Sprintf("Error removing volume data: %s", err.Error())}
+	}
+
 	return p.driver.Unmount(r)
 }
 
 func (p VolumePersistor) Capabilities(r volume.Request) volume.Response {
 	return p.driver.Capabilities(r)
+}
+
+func mountRequestToJson(r volume.MountRequest) ([]byte, error) {
+	return json.Marshal(&r)
+}
+
+func fullFilePath(dir, name, extension string) string {
+	fileName := strings.Join([]string{name, extension}, "")
+	return path.Join(dir, fileName)
 }

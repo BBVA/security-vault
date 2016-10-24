@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"github.com/docker/go-plugins-helpers/volume"
 	. "descinet.bbva.es/cloudframe-security-vault"
+	"errors"
 )
 
 func TestNewVolumePersistor(t *testing.T) {
@@ -19,17 +20,12 @@ func TestVolumePersistor_List(t *testing.T) {
 	fixtures := []struct {
 		request          volume.Request
 		dirUtils         FakeDirUtils
+		fileUtils        FakeFileUtils
 		volumeDriver     FakeVolumeDriver
 		expectedResponse volume.Response
 	}{
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				listResponse: volume.Response{},
 			},
@@ -37,12 +33,6 @@ func TestVolumePersistor_List(t *testing.T) {
 		},
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				listResponse: volume.Response{Err: "error"},
 			},
@@ -51,7 +41,7 @@ func TestVolumePersistor_List(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, fixture.dirUtils)
+		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.List(fixture.request)
 
@@ -66,17 +56,12 @@ func TestVolumePersistor_Get(t *testing.T) {
 	fixtures := []struct {
 		request          volume.Request
 		dirUtils         FakeDirUtils
+		fileUtils        FakeFileUtils
 		volumeDriver     FakeVolumeDriver
 		expectedResponse volume.Response
 	}{
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				getResponse: volume.Response{},
 			},
@@ -84,12 +69,6 @@ func TestVolumePersistor_Get(t *testing.T) {
 		},
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				getResponse: volume.Response{Err: "error"},
 			},
@@ -98,7 +77,7 @@ func TestVolumePersistor_Get(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, fixture.dirUtils)
+		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Get(fixture.request)
 
@@ -117,17 +96,12 @@ func TestVolumePersistor_Path(t *testing.T) {
 	fixtures := []struct {
 		request          volume.Request
 		dirUtils         FakeDirUtils
+		fileUtils        FakeFileUtils
 		volumeDriver     FakeVolumeDriver
 		expectedResponse volume.Response
 	}{
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				pathResponse: volume.Response{},
 			},
@@ -135,12 +109,6 @@ func TestVolumePersistor_Path(t *testing.T) {
 		},
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				pathResponse: volume.Response{Err: "error"},
 			},
@@ -149,7 +117,7 @@ func TestVolumePersistor_Path(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, fixture.dirUtils)
+		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Path(fixture.request)
 
@@ -161,11 +129,115 @@ func TestVolumePersistor_Path(t *testing.T) {
 }
 
 func TestVolumePersistor_Mount(t *testing.T) {
-	t.Skip("Not yet implemented")
+	fixtures := []struct {
+		request             volume.MountRequest
+		dirUtils            FakeDirUtils
+		fileUtils           FakeFileUtils
+		volumeDriver        FakeVolumeDriver
+		expectedResponse    volume.Response
+		expectedFileContent string
+	}{
+		{
+			request: volume.MountRequest{
+				Name: "test",
+				ID: "1234567",
+			},
+			fileUtils: FakeFileUtils{
+				writeError: nil,
+				expectedWriteCalls: 1,
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountResponse: volume.Response{},
+			},
+			expectedResponse: volume.Response{},
+			expectedFileContent: "{\"Name\":\"test\",\"ID\":\"1234567\"}",
+		},
+		{
+			request: volume.MountRequest{
+				Name: "test",
+				ID: "1234567",
+			},
+			fileUtils: FakeFileUtils{
+				writeError: errors.New("error"),
+				expectedWriteCalls: 1,
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountResponse: volume.Response{},
+			},
+			expectedResponse: volume.Response{Err: "Could not persist volume data: error"},
+			expectedFileContent: "{\"Name\":\"test\",\"ID\":\"1234567\"}",
+		},
+	}
+
+	for i, fixture := range fixtures {
+		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+
+		response := driver.Mount(fixture.request)
+
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected response %v, received %v\n", i, fixture.expectedResponse, response)
+		}
+
+		if fixture.fileUtils.writeCalls != fixture.fileUtils.expectedWriteCalls {
+			t.Errorf("%d - Expected %d write calls, received %d\n", i, fixture.fileUtils.expectedWriteCalls, fixture.fileUtils.writeCalls)
+		}
+
+		if !reflect.DeepEqual(fixture.fileUtils.writeBytes, fixture.expectedFileContent) {
+			t.Errorf("%d - Expected file content %s, received %s\n", i, fixture.expectedFileContent, fixture.fileUtils.writeBytes)
+		}
+	}
 }
 
 func TestVolumePersistor_Unmount(t *testing.T) {
-	t.Skip("Not yet implemented")
+	fixtures := []struct {
+		request          volume.UnmountRequest
+		dirUtils         FakeDirUtils
+		fileUtils        FakeFileUtils
+		volumeDriver     FakeVolumeDriver
+		expectedResponse volume.Response
+	}{
+		{
+			request: volume.UnmountRequest{
+				Name: "test",
+				ID: "1234567",
+			},
+			dirUtils: FakeDirUtils{
+				removeAllExpectedCalls: 1,
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountResponse: volume.Response{},
+			},
+			expectedResponse: volume.Response{},
+		},
+		{
+			request: volume.UnmountRequest{
+				Name: "test",
+				ID: "1234567",
+			},
+			dirUtils: FakeDirUtils{
+				removeAllExpectedCalls: 1,
+				removeAllError: errors.New("error"),
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountResponse: volume.Response{},
+			},
+			expectedResponse: volume.Response{Err: "Error removing volume data: error"},
+		},
+	}
+
+	for i, fixture := range fixtures {
+		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+
+		response := driver.Unmount(fixture.request)
+
+		if !reflect.DeepEqual(response, fixture.expectedResponse) {
+			t.Errorf("%d - Expected response %v, received %v\n", i, fixture.expectedResponse, response)
+		}
+
+		if fixture.dirUtils.removeAllExpectedCalls != fixture.dirUtils.removeAllCalls {
+			t.Errorf("%d - Expected %d removeAll calls, received %d\n", i, fixture.dirUtils.removeAllExpectedCalls, fixture.dirUtils.removeAllCalls)
+		}
+	}
 }
 
 func TestVolumePersistor_Capabilities(t *testing.T) {
@@ -173,17 +245,12 @@ func TestVolumePersistor_Capabilities(t *testing.T) {
 	fixtures := []struct {
 		request          volume.Request
 		dirUtils         FakeDirUtils
+		fileUtils        FakeFileUtils
 		volumeDriver     FakeVolumeDriver
 		expectedResponse volume.Response
 	}{
 		{
 			request: volume.Request{},
-			dirUtils: FakeDirUtils{
-				lstatError:    nil,
-				exist:         false,
-				lstatFileInfo: nil,
-				mkdirError:    nil,
-			},
 			volumeDriver: FakeVolumeDriver{
 				capabilitiesResponse:volume.Response{},
 			},
@@ -192,7 +259,7 @@ func TestVolumePersistor_Capabilities(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, fixture.dirUtils)
+		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Capabilities(fixture.request)
 

@@ -10,6 +10,7 @@ import (
 	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"github.com/docker/go-plugins-helpers/volume"
 	"golang.org/x/sys/unix"
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 )
 
 const (
@@ -37,10 +38,11 @@ func main() {
 	}
 
 	fuse := filesystem.DefaultFuseWrapper{}
-	fuseUtils := fuseutils.NewFuseUtils(fuse)
 	dirUtils := filesystem.DefaultDirUtils{}
 	fileUtils := filesystem.DefaultFileUtils{}
-
+	ExampleSecretApiHandler := SecretApi.NewExampleSecretApi()
+	secretApiHandler := SecretApi.NewSecretApi(ExampleSecretApiHandler)
+	fuseUtils := fuseutils.NewFuseUtils(fuse, secretApiHandler)
 	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, &dirUtils, fuseUtils)
 	persitor, _ := NewVolumePersistor(DefaultConfigPath, driver, &dirUtils, &fileUtils)
 	handler := volume.NewHandler(persitor)

@@ -1,20 +1,23 @@
 package SecretApi
 
-import "bazil.org/fuse"
+type Secret struct {
+	content []byte
+	len     int
+}
 
 type SecretApi interface {
-	GetSecret(SecretID string) (string, error)
-	LookupSecretsDir() []fuse.Dirent
+	GetSecret(SecretID string) ([]byte, error)
+	GetSecretFiles() map[string]*secret
 }
 
 type SecretApiHandler struct {
-	GetSecretFunc func()
-	LookupSecretsDirFunc func()
+	GetSecretFunc      func(SecretID string) ([]byte, error)
+	GetSecretFilesFunc func() map[string]*secret
 }
 
-func NewSecretApi (handle SecretApi) *SecretApiHandler {
+func NewSecretApi(handle SecretApi) *SecretApiHandler {
 	return &SecretApiHandler{
-		GetSecretFunc: handle.GetSecret,
-		LookupSecretsDirFunc: handle.LookupSecretsDir,
+		GetSecretFunc:      handle.GetSecret,
+		GetSecretFilesFunc: handle.GetSecretFiles,
 	}
 }

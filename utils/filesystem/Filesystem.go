@@ -6,6 +6,7 @@ import (
 
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
+	. "descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"golang.org/x/net/context"
 )
 
@@ -45,18 +46,32 @@ func (DefaultFuseWrapper) CloseConnection(conn *fuse.Conn) error {
 }
 
 type FS struct {
-	fuse       Fuse
-	Mountpoint string
-	VolumeId   string
-	conn       *fuse.Conn
-	ErrChan    chan (error)
-	server     *fs.Server
+	fuse          Fuse
+	Mountpoint    string
+	VolumeId      string
+	conn          *fuse.Conn
+	ErrChan       chan (error)
+	server        *fs.Server
+	secretHandler *SecretApiHandler
 	//store      store.SecretStore
 	//files      map[string]*File
 	//tick       *time.Ticker
 }
 
-func NewFS(mountpoint string, fuse Fuse) (*FS, error) {
+type Dir struct {
+	secretHandler *SecretApiHandler
+	dir           []fuse.Dirent
+}
+
+type File struct {
+	Name    string
+	Inode   uint64
+	Mode    os.FileMode
+	Size    int
+	Content []byte
+}
+
+func NewFS(mountpoint string, fuse Fuse, secretHandler *SecretApiHandler) (*FS, error) {
 	c := make(chan error)
 	go func() {
 		err := <-c
@@ -64,9 +79,10 @@ func NewFS(mountpoint string, fuse Fuse) (*FS, error) {
 	}()
 
 	return &FS{
-		fuse:       fuse,
-		Mountpoint: mountpoint,
-		ErrChan:    c,
+		fuse:          fuse,
+		Mountpoint:    mountpoint,
+		ErrChan:       c,
+		secretHandler: secretHandler,
 	}, nil
 }
 
@@ -110,69 +126,63 @@ func (f *FS) Unmount() error {
 	return f.fuse.Unmount(f.Mountpoint)
 }
 
-func (FS) Root() (fs.Node, error) {
-	return Dir{}, nil
+func (f *FS) Root() (fs.Node, error) {
+	return &Dir{
+		secretHandler: f.secretHandler,
+	}, nil
 }
 
-type Dir struct{}
-
-func (Dir) Attr(ctx context.Context, a *fuse.Attr) error {
+func (d *Dir) Attr(ctx context.Context, a *fuse.Attr) error {
 	log.Println("Fuse Dir Attr")
 	a.Inode = 1
 	a.Mode = os.ModeDir | 0555
 	return nil
 }
 
-func (Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
+func (d *Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
 	log.Println("Fuse Dir Lookup")
-	switch name {
-	case "cert":
+	var inode uint64
+	for _, file := range d.dir { //Es feo, lo sé, no se me ocurre nada más bonito.
+		if name == file.Name {
+			inode = file.Inode
+			break
+		}
+	}
+	if secret, err := d.secretHandler.GetSecretFunc(name); err != nil {
+		return nil,err
+	} else {
 		return &File{
-			name:    "cert",
-			inode:   2,
-			content: []byte("certificadooorr\n"),
-			mode:    0444,
+			Name:    name,
+			Inode:   inode,
+			Mode:    0444,
+			Content: secret,
+			Size:    len(secret),
 		}, nil
-	case "private":
-		return &File{
-			name:    "private",
-			inode:   3,
-			content: []byte("clave super privada\n"),
-			mode:    0444,
-		}, nil
-	default:
-		return nil, fuse.ENOENT
-
 	}
 }
 
-var dirDirs = []fuse.Dirent{
-	{Inode: 2, Name: "cert", Type: fuse.DT_File},
-	{Inode: 3, Name: "private", Type: fuse.DT_File},
-}
-
-func (Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
+func (d *Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 	log.Println("Fuse Dir ReadDirAll")
-	return dirDirs, nil
-}
-
-// File implements both Node and Handle for the hello file.
-type File struct {
-	name    string
-	inode   uint64
-	content []byte
-	mode    os.FileMode
+	var dir []fuse.Dirent
+	var inode uint64 = 2 // Because inode 1 is always the Dir itself.
+	files := d.secretHandler.GetSecretFilesFunc()
+	for k := range files {
+		dir = append(dir, fuse.Dirent{Inode: inode, Name: k, Type: fuse.DT_File})
+		inode++
+	}
+	d.dir = dir
+	return dir, nil
 }
 
 func (f *File) Attr(ctx context.Context, a *fuse.Attr) error {
 	log.Println("Fuse File Attr")
-	a.Inode = f.inode
-	a.Mode = f.mode
-	a.Size = uint64(len(f.content))
+	a.Inode = f.Inode
+	a.Mode = f.Mode
+	a.Size = uint64(len(f.Content))
 	return nil
 }
 
 func (f *File) ReadAll(ctx context.Context) ([]byte, error) {
 	log.Println("Fuse File ReadAll")
-	return f.content, nil
+	return f.Content, nil
 }

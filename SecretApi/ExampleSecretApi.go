@@ -1,58 +1,51 @@
 package SecretApi
 
 import (
-	"bazil.org/fuse"
-	"os"
+	"github.com/pkg/errors"
 )
 
 type secret struct {
 	content []byte
-	len     uint64
-	mode    os.FileMode
+	len     int
+
 }
 
 type ExampleSecretApi struct {
-	secrets map[string]secret
+	secrets map[string]*secret
 }
 
-func NewExampleSecretApi() ExampleSecretApi {
+
+func NewExampleSecretApi() *ExampleSecretApi {
 
 	privateContent := []byte("clave super privada\n")
 	certContent := []byte("certificadooorr\n")
 
-	secrets := make(map[string]secret)
-	secrets["private"] = secret{
+	secrets := make(map[string]*secret)
+	secrets["private"] = &secret{
 		content: privateContent,
-		mode:    0444,
 		len:     len(privateContent),
 	}
-	secrets["cert"] = secret{
+	secrets["cert"] = &secret{
 		content: certContent,
-		mode:    0444,
 		len:     len(certContent),
 	}
 
-	return ExampleSecretApi{
+	return &ExampleSecretApi{
 		secrets: secrets,
 	}
 }
 
-func (Api *ExampleSecretApi) GetSecret(SecretID string) (string, error) {
+func (Api *ExampleSecretApi) GetSecret(SecretID string) ([]byte, error) {
 
 	secret, ok := Api.secrets[SecretID]
 	if ok {
 		return secret.content, nil
 	}
-	return nil, "No secret found boyyyzzzz\n"
+	return nil, errors.New("No secret")
 
 }
 
-func (Api *ExampleSecretApi) LookupSecretsDir() []fuse.Dirent {
-
-	var dir []fuse.Dirent
-	var inode = 2 // Because inode 1 is always the Dir itself.
-	for k := range Api.secrets {
-		append(dir, fuse.Dirent{Inode: inode, Name: k, Type: fuse.DT_File})
-	}
-	return dir
+func (Api *ExampleSecretApi) GetSecretFiles() map[string]*secret {
+	return Api.secrets
 }
+

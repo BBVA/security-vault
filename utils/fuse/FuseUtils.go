@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 )
 
 type VolumeOptions map[string]string
@@ -31,12 +32,14 @@ type FuseUtils interface {
 type DefaultFuseUtils struct {
 	vols map[string]*Volume
 	fuse Fuse
+	secretHandler *SecretApi.SecretApiHandler
 }
 
-func NewFuseUtils(fuse Fuse) FuseUtils {
+func NewFuseUtils(fuse Fuse, handler *SecretApi.SecretApiHandler) FuseUtils {
 	return DefaultFuseUtils{
 		vols: make(map[string]*Volume),
 		fuse: fuse,
+		secretHandler: handler,
 	}
 }
 
@@ -71,7 +74,7 @@ func (d DefaultFuseUtils) Remove(volumeName string) error {
 }
 
 func (d DefaultFuseUtils) Mount(volumeId, mountPoint, volumeName string) error {
-	fs, err := NewFS(mountPoint, d.fuse)
+	fs, err := NewFS(mountPoint, d.fuse, d.secretHandler)
 	if err != nil {
 		fs.ErrChan <- err
 	}

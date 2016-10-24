@@ -15,7 +15,7 @@ type ExampleSecretApi struct {
 	secrets map[string]secret
 }
 
-func NewExampleSecretApi() SecretApi {
+func NewExampleSecretApi() ExampleSecretApi {
 
 	privateContent := []byte("clave super privada\n")
 	certContent := []byte("certificadooorr\n")
@@ -37,7 +37,7 @@ func NewExampleSecretApi() SecretApi {
 	}
 }
 
-func (Api *ExampleSecretApi) getSecret(SecretID string) (string, error) {
+func (Api *ExampleSecretApi) GetSecret(SecretID string) (string, error) {
 
 	secret, ok := Api.secrets[SecretID]
 	if ok {
@@ -47,7 +47,7 @@ func (Api *ExampleSecretApi) getSecret(SecretID string) (string, error) {
 
 }
 
-func (Api *ExampleSecretApi) lookupSecretsDir() []fuse.Dirent {
+func (Api *ExampleSecretApi) LookupSecretsDir() []fuse.Dirent {
 
 	var dir []fuse.Dirent
 	var inode = 2 // Because inode 1 is always the Dir itself.

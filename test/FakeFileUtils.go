@@ -9,6 +9,7 @@ type FakeFileUtils struct {
 	writeError         error
 	bytesRead          string
 	readCalls          int
+	expectedReadCalls int
 	readError          error
 }
 

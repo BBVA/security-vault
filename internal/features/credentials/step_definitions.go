@@ -2,7 +2,6 @@ package credentials
 
 import (
 	"context"
-	"errors"
 	"reflect"
 	"strings"
 
@@ -69,7 +68,7 @@ func init() {
 			//fmt.Println(content, len(content))
 
 			if !reflect.DeepEqual(expectedContent, content) {
-				panic(errors.New("Expected: " + expectedContent + " Actual: " + content))
+				T.Errorf("Expected: " + expectedContent + " Actual: " + content)
 			}
 		}
 	})
@@ -79,7 +78,7 @@ func createDockerClient() *client.Client {
 	defaultHeaders := map[string]string{"User-Agent": "engine-api-cli-1.0"}
 	cli, err := client.NewClient("unix:///var/run/docker.sock", "v1.24", nil, defaultHeaders)
 	if err != nil {
-		panic(err)
+		T.Errorf(err.Error())
 	}
 
 	return cli
@@ -124,11 +123,11 @@ func createHostConfiguration(volumeDriver, hostFS, containerMountPoint string) *
 func runContainer(cli *client.Client, containerName string, hostConfiguration *container.HostConfig, containerConfiguration *container.Config) string {
 	response, err := cli.ContainerCreate(context.Background(), containerConfiguration, hostConfiguration, nil, containerName)
 	if err != nil {
-		panic(err)
+		T.Errorf(err.Error())
 	}
 
 	if err := cli.ContainerStart(context.Background(), response.ID, types.ContainerStartOptions{}); err != nil {
-		panic(err)
+		T.Errorf(err.Error())
 	}
 
 	return response.ID
@@ -146,22 +145,22 @@ func getFileContent(cli *client.Client, container string, fileName string) strin
 	}
 	execresponse, err := cli.ContainerExecCreate(context.Background(), container, options)
 	if err != nil {
-		panic(err)
+		T.Errorf(err.Error())
 	}
 
 	connection, err := cli.ContainerExecAttach(context.Background(), execresponse.ID, options)
 	if err != nil {
-		panic(err)
+		T.Errorf(err.Error())
 	}
 
 	defer connection.Close()
 
 	output, err := connection.Reader.ReadString('\n')
 	if err != nil {
-		panic(err)
+		T.Errorf(err.Error())
 	}
 	if len(output) == 0 {
-		panic("no data returned\n")
+		T.Errorf("no data returned\n")
 	}
 
 	return output[8:]
@@ -174,7 +173,7 @@ func destroyContainer(cli *client.Client, containers map[string]*Container) {
 			RemoveVolumes: true,
 			Force:         true,
 		}); err != nil {
-			panic(err)
+			T.Errorf(err.Error())
 		}
 	}
 }

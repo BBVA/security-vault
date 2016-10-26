@@ -41,7 +41,7 @@ func TestVolumePersistor_List(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+		driver, _ := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.List(fixture.request)
 
@@ -77,7 +77,7 @@ func TestVolumePersistor_Get(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+		driver, _ := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Get(fixture.request)
 
@@ -117,7 +117,7 @@ func TestVolumePersistor_Path(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+		driver, _ := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Path(fixture.request)
 
@@ -170,7 +170,7 @@ func TestVolumePersistor_Mount(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+		driver, _ := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Mount(fixture.request)
 
@@ -226,7 +226,7 @@ func TestVolumePersistor_Unmount(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+		driver, _ := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Unmount(fixture.request)
 
@@ -259,7 +259,7 @@ func TestVolumePersistor_Capabilities(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		driver, _ := NewVolumePersistor("testpath", fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+		driver, _ := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
 
 		response := driver.Capabilities(fixture.request)
 

@@ -1,38 +1,50 @@
 package SecretApi
 
 import (
+
 	"github.com/pkg/errors"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
-type secret struct {
-	content []byte
-	len     int
-
-}
-
 type ExampleSecretApi struct {
-	secrets map[string]*secret
+	secrets map[string]*Secret
 }
 
+func NewExampleSecretApi(cacert string, private string, public string, fileUtilsHandler filesystem.FileUtils) (*ExampleSecretApi, error) {
 
-func NewExampleSecretApi() *ExampleSecretApi {
 
-	privateContent := []byte("clave super privada\n")
-	certContent := []byte("certificadooorr\n")
+	privateContent, err := fileUtilsHandler.Read(private)
+	if err != nil {
+		return nil,err
+	}
 
-	secrets := make(map[string]*secret)
-	secrets["private"] = &secret{
+	publicContent, err := fileUtilsHandler.Read(public)
+	if err != nil {
+		return nil,err
+	}
+
+	caCertContent, err := fileUtilsHandler.Read(cacert)
+	if err != nil {
+		return nil,err
+	}
+
+	secrets := make(map[string]*Secret)
+	secrets["private"] = &Secret{
 		content: privateContent,
 		len:     len(privateContent),
 	}
-	secrets["cert"] = &secret{
-		content: certContent,
-		len:     len(certContent),
+	secrets["cacert"] = &Secret{
+		content: caCertContent,
+		len:     len(caCertContent),
+	}
+	secrets["public"] = &Secret{
+		content: publicContent,
+		len:     len(publicContent),
 	}
 
 	return &ExampleSecretApi{
 		secrets: secrets,
-	}
+	},nil
 }
 
 func (Api *ExampleSecretApi) GetSecret(SecretID string) ([]byte, error) {
@@ -45,7 +57,6 @@ func (Api *ExampleSecretApi) GetSecret(SecretID string) ([]byte, error) {
 
 }
 
-func (Api *ExampleSecretApi) GetSecretFiles() map[string]*secret {
+func (Api *ExampleSecretApi) GetSecretFiles() map[string]*Secret {
 	return Api.secrets
 }
-

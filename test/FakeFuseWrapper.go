@@ -2,7 +2,8 @@ package test
 
 import (
 	"bazil.org/fuse"
-	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	. "descinet.bbva.es/cloudframe-security-vault/utils/fuse"
+
 )
 
 type FakeFuseWrapper struct {

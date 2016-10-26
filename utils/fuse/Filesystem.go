@@ -1,4 +1,4 @@
-package filesystem
+package fuseutils
 
 import (
 	"log"
@@ -52,14 +52,14 @@ type FS struct {
 	conn          *fuse.Conn
 	ErrChan       chan (error)
 	server        *fs.Server
-	secretHandler *SecretApiHandler
+	secretHandler SecretApi
 	//store      store.SecretStore
 	//files      map[string]*File
 	//tick       *time.Ticker
 }
 
 type Dir struct {
-	secretHandler *SecretApiHandler
+	secretHandler SecretApi
 	dir           []fuse.Dirent
 }
 
@@ -71,7 +71,7 @@ type File struct {
 	Content []byte
 }
 
-func NewFS(mountpoint string, fuse Fuse, secretHandler *SecretApiHandler) (*FS, error) {
+func NewFS(mountpoint string, fuse Fuse, secretHandler SecretApi) (*FS, error) {
 	c := make(chan error)
 	go func() {
 		err := <-c
@@ -148,7 +148,7 @@ func (d *Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
 			break
 		}
 	}
-	if secret, err := d.secretHandler.GetSecretFunc(name); err != nil {
+	if secret, err := d.secretHandler.GetSecret(name); err != nil {
 		return nil,err
 	} else {
 		return &File{
@@ -165,7 +165,7 @@ func (d *Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 	log.Println("Fuse Dir ReadDirAll")
 	var dir []fuse.Dirent
 	var inode uint64 = 2 // Because inode 1 is always the Dir itself.
-	files := d.secretHandler.GetSecretFilesFunc()
+	files := d.secretHandler.GetSecretFiles()
 	for k := range files {
 		dir = append(dir, fuse.Dirent{Inode: inode, Name: k, Type: fuse.DT_File})
 		inode++

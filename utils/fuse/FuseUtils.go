@@ -3,7 +3,6 @@ package fuseutils
 import (
 	"errors"
 
-	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 )
 
@@ -32,10 +31,10 @@ type FuseUtils interface {
 type DefaultFuseUtils struct {
 	vols map[string]*Volume
 	fuse Fuse
-	secretHandler *SecretApi.SecretApiHandler
+	secretHandler SecretApi.SecretApi
 }
 
-func NewFuseUtils(fuse Fuse, handler *SecretApi.SecretApiHandler) FuseUtils {
+func NewFuseUtils(fuse Fuse, handler SecretApi.SecretApi) FuseUtils {
 	return DefaultFuseUtils{
 		vols: make(map[string]*Volume),
 		fuse: fuse,

@@ -8,19 +8,24 @@ import (
 	"testing"
 	"time"
 
-	. "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	. "descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 )
 
 func TestFS_Mount(t *testing.T) {
 
 	fixtures := []struct {
 		fuse             FakeFuseWrapper
+		secretHandler    FakeExampleSecretApi
 		mountPoint       string
 		expectedResponse error
 	}{
 		{
 			fuse: FakeFuseWrapper{
 				waitReady: func() {},
+			},
+			secretHandler: FakeExampleSecretApi{
+				getSecretContent: "prueba",
+
 			},
 			mountPoint:       "test",
 			expectedResponse: nil,
@@ -30,6 +35,10 @@ func TestFS_Mount(t *testing.T) {
 				mountError: errors.New("error"),
 				waitReady:  func() {},
 			},
+			secretHandler: FakeExampleSecretApi{
+				getSecretContent: "prueba",
+
+			},
 			mountPoint:       "test",
 			expectedResponse: errors.New("error"),
 		},
@@ -38,13 +47,17 @@ func TestFS_Mount(t *testing.T) {
 				connMountError: errors.New("error"),
 				waitReady:      func() {},
 			},
+			secretHandler: FakeExampleSecretApi{
+				getSecretContent: "prueba",
+
+			},
 			mountPoint:       "test",
 			expectedResponse: errors.New("error"),
 		},
 	}
 
 	for i, fixture := range fixtures {
-		f, _ := NewFS(fixture.mountPoint, fixture.fuse)
+		f, _ := NewFS(fixture.mountPoint, fixture.fuse, &fixture.secretHandler)
 
 		err := f.Mount(fixture.mountPoint)
 
@@ -59,6 +72,7 @@ func TestFS_MountCrashOnServe(t *testing.T) {
 
 	fixtures := []struct {
 		fuse       FakeFuseWrapper
+		secretHandler    FakeExampleSecretApi
 		mountPoint string
 	}{
 		{
@@ -68,6 +82,10 @@ func TestFS_MountCrashOnServe(t *testing.T) {
 					time.Sleep(2000)
 				},
 			},
+			secretHandler: FakeExampleSecretApi{
+				getSecretContent: "prueba",
+
+			},
 			mountPoint: "test",
 		},
 	}
@@ -75,7 +93,7 @@ func TestFS_MountCrashOnServe(t *testing.T) {
 	wrapperForTestingCrashingFunction(t, "TestFS_MountCrashOnServe", func() {
 		fixture := fixtures[0]
 
-		f, _ := NewFS(fixture.mountPoint, fixture.fuse)
+		f, _ := NewFS(fixture.mountPoint, fixture.fuse,&fixture.secretHandler)
 
 		f.Mount(fixture.mountPoint)
 	})
@@ -102,12 +120,17 @@ func wrapperForTestingCrashingFunction(t *testing.T, test string, crasher func()
 func TestFS_Unmount(t *testing.T) {
 	fixtures := []struct {
 		fuse             FakeFuseWrapper
+		secretHandler    FakeExampleSecretApi
 		mountPoint       string
 		expectedResponse error
 	}{
 		{
 			fuse: FakeFuseWrapper{
 				waitReady: func() {},
+			},
+			secretHandler: FakeExampleSecretApi{
+				getSecretContent: "prueba",
+
 			},
 			mountPoint:       "test",
 			expectedResponse: nil,
@@ -117,13 +140,17 @@ func TestFS_Unmount(t *testing.T) {
 				unmountError: errors.New("error"),
 				waitReady:    func() {},
 			},
+			secretHandler: FakeExampleSecretApi{
+				getSecretContent: "prueba",
+
+			},
 			mountPoint:       "test",
 			expectedResponse: errors.New("error"),
 		},
 	}
 
 	for i, fixture := range fixtures {
-		f, _ := NewFS(fixture.mountPoint, fixture.fuse)
+		f, _ := NewFS(fixture.mountPoint, fixture.fuse,&fixture.secretHandler)
 
 		err := f.Unmount()
 

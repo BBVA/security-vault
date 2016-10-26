@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -x
+set -u
+set -e
 
 pushd test
     go test -v

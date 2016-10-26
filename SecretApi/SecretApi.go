@@ -7,17 +7,6 @@ type Secret struct {
 
 type SecretApi interface {
 	GetSecret(SecretID string) ([]byte, error)
-	GetSecretFiles() map[string]*secret
+	GetSecretFiles() map[string]*Secret
 }
 
-type SecretApiHandler struct {
-	GetSecretFunc      func(SecretID string) ([]byte, error)
-	GetSecretFilesFunc func() map[string]*secret
-}
-
-func NewSecretApi(handle SecretApi) *SecretApiHandler {
-	return &SecretApiHandler{
-		GetSecretFunc:      handle.GetSecret,
-		GetSecretFilesFunc: handle.GetSecretFiles,
-	}
-}

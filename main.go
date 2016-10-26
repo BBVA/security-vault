@@ -6,17 +6,19 @@ import (
 
 	"syscall"
 
-	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
 	"github.com/docker/go-plugins-helpers/volume"
 	"golang.org/x/sys/unix"
+
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
+	"log"
 )
 
 const (
 	SocketAddress = "/run/docker/plugins/Vault.sock"
-	ServerUrl     = "http://localhost:8200"
-	VaultToken    = ""
+	ServerUrl = "http://localhost:8200"
+	VaultToken = ""
 )
 
 var (
@@ -51,7 +53,10 @@ func main() {
 
 	fuseUtils := fuseutils.NewFuseUtils(fuse, exampleSecretApiHandler)
 	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, &dirUtils, fuseUtils)
-	persitor, _ := NewVolumePersistor(DefaultConfigPath, driver, &dirUtils, &fileUtils)
+	persitor, err := NewVolumePersistor(DefaultConfigPath, &driver, &dirUtils, &fileUtils)
+	if err != nil {
+		log.Panic(err)
+	}
 	handler := volume.NewHandler(persitor)
 
 	fmt.Printf("Listening on %s\n", SocketAddress)

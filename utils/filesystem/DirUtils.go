@@ -1,6 +1,9 @@
 package filesystem
 
-import "os"
+import (
+	"os"
+	"io/ioutil"
+)
 
 type DirUtils interface {
 	Lstat(mountPoint string) (os.FileInfo, error)
@@ -8,6 +11,7 @@ type DirUtils interface {
 	IsNotExist(err error) bool
 	IsExist(err error) bool
 	RemoveAll(path string) error
+	ReadDir(dir string) ([]os.FileInfo, error)
 }
 
 type DefaultDirUtils struct{}
@@ -30,4 +34,8 @@ func (d *DefaultDirUtils) IsExist(err error) bool {
 
 func (d *DefaultDirUtils) RemoveAll(path string) error {
 	return os.RemoveAll(path)
+}
+
+func (d *DefaultDirUtils) ReadDir(dir string) ([]os.FileInfo, error) {
+	return ioutil.ReadDir(dir)
 }

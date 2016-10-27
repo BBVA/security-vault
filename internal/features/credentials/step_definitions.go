@@ -2,7 +2,6 @@ package credentials
 
 import (
 	"context"
-	"reflect"
 	"strings"
 
 	"fmt"
@@ -67,7 +66,8 @@ func init() {
 			//fmt.Println(expectedContent, len(expectedContent))
 			//fmt.Println(content, len(content))
 
-			if !reflect.DeepEqual(expectedContent, content) {
+			//if !reflect.DeepEqual(expectedContent, content)
+			if !strings.Contains(content, expectedContent) {
 				T.Errorf("Expected: " + expectedContent + " Actual: " + content)
 			}
 		}

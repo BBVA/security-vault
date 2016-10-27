@@ -11,3 +11,4 @@ security-vault:
   labels:
     service: vault-volumedriver
     io.rancher.scheduler.global: 'true'
+    io.rancher.scheduler.affinity:host_label: domain=accounting,instance.size=medium

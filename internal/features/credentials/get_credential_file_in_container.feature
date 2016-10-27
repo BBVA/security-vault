@@ -11,6 +11,6 @@ Feature:
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
       | file         | content         |
-      | /secret/public | public |
-      | /secret/private | private |
-      | /secret/cacert     | cacert |
+      | /secret/public | 3VkZnJhbW |
+      | /secret/private | p1xbnBgZFsgx7oix9jA |
+      | /secret/cacert     | MIIDnzCCAoegAwIBAgIJAKWcVjT+Ah |

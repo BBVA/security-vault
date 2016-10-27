@@ -10,7 +10,7 @@ Feature:
       | Vault         | test/mountpoint  | /secret               |
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
-      | file         | content         |
-      | /secret/public | public |
+      | file            | content |
+      | /secret/public  | public  |
       | /secret/private | private |
-      | /secret/cacert     | cacert |
+      | /secret/cacert  | cacert  |

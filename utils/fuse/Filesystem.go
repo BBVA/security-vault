@@ -6,8 +6,10 @@ import (
 
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
-	. "descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"golang.org/x/net/context"
+	"fmt"
+
+	. "descinet.bbva.es/cloudframe-security-vault/SecretApi"
 )
 
 type Fuse interface {
@@ -88,6 +90,7 @@ func NewFS(mountpoint string, fuse Fuse, secretHandler SecretApi) (*FS, error) {
 
 func (f *FS) Mount(volumeName string) error {
 	log.Printf("setting up fuse: volume=%s", volumeName)
+	var c *fuse.Conn
 	c, err := f.fuse.Mount(
 		f.Mountpoint,
 		fuse.FSName("vault"),
@@ -95,6 +98,7 @@ func (f *FS) Mount(volumeName string) error {
 		fuse.LocalVolume(),
 		fuse.VolumeName(volumeName),
 		fuse.ReadOnly(),
+		fuse.AllowNonEmptyMount(),
 		//fuse.NoExec(),
 	)
 	if err != nil {
@@ -104,6 +108,7 @@ func (f *FS) Mount(volumeName string) error {
 	f.conn = c
 
 	go func() {
+		fmt.Println("gorutine")
 		err := f.fuse.Serve(c, f)
 		if err != nil {
 			f.ErrChan <- err
@@ -142,12 +147,14 @@ func (d *Dir) Attr(ctx context.Context, a *fuse.Attr) error {
 func (d *Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
 	log.Println("Fuse Dir Lookup")
 	var inode uint64
-	for _, file := range d.dir { //Es feo, lo sé, no se me ocurre nada más bonito.
+	for _, file := range d.dir {
+		//Es feo, lo sé, no se me ocurre nada más bonito.
 		if name == file.Name {
 			inode = file.Inode
 			break
 		}
 	}
+
 	if secret, err := d.secretHandler.GetSecret(name); err != nil {
 		return nil,err
 	} else {

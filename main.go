@@ -12,7 +12,6 @@ import (
 	"golang.org/x/sys/unix"
 
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
-	"log"
 )
 
 const (
@@ -53,11 +52,8 @@ func main() {
 
 	fuseUtils := fuseutils.NewFuseUtils(fuse, exampleSecretApiHandler)
 	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, &dirUtils, fuseUtils)
-	persitor, err := NewVolumePersistor(DefaultConfigPath, &driver, &dirUtils, &fileUtils)
-	if err != nil {
-		log.Panic(err)
-	}
-	handler := volume.NewHandler(persitor)
+
+	handler := volume.NewHandler(driver)
 
 	fmt.Printf("Listening on %s\n", SocketAddress)
 	fmt.Println(handler.ServeUnix("root", SocketAddress))

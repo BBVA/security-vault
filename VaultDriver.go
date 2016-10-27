@@ -89,21 +89,23 @@ func (d VaultDriver) Mount(r volume.MountRequest) volume.Response {
 
 	mountPoint := path.Join(d.VolumePath, r.ID, r.Name)
 
-	log.Println("check mountpoint", mountPoint)
 	_, err := d.dirUtils.Lstat(mountPoint)
+	log.Println("check mountpoint", mountPoint, err)
 
 	if d.dirUtils.IsNotExist(err) {
 		if err := d.dirUtils.MkdirAll(mountPoint, 0755); err != nil {
+			log.Println("error mkdir", err)
 			return volume.Response{Err: err.Error()}
 		}
 	} else if err != nil {
+		log.Println("error IsNotExist", err)
 		return volume.Response{Err: err.Error()}
 	}
 
 	log.Println("mount volume", mountPoint)
 
 	if err := d.fuseUtils.Mount(r.ID, mountPoint, r.Name); err != nil {
-		log.Println(err.Error())
+		log.Println("mount error:", err.Error())
 		return volume.Response{Err: err.Error()}
 
 	}

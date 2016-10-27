@@ -1,15 +1,130 @@
 package test
 
 import (
-	"testing"
-	"reflect"
-	"github.com/docker/go-plugins-helpers/volume"
 	. "descinet.bbva.es/cloudframe-security-vault"
 	"errors"
+	"github.com/docker/go-plugins-helpers/volume"
+	"os"
+	"reflect"
+	"testing"
 )
 
 func TestNewVolumePersistor(t *testing.T) {
-	t.Skip("Not yet implemented")
+	fixtures := []struct {
+		dirUtils         FakeDirUtils
+		fileUtils        FakeFileUtils
+		volumeDriver     FakeVolumeDriver
+		expectedResponse error
+	}{
+		// Folder exists, single file
+		{
+			dirUtils: FakeDirUtils{
+				lstatError:           nil,
+				exist:                true,
+				mkdirExpectedCalls:   0,
+				readDirExpectedCalls: 1,
+				readDirFiles: []os.FileInfo{
+					&FakeFileInfo{
+						name: "Test.json",
+					},
+				},
+			},
+			fileUtils: FakeFileUtils{
+				expectedReadCalls: 1,
+				bytesRead:         "{\"Name\":\"test\",\"ID\":\"1234567\"}",
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountRequestsExpected: 1,
+				mountResponse:         volume.Response{},
+			},
+			expectedResponse: nil,
+		},
+		// Folder exists, multiple files file
+		{
+			dirUtils: FakeDirUtils{
+				lstatError:           nil,
+				exist:                true,
+				mkdirExpectedCalls:   0,
+				readDirExpectedCalls: 1,
+				readDirFiles: []os.FileInfo{
+					&FakeFileInfo{
+						name: "Test.json",
+					},
+					&FakeFileInfo{
+						name: "Test2.json",
+					},
+				},
+			},
+			fileUtils: FakeFileUtils{
+				expectedReadCalls: 2,
+				bytesRead:         "{\"Name\":\"test\",\"ID\":\"1234567\"}",
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountRequestsExpected: 2,
+				mountResponse:         volume.Response{},
+			},
+			expectedResponse: nil,
+		},
+		// Folder exists, no files
+		{
+			dirUtils: FakeDirUtils{
+				lstatError:           nil,
+				exist:                true,
+				mkdirExpectedCalls:   0,
+				readDirExpectedCalls: 1,
+				readDirFiles:         []os.FileInfo{},
+			},
+			fileUtils: FakeFileUtils{
+				expectedReadCalls: 0,
+				bytesRead:         "",
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountRequestsExpected: 0,
+				mountResponse:         volume.Response{},
+			},
+			expectedResponse: nil,
+		},
+		// Folder do not exist, no files
+		{
+			dirUtils: FakeDirUtils{
+				lstatError:           nil,
+				exist:                false,
+				mkdirExpectedCalls:   1,
+				readDirExpectedCalls: 0,
+				readDirFiles:         []os.FileInfo{},
+			},
+			fileUtils: FakeFileUtils{
+				expectedReadCalls: 0,
+				bytesRead:         "",
+			},
+			volumeDriver: FakeVolumeDriver{
+				mountRequestsExpected: 0,
+				mountResponse:         volume.Response{},
+			},
+			expectedResponse: nil,
+		},
+	}
+
+	for i, fixture := range fixtures {
+		_, err := NewVolumePersistor("testpath", &fixture.volumeDriver, &fixture.dirUtils, &fixture.fileUtils)
+
+		if !reflect.DeepEqual(err, fixture.expectedResponse) {
+			t.Errorf("%d - Expected %v, received %v\n", i, fixture.expectedResponse, err)
+		}
+
+		if fixture.dirUtils.readDirExpectedCalls != fixture.dirUtils.readDirCalls {
+			t.Errorf("%d - Expected %d ReadDir calls, received %d\n", i, fixture.dirUtils.readDirExpectedCalls, fixture.dirUtils.readDirCalls)
+		}
+
+		if fixture.fileUtils.expectedReadCalls != fixture.fileUtils.readCalls {
+			t.Errorf("%d - Expected %d Read calls, received %d\n", i, fixture.fileUtils.expectedReadCalls, fixture.fileUtils.readCalls)
+		}
+
+		if fixture.volumeDriver.mountRequestsExpected != fixture.volumeDriver.mountRequests {
+			t.Errorf("%d - Expected %d Mount requests, received %d\n", i, fixture.volumeDriver.mountRequestsExpected, fixture.volumeDriver.mountRequests)
+		}
+
+	}
 }
 
 func TestVolumePersistor_Create(t *testing.T) {
@@ -140,31 +255,31 @@ func TestVolumePersistor_Mount(t *testing.T) {
 		{
 			request: volume.MountRequest{
 				Name: "test",
-				ID: "1234567",
+				ID:   "1234567",
 			},
 			fileUtils: FakeFileUtils{
-				writeError: nil,
+				writeError:         nil,
 				expectedWriteCalls: 1,
 			},
 			volumeDriver: FakeVolumeDriver{
 				mountResponse: volume.Response{},
 			},
-			expectedResponse: volume.Response{},
+			expectedResponse:    volume.Response{},
 			expectedFileContent: "{\"Name\":\"test\",\"ID\":\"1234567\"}",
 		},
 		{
 			request: volume.MountRequest{
 				Name: "test",
-				ID: "1234567",
+				ID:   "1234567",
 			},
 			fileUtils: FakeFileUtils{
-				writeError: errors.New("error"),
+				writeError:         errors.New("error"),
 				expectedWriteCalls: 1,
 			},
 			volumeDriver: FakeVolumeDriver{
 				mountResponse: volume.Response{},
 			},
-			expectedResponse: volume.Response{Err: "Could not persist volume data: error"},
+			expectedResponse:    volume.Response{Err: "Could not persist volume data: error"},
 			expectedFileContent: "{\"Name\":\"test\",\"ID\":\"1234567\"}",
 		},
 	}
@@ -199,27 +314,27 @@ func TestVolumePersistor_Unmount(t *testing.T) {
 		{
 			request: volume.UnmountRequest{
 				Name: "test",
-				ID: "1234567",
+				ID:   "1234567",
 			},
 			dirUtils: FakeDirUtils{
 				removeAllExpectedCalls: 1,
 			},
 			volumeDriver: FakeVolumeDriver{
-				mountResponse: volume.Response{},
+				unmountResponse: volume.Response{},
 			},
 			expectedResponse: volume.Response{},
 		},
 		{
 			request: volume.UnmountRequest{
 				Name: "test",
-				ID: "1234567",
+				ID:   "1234567",
 			},
 			dirUtils: FakeDirUtils{
 				removeAllExpectedCalls: 1,
-				removeAllError: errors.New("error"),
+				removeAllError:         errors.New("error"),
 			},
 			volumeDriver: FakeVolumeDriver{
-				mountResponse: volume.Response{},
+				unmountResponse: volume.Response{},
 			},
 			expectedResponse: volume.Response{Err: "Error removing volume data: error"},
 		},
@@ -252,7 +367,7 @@ func TestVolumePersistor_Capabilities(t *testing.T) {
 		{
 			request: volume.Request{},
 			volumeDriver: FakeVolumeDriver{
-				capabilitiesResponse:volume.Response{},
+				capabilitiesResponse: volume.Response{},
 			},
 			expectedResponse: volume.Response{},
 		},

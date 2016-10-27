@@ -8,6 +8,7 @@ import (
 	"bazil.org/fuse/fs"
 	. "descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"golang.org/x/net/context"
+	"fmt"
 )
 
 type Fuse interface {
@@ -88,6 +89,7 @@ func NewFS(mountpoint string, fuse Fuse, secretHandler SecretApi) (*FS, error) {
 
 func (f *FS) Mount(volumeName string) error {
 	log.Printf("setting up fuse: volume=%s", volumeName)
+	var c *fuse.Conn
 	c, err := f.fuse.Mount(
 		f.Mountpoint,
 		fuse.FSName("vault"),
@@ -95,15 +97,30 @@ func (f *FS) Mount(volumeName string) error {
 		fuse.LocalVolume(),
 		fuse.VolumeName(volumeName),
 		fuse.ReadOnly(),
+		fuse.AllowNonEmptyMount(),
 		//fuse.NoExec(),
 	)
 	if err != nil {
-		return err
+		log.Printf("Unmounting volume %s", f.Mountpoint)
+		f.fuse.Unmount(f.Mountpoint)
+		c, _ = f.fuse.Mount(
+			f.Mountpoint,
+			fuse.FSName("vault"),
+			fuse.Subtype("vaultfs"),
+			fuse.LocalVolume(),
+			fuse.VolumeName(volumeName),
+			fuse.ReadOnly(),
+			fuse.AllowNonEmptyMount(),
+			//fuse.NoExec(),
+		)
+
+		//return err
 	}
 
 	f.conn = c
 
 	go func() {
+		fmt.Println("gorutine")
 		err := f.fuse.Serve(c, f)
 		if err != nil {
 			f.ErrChan <- err

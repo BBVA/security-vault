@@ -7,6 +7,7 @@ import (
 	"strings"
 	"encoding/json"
 	"fmt"
+	"errors"
 )
 
 type VolumePersistor struct {
@@ -16,25 +17,58 @@ type VolumePersistor struct {
 	path      string
 }
 
-func NewVolumePersistor(path string, volumeDriver volume.Driver, dirUtils filesystem.DirUtils, fileUtils filesystem.FileUtils) (*VolumePersistor, error) {
+func NewVolumePersistor(dir string, volumeDriver volume.Driver, dirUtils filesystem.DirUtils, fileUtils filesystem.FileUtils) (*VolumePersistor, error) {
 
-	_, err := dirUtils.Lstat(path)
+	_, err := dirUtils.Lstat(dir)
+	fmt.Println("Recovering", dir, err)
 
 	if dirUtils.IsNotExist(err) {
-		if err := dirUtils.MkdirAll(path, 0755); err != nil {
+		fmt.Println("folder doesnt exit")
+		if err := dirUtils.MkdirAll(dir, 0755); err != nil {
 			return nil, err
 		}
-	} else if dirUtils.IsExist(err) {
-		// TODO recover
-	} else if err != nil {
-		return nil, err
+		fmt.Println("folder created")
+	} else {
+		fmt.Println("folder exists")
+		files, err := dirUtils.ReadDir(dir)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Println("read folder content", files)
+
+		for _, file := range files {
+			if file.IsDir() {
+				continue
+			}
+
+			fmt.Println("file:", file)
+			content, err := fileUtils.Read(path.Join(dir, file.Name()))
+			if err != nil {
+				return nil, err
+			}
+
+			fmt.Println(string(content))
+
+			var r volume.MountRequest
+			if err := json.Unmarshal(content, &r); err != nil {
+				fmt.Println("Error unmarshalling:", err)
+				return nil, err
+			}
+
+
+			fmt.Println("volume data", r)
+			response := volumeDriver.Mount(r)
+			if len(response.Err) > 0 {
+				return nil, errors.New(response.Err)
+			}
+		}
 	}
 
 	return &VolumePersistor{
 		driver: volumeDriver,
 		dirUtils: dirUtils,
 		fileUtils: fileUtils,
-		path: path,
+		path: dir,
 	}, nil
 }
 

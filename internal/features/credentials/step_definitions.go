@@ -34,23 +34,17 @@ func init() {
 		destroyContainer(cli, containers)
 	})
 
-	Given(`^a container "(.+?)" configured with the following volume driver options:$`, func(containerName string, volDriverOpts [][]string) {
-		volumeOption := volDriverOpts[1]
-		containers[containerName] = &Container{containerName, volumeOption, ""}
+	Given(`^a container "(.+?)" configured with the following volume driver options:$`, func(containerName string) {
+
+		containers[containerName] = &Container{containerName, ""}
 	})
 
 	When(`^the container "(.+?)" is started$`, func(containerName string) {
 		c := containers[containerName]
-		volumeDriver := c.options[0]
-		hostFS := c.options[1]
-		containerMountPoint := c.options[2]
 
-		vols := make(map[string]struct{})
-		vols[c.options[2]] = struct{}{}
+		containerConfig := createContainerConfiguration()
 
-		containerConfig := createContainerConfiguration(containerMountPoint)
-
-		hostConfig := createHostConfiguration(volumeDriver, hostFS, containerMountPoint)
+		hostConfig := createHostConfiguration()
 
 		containers[containerName].id = runContainer(cli, containerName, hostConfig, containerConfig)
 
@@ -84,39 +78,19 @@ func createDockerClient() *client.Client {
 	return cli
 }
 
-func createContainerConfiguration(volume string) *container.Config {
-	vols := make(map[string]struct{})
-	vols[volume] = struct{}{}
+func createContainerConfiguration() *container.Config {
+
 	cmd := []string{"/bin/ash", "-c", "while true; do sleep 5; done"}
 
 	return &container.Config{
 		Cmd:     cmd,
 		Image:   "alpine",
-		Volumes: vols,
 	}
 }
 
-func createHostConfiguration(volumeDriver, hostFS, containerMountPoint string) *container.HostConfig {
+func createHostConfiguration() *container.HostConfig {
 	return &container.HostConfig{
 		AutoRemove:   true,
-		VolumeDriver: volumeDriver,
-		Binds: []string{
-			strings.Join([]string{hostFS, containerMountPoint}, ":"),
-		},
-		Mounts: []mount.Mount{
-			{
-				Type:   mount.TypeVolume,
-				Target: hostFS,
-				BindOptions: &mount.BindOptions{
-					Propagation: mount.PropagationRPrivate,
-				},
-				VolumeOptions: &mount.VolumeOptions{
-					DriverConfig: &mount.Driver{
-						Name: hostFS,
-					},
-				},
-			},
-		},
 	}
 }
 

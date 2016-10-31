@@ -5,9 +5,7 @@ Feature:
 
   @destroyContainers
   Scenario: Get a volume with my credentials
-    Given a container "cred-test" configured with the following volume driver options:
-      | volume_driver | host_mount_point | container_mount_point |
-      | Vault         | test/mountpoint  | /secret               |
+    Given a container "cred-test" configured         |
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
       | file         | content         |

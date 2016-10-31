@@ -10,6 +10,7 @@ import (
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	. "github.com/gucumber/gucumber"
+	"time"
 )
 
 type Container struct {
@@ -45,6 +46,8 @@ func init() {
 		hostConfig := createHostConfiguration()
 
 		containers[containerName].id = runContainer(cli, containerName, hostConfig, containerConfig)
+
+		time.Sleep(10)
 
 	})
 

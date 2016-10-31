@@ -57,7 +57,7 @@ func (c *DockerConnector) StartConnector() error {
 		msg := &events.Message{}
 		d.Decode(msg)
 
-		c.eventHandler(msg)
+		go c.eventHandler(msg)
 
 	}
 

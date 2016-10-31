@@ -14,7 +14,6 @@ import (
 
 type Container struct {
 	name    string
-	options []string
 	id      string
 }
 

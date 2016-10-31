@@ -14,8 +14,8 @@ import (
 )
 
 type Container struct {
-	name    string
-	id      string
+	name string
+	id   string
 }
 
 func init() {
@@ -39,7 +39,6 @@ func init() {
 	})
 
 	When(`^the container "(.+?)" is started$`, func(containerName string) {
-
 
 		containerConfig := createContainerConfiguration()
 
@@ -84,14 +83,14 @@ func createContainerConfiguration() *container.Config {
 	cmd := []string{"/bin/ash", "-c", "while true; do sleep 5; done"}
 
 	return &container.Config{
-		Cmd:     cmd,
-		Image:   "alpine",
+		Cmd:   cmd,
+		Image: "alpine",
 	}
 }
 
 func createHostConfiguration() *container.HostConfig {
 	return &container.HostConfig{
-		AutoRemove:   true,
+		AutoRemove: true,
 	}
 }
 

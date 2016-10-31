@@ -6,10 +6,11 @@ import (
 	"github.com/docker/engine-api/types/events"
 	"golang.org/x/net/context"
 
+	"log"
 )
 
 func (c *DockerConnector) eventHandler(msg *events.Message) {
-//	log.Printf("Received:\n Action %v\nActor %v\nFrom %v\nID %v\nStatus %v\nTime %v\nTimenano %v\nType %v\n", msg.Action, msg.Actor, msg.From, msg.ID, msg.Status, msg.Time, msg.TimeNano, msg.Type)
+	log.Printf("Received:\n Action %v\nActor %v\nFrom %v\nID %v\nStatus %v\nTime %v\nTimenano %v\nType %v\n", msg.Action, msg.Actor, msg.From, msg.ID, msg.Status, msg.Time, msg.TimeNano, msg.Type)
 	if msg.Actor.Attributes["name"] == "cred-test" {
 		tarball := c.secretApiHandler.GetSecretFiles()
 

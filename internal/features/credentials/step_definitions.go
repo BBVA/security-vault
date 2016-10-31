@@ -8,7 +8,6 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
 	. "github.com/gucumber/gucumber"
 )
@@ -40,7 +39,7 @@ func init() {
 	})
 
 	When(`^the container "(.+?)" is started$`, func(containerName string) {
-		c := containers[containerName]
+
 
 		containerConfig := createContainerConfiguration()
 

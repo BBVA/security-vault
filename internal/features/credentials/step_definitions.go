@@ -32,7 +32,7 @@ func init() {
 		destroyContainer(cli, containers)
 	})
 
-	Given(`^a container "(.+?)" configured with the following volume driver options:$`, func(containerName string) {
+	Given(`^a container "(.+?)" configured$`, func(containerName string) {
 
 		containers[containerName] = &Container{containerName, ""}
 	})

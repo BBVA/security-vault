@@ -10,7 +10,7 @@ import (
 
 func (c *DockerConnector) eventHandler(msg *events.Message) {
 	log.Printf("Received:\n Action %v\nActor %v\nFrom %v\nID %v\nStatus %v\nTime %v\nTimenano %v\nType %v\n", msg.Action, msg.Actor, msg.From, msg.ID, msg.Status, msg.Time, msg.TimeNano, msg.Type)
-	if msg.Actor.Attributes["name"] == "prueba" {
+	if msg.Actor.Attributes["name"] == "cred-test" {
 		tarball := c.secretApiHandler.GetSecretFiles()
 
 		opts := CopyToContainerOptions{

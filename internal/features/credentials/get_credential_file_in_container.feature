@@ -5,7 +5,7 @@ Feature:
 
   @destroyContainers
   Scenario: Get a volume with my credentials
-    Given a container "cred-test" configured         |
+    Given a container "cred-test" configured
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
       | file         | content         |

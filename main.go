@@ -1,44 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"path/filepath"
-
 	"syscall"
-
-	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
-	"descinet.bbva.es/cloudframe-security-vault/utils/fuse"
-	"github.com/docker/go-plugins-helpers/volume"
+	"descinet.bbva.es/cloudframe-security-vault/EventConnector"
 	"golang.org/x/sys/unix"
-
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
-)
-
-const (
-	SocketAddress = "/run/docker/plugins/Vault.sock"
-	ServerUrl = "http://localhost:8200"
-	VaultToken = ""
+	"path/filepath"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 var (
-	//DefaultPath = filepath.Join(volume.DefaultDockerRootDirectory, "_vault")
-	DefaultMountPath  = filepath.Join("/mnt/volumes", "_vault")
-	DefaultConfigPath = filepath.Join("/tmp", "security-vault")
 	DefaultPublicKey  = filepath.Join("/tmp", "public.key")
 	DefaultPrivateKey = filepath.Join("/tmp", "private.key")
 	DefaultCaCert     = filepath.Join("/tmp", "ca.cert")
+	DefaultSecretPaths = "/tmp"
 )
 
-/* hay que implementar argumentos para recibir:
-*
-*  -path de la configuración ( aquí pondremos todo lo que ahora está como constantes )
-*
- */
 
 func main() {
 
-	fuse := fuseutils.DefaultFuseWrapper{}
-	dirUtils := filesystem.DefaultDirUtils{}
 	fileUtils := filesystem.DefaultFileUtils{}
 
 	if err := syscall.Mlockall(unix.MCL_FUTURE | unix.MCL_CURRENT); err != nil {
@@ -50,11 +30,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	fuseUtils := fuseutils.NewFuseUtils(fuse, exampleSecretApiHandler)
-	driver := NewVaultDriver(DefaultMountPath, ServerUrl, VaultToken, &dirUtils, fuseUtils)
+	connector := EventConnector.NewConnector(exampleSecretApiHandler, DefaultSecretPaths)
+	connector.StartConnector()
 
-	handler := volume.NewHandler(driver)
-
-	fmt.Printf("Listening on %s\n", SocketAddress)
-	fmt.Println(handler.ServeUnix("root", SocketAddress))
 }

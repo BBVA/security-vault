@@ -2,8 +2,11 @@ package SecretApi
 
 import (
 
-	"github.com/pkg/errors"
+
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"github.com/rancher/secrets-bridge/pkg/archive"
+	"log"
+	"bytes"
 )
 
 type ExampleSecretApi struct {
@@ -31,15 +34,12 @@ func NewExampleSecretApi(cacert string, private string, public string, fileUtils
 	secrets := make(map[string]*Secret)
 	secrets["private"] = &Secret{
 		content: privateContent,
-		len:     len(privateContent),
 	}
 	secrets["cacert"] = &Secret{
 		content: caCertContent,
-		len:     len(caCertContent),
 	}
 	secrets["public"] = &Secret{
 		content: publicContent,
-		len:     len(publicContent),
 	}
 
 	return &ExampleSecretApi{
@@ -47,16 +47,30 @@ func NewExampleSecretApi(cacert string, private string, public string, fileUtils
 	},nil
 }
 
-func (Api *ExampleSecretApi) GetSecret(SecretID string) ([]byte, error) {
+func (Api *ExampleSecretApi) GetSecret(SecretID string) ([]byte) {
 
 	secret, ok := Api.secrets[SecretID]
 	if ok {
-		return secret.content, nil
+		return secret.content
 	}
-	return nil, errors.New("No secret")
+	return nil
 
 }
 
-func (Api *ExampleSecretApi) GetSecretFiles() map[string]*Secret {
-	return Api.secrets
+func (Api *ExampleSecretApi) GetSecretFiles() *bytes.Buffer {
+	files := []archive.ArchiveFile{}
+
+	for  k := range Api.secrets {
+		message := archive.ArchiveFile{
+			Name: k,
+			Content: string(Api.GetSecret(k)),
+		}
+		files = append(files,message)
+	}
+
+	tarball, err := archive.CreateTarArchive(files)
+	if err != nil {
+		log.Printf("Failed to create Tar file")
+	}
+	return tarball
 }

@@ -1,13 +1,9 @@
-# docker run -ti --device=/dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined -v /run/docker/plugins:/run/docker/plugins -v /mnt/volumes:/mnt/volumes:shared sec-vault
+# docker run -ti --security-opt apparmor:unconfined sec-vault
 
 security-vault:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/security-vault:VERSION
-  privileged: true
-  devices:
-    - "/dev/fuse:/dev/fuse"
   volumes:
-    - "/run/docker/plugins:/run/docker/plugins"
-    - "/mnt/volumes:/mnt/volumes:shared"
+    - "/var/run/docker.sock:/var/run/docker.sock"
   labels:
     service: vault-volumedriver
     io.rancher.scheduler.global: 'true'

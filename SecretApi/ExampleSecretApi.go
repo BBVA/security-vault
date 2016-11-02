@@ -57,7 +57,8 @@ func (Api *ExampleSecretApi) GetSecret(SecretID string) ([]byte) {
 
 }
 
-func (Api *ExampleSecretApi) GetSecretFiles() *bytes.Buffer {
+func (Api *ExampleSecretApi) GetSecretFiles(SecretID string) *bytes.Buffer {
+	//no usamos SecretID para nada porque en este caso no aplica.
 	files := []archive.ArchiveFile{}
 
 	for  k := range Api.secrets {

@@ -11,6 +11,7 @@ import (
 	"github.com/docker/docker/client"
 	. "github.com/gucumber/gucumber"
 	"time"
+
 )
 
 type Container struct {
@@ -82,9 +83,13 @@ func createContainerConfiguration() *container.Config {
 
 	cmd := []string{"/bin/ash", "-c", "while true; do sleep 5; done"}
 
+	labels := make(map[string]string)
+	labels["credentialsid"] = "weieeo"
+
 	return &container.Config{
 		Cmd:   cmd,
 		Image: "alpine",
+		Labels: labels,
 	}
 }
 

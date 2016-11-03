@@ -8,7 +8,7 @@ Feature:
     Given a container "cred-test" configured
     When the container "cred-test" is started
     Then the container "cred-test" credentials will be the following
-      | file         | content         |
-      | /tmp/public | -BEGIN CERTIFICATE---- |
+      | file         | content                    |
+      | /tmp/public  | -BEGIN CERTIFICATE----     |
       | /tmp/private | -----BEGIN PRIVATE KEY-----|
-      | /tmp/cacert     | -----BEGIN CERTIFICATE----- |
+      | /tmp/cacert  | -----BEGIN CERTIFICATE-----|

@@ -1,0 +1,6 @@
+security-vault:
+  scale: 1
+
+security-vault-at:
+  scale: 1
+

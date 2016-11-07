@@ -9,6 +9,7 @@ security-vault:
   depends_on:
     - vault-server
 
+
 dummy:
   image: alpine:latest
   command: [ "true" ]
@@ -29,9 +30,10 @@ security-vault-at:
     - io.rancher.scheduler.affinity:container_label=service=vault-volumedriver
 
 vault-server:
-  image: hashicorp/docker-vault:0.6.2
+  image: vault:0.6.2
   labels:
     - io.rancher.scheduler.affinity:container_label=service=vault-volumedriver
+    - io.rancher.sidekicks=vault-server-configurator
 
 vault-server-configurator:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/vault-server-configurator:0.2.0-dev
@@ -40,6 +42,4 @@ vault-server-configurator:
   labels:
       - io.rancher.container.start_once=true
       - io.rancher.scheduler.affinity:container_label=service=vault-volumedriver
-
-
 

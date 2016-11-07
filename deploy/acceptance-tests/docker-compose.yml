@@ -30,7 +30,7 @@ security-vault-at:
     - io.rancher.scheduler.affinity:container_label=service=vault-volumedriver
 
 vault-server:
-  image: hashicorp/docker-vault:0.6.2
+  image: vault:0.6.2
   labels:
     - io.rancher.scheduler.affinity:container_label=service=vault-volumedriver
     - io.rancher.sidekicks=vault-server-configurator

@@ -47,7 +47,7 @@ func init() {
 
 		containers[containerName].id = runContainer(cli, containerName, hostConfig, containerConfig)
 
-		time.Sleep(10)
+		time.Sleep(10 * time.Second)
 
 	})
 

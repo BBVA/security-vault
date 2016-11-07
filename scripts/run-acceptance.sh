@@ -20,7 +20,7 @@ cp -f ../deploy/acceptance-tests/rancher-compose.yml ../acceptance-tests/target
 #
 docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up security-vault dummy vault-server -d
 sleep 5
-docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up vault-configurator -d
+docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up vault-configurator
 sleep 5
 docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up security-vault-at -d
 

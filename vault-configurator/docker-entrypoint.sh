@@ -19,7 +19,7 @@ fi
 
 #complete vault configuration
 
-export VAULT_ADDR="http://vault-server:8200"
+export VAULT_ADDR="http://r-security-vault_vault-server_1:8200"
 export VAULT_TOKEN=$VAULT_DEV_ROOT_TOKEN_ID
 
 vault mount pki
@@ -27,7 +27,3 @@ vault mount-tune -max-lease-ttl=87600h pki
 vault write pki/root/generate/internal common_name=ca.cloudframe.wtf ttl=87600h
 vault write pki/config/urls issuing_certificates="http://0.0.0.0:8200/v1/pki/ca" crl_distribution_points="http://0.0.0.0:8200/v1/pki/crl"
 vault write pki/roles/cloudframe-dot-wtf allowed_domains="cloudframe.wtf" allow_subdomains="true" max_ttl="72h"
-
-while [ 1 ]; do
-	sleep 500
-done

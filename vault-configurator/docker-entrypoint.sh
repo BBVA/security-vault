@@ -19,7 +19,7 @@ fi
 
 #complete vault configuration
 
-export VAULT_ADDR="http://r-security-vault_vault-server_1:8200"
+export VAULT_ADDR="http://172.0.0.1:8200"
 export VAULT_TOKEN=$VAULT_DEV_ROOT_TOKEN_ID
 
 vault mount pki

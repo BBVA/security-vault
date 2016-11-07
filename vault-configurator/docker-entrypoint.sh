@@ -19,7 +19,7 @@ fi
 
 #complete vault configuration
 
-export VAULT_ADDR="http://vault.security-vault.rancher.internal:8200"
+export VAULT_ADDR="http://vault-server.security-vault.rancher.internal:8200"
 export VAULT_TOKEN=$VAULT_DEV_ROOT_TOKEN_ID
 
 vault mount pki

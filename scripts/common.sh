@@ -4,6 +4,7 @@ export CONTAINER_NAME="security-vault"
 export SERVICE_NAME="cloudframe-${CONTAINER_NAME}"
 export SOURCE_PACKAGE="descinet.bbva.es"
 export AT_DOCKER_NAME="security-vault-at"  # defined in ../deploy/acceptance-test/docker-compose.yml
+export VAULT_CONFIGURATOR_DOCKER_NAME="vault-configurator"
 export VERSION="0.2.0"
 
 export REGISTRY_URL="894431722748.dkr.ecr.us-east-1.amazonaws.com"

@@ -4,3 +4,9 @@ security-vault:
 security-vault-at:
   scale: 1
 
+vault-server:
+  scale: 1
+
+vault-server-configurator:
+  scale: 1
+

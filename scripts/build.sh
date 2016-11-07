@@ -23,8 +23,10 @@ docker run  \
 
 docker build --force-rm -f  ../Dockerfile -t ${REGISTRY_URL}/${CONTAINER_NAME}:${VERSION} ..
 docker build --force-rm -f ../Dockerfile_at -t ${REGISTRY_URL}/${AT_DOCKER_NAME}:${VERSION} ..
+docker build --force-rm -f ../Dockerfile_vault_configurator -t ${REGISTRY_URL}/${AT_DOCKER_NAME}:${VERSION} ..
 
 if $aws ; then
     docker push ${REGISTRY_URL}/${CONTAINER_NAME}:${VERSION}
     docker push ${REGISTRY_URL}/${AT_DOCKER_NAME}:${VERSION}
+    docker push ${REGISTRY_URL}/${VAULT_CONFIGURATOR_DOCKER_NAME}:${VERSION}
 fi

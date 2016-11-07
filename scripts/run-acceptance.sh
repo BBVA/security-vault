@@ -28,6 +28,8 @@ docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target
 # 2 - GET LOGS
 docker-rancher-api-cli -c "fl services,fr ${AT_DOCKER_NAME},fl instances,fr ${STACK_NAME}_${AT_DOCKER_NAME}_1,fa logs,rl" | tee ../acceptance-tests/target/rancher.log
 
+docker-rancher-api-cli -c "fl services,fr ${VAULT_CONFIGURATOR_DOCKER_NAME},fl instances,fr ${STACK_NAME}_${VAULT_CONFIGURATOR_DOCKER_NAME}_1,fa logs,rl"
+
 # 3 - CLEAN STACK
 docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml rm --force
 

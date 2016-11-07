@@ -37,8 +37,8 @@ vault-server:
     - io.rancher.scheduler.affinity:container_label=service=vault-volumedriver
 
 
-vault-server-configurator:
-  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/vault-server-configurator:0.2.0-dev
+vault-configurator:
+  image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/vault-configurator:0.2.0-dev
   environment:
     - VAULT_DEV_ROOT_TOKEN_ID=86666040-1b49-35e8-5bb7-e4c323f48df3
   depends_on:

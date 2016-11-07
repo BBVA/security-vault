@@ -17,9 +17,13 @@ cp -f ../deploy/acceptance-tests/rancher-compose.yml ../acceptance-tests/target
 
 
 # 1 - LAUNCH STACK
-docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up security-vault dummy -d
+#
+docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up security-vault dummy vault-server -d
+sleep 5
+docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up vault-server-configurator -d
 sleep 5
 docker-rancher-tools rancher-compose -p ${STACK_NAME} -r acceptance-tests/target/rancher-compose.yml -f acceptance-tests/target/docker-compose.yml up security-vault-at -d
+
 
 # 2 - GET LOGS
 docker-rancher-api-cli -c "fl services,fr ${AT_DOCKER_NAME},fl instances,fr ${STACK_NAME}_${AT_DOCKER_NAME}_1,fa logs,rl" | tee ../acceptance-tests/target/rancher.log

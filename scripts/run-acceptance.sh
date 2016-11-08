@@ -37,5 +37,3 @@ if ( tail -n 2 ../acceptance-tests/target/rancher.log | grep -ai success ); then
 else
     echo "FAILED" && rm -f ../acceptance-tests/target/rancher.log && exit 1
 fi
-
-

@@ -17,7 +17,7 @@ func CreateTarArchive(files []ArchiveFile) (*bytes.Buffer, error) {
 	for _, file := range files {
 		hdr := &tar.Header{
 			Name: file.Name,
-			Mode: 0600,
+			Mode: 0644,
 			Size: int64(len(file.Content)),
 		}
 

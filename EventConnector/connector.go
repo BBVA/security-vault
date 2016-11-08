@@ -51,7 +51,7 @@ func (c *DockerConnector) StartConnector() error {
 	}
 	defer eventsResp.Close()
 
-	log.Printf("Entering event listening Loop")
+	log.Println("Entering event listening Loop")
 	d := json.NewDecoder(eventsResp)
 	for {
 		msg := &events.Message{}

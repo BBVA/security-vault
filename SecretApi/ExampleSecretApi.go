@@ -71,7 +71,7 @@ func (Api *ExampleSecretApi) GetSecretFiles(SecretID string) *bytes.Buffer {
 
 	tarball, err := archive.CreateTarArchive(files)
 	if err != nil {
-		log.Printf("Failed to create Tar file")
+		log.Println("Failed to create Tar file")
 	}
 	return tarball
 }

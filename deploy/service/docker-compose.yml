@@ -5,6 +5,6 @@ security-vault:
   volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
   labels:
-    service: vault-volumedriver
+    service: security-vault
     io.rancher.scheduler.global: 'true'
     io.rancher.scheduler.affinity:host_label: domain=accounting,instance.size=medium

@@ -16,13 +16,13 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 		log.Println("label detected!")
 		tarball,err := c.secretApiHandler.GetSecretFiles(id)
 		if err != nil {
-			log.Printf("GetSecretFiles failed %s\n", err.Error())
+			panic(err.Error())
 		}
 		opts := CopyToContainerOptions{
 			AllowOverwriteDirWithFile: false,
 		}
 		if err := c.cli.CopyToContainer(context.Background(), msg.ID, c.path, tarball, opts); err != nil {
-			log.Printf("CopyToContainer failed: %s\n", err.Error())
+			panic(err.Error())
 		}
 	}
 }

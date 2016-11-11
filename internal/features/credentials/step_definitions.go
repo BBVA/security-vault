@@ -84,7 +84,7 @@ func createContainerConfiguration() *container.Config {
 	cmd := []string{"/bin/ash", "-c", "while true; do sleep 5; done"}
 
 	labels := make(map[string]string)
-	labels["credentialsid"] = "weieeo"
+	labels["common_name"] = "makecloudframegreatagain.cloudframe.wtf"
 
 	return &container.Config{
 		Cmd:   cmd,

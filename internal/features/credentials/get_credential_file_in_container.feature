@@ -10,5 +10,5 @@ Feature:
     Then the container "cred-test" credentials will be the following
       | file         | content                    |
       | /tmp/public  | -BEGIN CERTIFICATE----     |
-      | /tmp/private | -----BEGIN PRIVATE KEY-----|
+      | /tmp/private | -----BEGIN RSA PRIVATE KEY-----|
       | /tmp/cacert  | -----BEGIN CERTIFICATE-----|

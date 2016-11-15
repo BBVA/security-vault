@@ -10,6 +10,7 @@ import (
 	"log"
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 
+	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 )
 
 type Connector interface {
@@ -23,10 +24,10 @@ type DockerConnector struct{
 	path string
 }
 
-func NewConnector(secretApiHandler SecretApi.SecretApi, path string) *DockerConnector {
+func NewConnector(secretApiHandler SecretApi.SecretApi, config config.Config) *DockerConnector {
 	return &DockerConnector{
 		secretApiHandler: secretApiHandler,
-		path: path,
+		path: config["secretPath"],
 	}
 }
 

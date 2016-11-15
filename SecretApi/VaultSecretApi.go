@@ -4,13 +4,17 @@ import (
 	vault "github.com/hashicorp/vault/api"
 	"bytes"
 	"github.com/rancher/secrets-bridge/pkg/archive"
+	"path/filepath"
+	"io/ioutil"
+	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 )
 
 type VaultSecretApi struct {
 	client *vault.Client
+	role string
 }
 
-func NewVaultSecretApi(token string, url string) (*VaultSecretApi, error) {
+func NewVaultSecretApi(mainConfig config.Config) (*VaultSecretApi, error) {
 
 	config := vault.DefaultConfig()
 
@@ -23,11 +27,17 @@ func NewVaultSecretApi(token string, url string) (*VaultSecretApi, error) {
 		return nil, err
 	}
 
-	client.SetToken(token)
-	client.SetAddress(url)
+	token, err := ioutil.ReadFile(mainConfig["tokenPath"])
+	if err != nil {
+		return nil, err
+	}
+
+	client.SetToken(string(token))
+	client.SetAddress(mainConfig["vaultServer"])
 
 	return &VaultSecretApi{
 		client: client,
+		role: mainConfig["role"],
 	},nil
 }
 
@@ -37,7 +47,9 @@ func (Api *VaultSecretApi) GetSecretFiles(commonName string) (*bytes.Buffer, err
 	params := make(map[string]interface{})
 	params["common_name"] = commonName
 
-	secrets, err := Api.client.Logical().Write("pki/issue/cloudframe-dot-wtf", params)
+	path := filepath.Join("pki/issue/", Api.role)
+
+	secrets, err := Api.client.Logical().Write(path, params)
 	if err != nil {
 		return nil, err
 	}

@@ -18,6 +18,7 @@ func ReadConfig() (Config, error) {
 	configMap["tokenPath"] = os.Getenv("TOKEN_PATH")
 	configMap["secretPath"] = os.Getenv("SECRET_PATH")
 	configMap["role"] = os.Getenv("ROLE")
+	configMap["persistencePath"] = os.Getenv("PERSISTENCE_PATH")
 
 	for k, v := range configMap {
 		if len(v) == 0 {

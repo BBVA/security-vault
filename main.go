@@ -19,6 +19,8 @@ func main() {
 		panic(err.Error())
 	}
 
+	go secretApiHandler.PersistenceManager()
+
 	connector := EventConnector.NewConnector(secretApiHandler,config)
 	connector.StartConnector()
 

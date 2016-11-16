@@ -7,6 +7,7 @@ type Secret struct {
 }
 
 type SecretApi interface {
-	GetSecretFiles(SecretID string) (*bytes.Buffer,error)
+	GetSecretFiles(SecretID string, containerID string) (*bytes.Buffer,error)
+	DeleteSecrets(containerID string) error
 }
 

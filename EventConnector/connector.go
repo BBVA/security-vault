@@ -41,6 +41,8 @@ func (c *DockerConnector) StartConnector() error {
 
 	filterArgs := filters.NewArgs()
 	filterArgs.Add("event", "start")
+	filterArgs.Add("event", "stop")
+
 
 	eventOptions := types.EventsOptions{
 		Filters: filterArgs,

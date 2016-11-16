@@ -61,7 +61,7 @@ func NewVaultSecretApi(mainConfig config.Config) (*VaultSecretApi, error) {
 }
 
 func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string) (*bytes.Buffer, error) {
-
+	fmt.Println("Generating secret\n")
 	files := []archive.ArchiveFile{}
 	params := make(map[string]interface{})
 	params["common_name"] = commonName

@@ -97,6 +97,7 @@ func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string)
 }
 
 func (Api *VaultSecretApi) DeleteSecrets(containerID string) error{
+	fmt.Println("Deleting secret persistence..")
 	event := leaseEvent{
 		eventType: "stop",
 		containerID: containerID,
@@ -108,22 +109,23 @@ func (Api *VaultSecretApi) DeleteSecrets(containerID string) error{
 }
 
 func (Api *VaultSecretApi) PersistenceManager() {
-	select {
-	case <-Api.persistenceChannel:
-		fmt.Println("Lease event received\n")
-		var event leaseEvent
+	for {
+		select {
+		case <-Api.persistenceChannel:
+			fmt.Println("Lease event received\n")
+			var event leaseEvent
 
-		event = <-Api.persistenceChannel
-		switch event.eventType {
-		case "start":
-			Api.leases[event.containerID] = event.lease
-		case "stop":
-			_, ok := Api.leases[event.containerID]
-			if ok {
-				delete(Api.leases,event.containerID)
+			event = <-Api.persistenceChannel
+			switch event.eventType {
+			case "start":
+				Api.leases[event.containerID] = event.lease
+			case "stop":
+				_, ok := Api.leases[event.containerID]
+				if ok {
+					delete(Api.leases,event.containerID)
+				}
 			}
+
 		}
-
 	}
-
 }

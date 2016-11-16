@@ -1,5 +1,3 @@
--Fichero de configuración para opciones.
--Soporte para leer el rol desde los labels o desde el fichero de configuración.
 -Soporte para solo pasar secretos a containers firmados correctamente.
 -persistir info de los certificados emitidos para renovarlos automáticamente en caso de caducidad.
 

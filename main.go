@@ -22,6 +22,7 @@ func main() {
 	go secretApiHandler.PersistenceManager()
 
 	connector := EventConnector.NewConnector(secretApiHandler,config)
+
 	connector.StartConnector()
 
 }

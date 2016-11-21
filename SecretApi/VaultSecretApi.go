@@ -10,12 +10,14 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 type leaseInfo struct {
 	LeaseID   string `json:"lease_id"`
 	LeaseTime int    `json:"lease_time"`
 	Renewable bool   `json:"renewable"`
+	Timestamp int64	`json:"timestamp"`
 }
 type leaseEvent struct {
 	eventType   string
@@ -90,6 +92,8 @@ func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string)
 		return nil, err
 	}
 
+	timestamp := time.Now().Unix()
+
 	Api.persistenceChannel <- leaseEvent{
 		eventType:   "start",
 		containerID: containerID,
@@ -97,6 +101,7 @@ func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string)
 			LeaseID:   secrets.LeaseID,
 			LeaseTime: secrets.LeaseDuration,
 			Renewable: secrets.Renewable,
+			Timestamp: timestamp,
 		},
 	}
 
@@ -139,7 +144,7 @@ func (Api *VaultSecretApi) PersistenceManager() {
 		if err := json.Unmarshal(content, &lease); err != nil {
 			panic(err.Error())
 		}
-		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %i\nrenewable: %b\n",file.Name(),lease.LeaseID,lease.LeaseTime,lease.Renewable)
+		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n",file.Name(),lease.LeaseID,lease.LeaseTime,lease.Renewable,lease.Timestamp)
 
 		Api.leases[file.Name()] = lease
 	}
@@ -161,7 +166,7 @@ func (Api *VaultSecretApi) PersistenceManager() {
 				if err := ioutil.WriteFile(file, bytes, 0777); err != nil {
 					panic(err.Error())
 				}
-				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\n",event.containerID,event.lease.LeaseID,event.lease.LeaseTime,event.lease.Renewable)
+				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n",event.containerID,event.lease.LeaseID,event.lease.LeaseTime,event.lease.Renewable,event.lease.Timestamp)
 			case "stop":
 				_, ok := Api.leases[event.containerID]
 				if ok {

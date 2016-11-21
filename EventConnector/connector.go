@@ -22,18 +22,21 @@ type DockerConnector struct{
 	secretApiHandler SecretApi.SecretApi
 	cli *client.Client
 	path string
+	dockerClient func() (*client.Client, error)
 }
 
 func NewConnector(secretApiHandler SecretApi.SecretApi, config config.Config) *DockerConnector {
 	return &DockerConnector{
 		secretApiHandler: secretApiHandler,
 		path: config["secretPath"],
+		dockerClient: getDockerClient,
+
 	}
 }
 
 func (c *DockerConnector) StartConnector() error {
 
-	cli, err := getDockerClient()
+	cli, err := c.dockerClient()
 	if err != nil {
 		log.Printf("Could not get Docker client: %s", err)
 	}

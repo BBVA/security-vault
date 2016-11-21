@@ -1,3 +1,2 @@
--Soporte para solo pasar secretos a containers firmados correctamente.
 -persistir info de los certificados emitidos para renovarlos automáticamente en caso de caducidad.
-
+-comprobar que los container estan arrancados para estableceer su info de persistencia.

@@ -12,6 +12,7 @@ type ConfigHandler interface {
 	GetRole() string
 	GetVaultServer() string
 	GetPersistencePath() string
+	GetSecretPath() string
 	Get(string) (string, error)
 }
 
@@ -51,6 +52,10 @@ func (c Config) GetVaultServer() string {
 
 func (c Config) GetPersistencePath() string {
 	return c["persistencePath"]
+}
+
+func (c Config) GetSecretPath() string {
+	return c["secretPath"]
 }
 
 func (c Config) Get(key string) (string, error) {

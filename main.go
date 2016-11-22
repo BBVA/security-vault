@@ -16,14 +16,14 @@ func main() {
 
 	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg)
 
-	secretApiHandler, err := SecretApi.NewVaultSecretApi(cfg, persistenceChannel)
+	secretApiHandler, err := SecretApi.NewVaultSecretApi(cfg)
 	if err != nil {
 		panic(err.Error())
 	}
 
 	go persistenceManager.Run()
 
-	connector := EventConnector.NewConnector(secretApiHandler, cfg)
+	connector := EventConnector.NewConnector(secretApiHandler, cfg, persistenceChannel)
 
 	connector.StartConnector()
 

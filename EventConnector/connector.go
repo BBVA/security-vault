@@ -11,6 +11,7 @@ import (
 	"log"
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
 )
 
 type Connector interface {
@@ -23,13 +24,15 @@ type DockerConnector struct {
 	cli              *client.Client
 	path             string
 	dockerClient     func() (*client.Client, error)
+	persistenceChannel chan persistence.LeaseEvent
 }
 
-func NewConnector(secretApiHandler SecretApi.SecretApi, config config.Config) *DockerConnector {
+func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHandler, persistenceChannel chan persistence.LeaseEvent) *DockerConnector {
 	return &DockerConnector{
 		secretApiHandler: secretApiHandler,
-		path:             config["secretPath"],
+		path:             config.GetSecretPath(),
 		dockerClient:     getDockerClient,
+		persistenceChannel: persistenceChannel,
 	}
 }
 

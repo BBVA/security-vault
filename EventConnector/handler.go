@@ -5,6 +5,11 @@ import (
 	. "github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/events"
 	"golang.org/x/net/context"
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
+	"bytes"
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
+	"descinet.bbva.es/cloudframe-security-vault/utils/archive"
+	"time"
 )
 
 func (c *DockerConnector) eventHandler(msg *events.Message) {
@@ -14,21 +19,60 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 		id, ok := msg.Actor.Attributes["common_name"]
 		if ok {
 			fmt.Println("label detected!")
-			tarball, err := c.secretApiHandler.GetSecretFiles(id, msg.ID)
+			secrets, err := c.secretApiHandler.GetSecretFiles(id)
 			if err != nil {
 				panic(err.Error())
 			}
+
+			tarball, err := secretToTarball(secrets)
+			if err != nil {
+				panic(err.Error())
+			}
+
 			opts := CopyToContainerOptions{
 				AllowOverwriteDirWithFile: false,
 			}
 			if err := c.cli.CopyToContainer(context.Background(), msg.ID, c.path, tarball, opts); err != nil {
 				panic(err.Error())
 			}
+
+			timestamp := time.Now().Unix()
+
+			c.persistenceChannel <- persistence.LeaseEvent{
+				EventType:   "start",
+				Identifier: msg.ID,
+				Lease: persistence.LeaseInfo{
+					LeaseID:   secrets.LeaseID,
+					LeaseTime: secrets.LeaseDuration,
+					Renewable: secrets.Renewable,
+					Timestamp: timestamp,
+				},
+			}
 		}
 	case "stop":
 		if err := c.secretApiHandler.DeleteSecrets(msg.ID); err != nil {
 			panic(err.Error())
 		}
+
+		event := persistence.LeaseEvent{
+			EventType:   "stop",
+			Identifier: msg.ID,
+			Lease:       persistence.LeaseInfo{},
+		}
+		c.persistenceChannel <- event
+	}
+}
+
+func secretToTarball (secrets *SecretApi.Secrets) (*bytes.Buffer, error) {
+	files := []archive.ArchiveFile{}
+	files = append(files, archive.ArchiveFile{Name: "private", Content: secrets.Private})
+	files = append(files, archive.ArchiveFile{Name: "cacert", Content: secrets.Cacert})
+	files = append(files, archive.ArchiveFile{Name: "public", Content: secrets.Public})
+
+	tarball, err := archive.CreateTarArchive(files)
+	if err != nil {
+		return nil, err
 	}
 
+	return tarball, nil
 }

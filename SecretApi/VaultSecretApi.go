@@ -1,24 +1,19 @@
 package SecretApi
 
 import (
-	"bytes"
-	"descinet.bbva.es/cloudframe-security-vault/persistence"
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 	"fmt"
 	vault "github.com/hashicorp/vault/api"
-	"github.com/rancher/secrets-bridge/pkg/archive"
 	"path/filepath"
-	"time"
 )
 
 type VaultSecretApi struct {
-	client             *vault.Client
-	role               string
-	persistenceChannel chan persistence.LeaseEvent
-	config             config.ConfigHandler
+	client *vault.Client
+	role   string
+	config config.ConfigHandler
 }
 
-func NewVaultSecretApi(mainConfig config.ConfigHandler, persistenceChannel chan persistence.LeaseEvent) (*VaultSecretApi, error) {
+func NewVaultSecretApi(mainConfig config.ConfigHandler) (*VaultSecretApi, error) {
 
 	vaultConfig := vault.DefaultConfig()
 
@@ -42,14 +37,12 @@ func NewVaultSecretApi(mainConfig config.ConfigHandler, persistenceChannel chan 
 	return &VaultSecretApi{
 		client:             client,
 		role:               mainConfig.GetRole(),
-		persistenceChannel: persistenceChannel,
 		config:             mainConfig,
 	}, nil
 }
 
-func (api *VaultSecretApi) GetSecretFiles(commonName string, containerID string) (*bytes.Buffer, error) {
+func (api *VaultSecretApi) GetSecretFiles(commonName string) (*Secrets, error) {
 	fmt.Println("Generating secret\n")
-	files := []archive.ArchiveFile{}
 	params := make(map[string]interface{})
 	params["common_name"] = commonName
 
@@ -60,40 +53,18 @@ func (api *VaultSecretApi) GetSecretFiles(commonName string, containerID string)
 		return nil, err
 	}
 
-	files = append(files, archive.ArchiveFile{Name: "private", Content: secrets.Data["private_key"].(string)})
-	files = append(files, archive.ArchiveFile{Name: "cacert", Content: secrets.Data["issuing_ca"].(string)})
-	files = append(files, archive.ArchiveFile{Name: "public", Content: secrets.Data["certificate"].(string)})
-
-	tarball, err := archive.CreateTarArchive(files)
-	if err != nil {
-		return nil, err
-	}
-
-	timestamp := time.Now().Unix()
-
-	api.persistenceChannel <- persistence.LeaseEvent{
-		EventType:   "start",
-		ContainerID: containerID,
-		Lease: persistence.LeaseInfo{
-			LeaseID:   secrets.LeaseID,
-			LeaseTime: secrets.LeaseDuration,
-			Renewable: secrets.Renewable,
-			Timestamp: timestamp,
-		},
-	}
-
-	return tarball, nil
+	return &Secrets{
+		Public: secrets.Data["certificate"].(string),
+		Private: secrets.Data["private_key"].(string),
+		Cacert: secrets.Data["issuing_ca"].(string),
+		LeaseID: secrets.LeaseID,
+		LeaseDuration: secrets.LeaseDuration,
+		Renewable: secrets.Renewable,
+	}, nil
 
 }
 
 func (api *VaultSecretApi) DeleteSecrets(containerID string) error {
 	fmt.Println("Deleting secret persistence..")
-	event := persistence.LeaseEvent{
-		EventType:   "stop",
-		ContainerID: containerID,
-		Lease:       persistence.LeaseInfo{},
-	}
-	api.persistenceChannel <- event
-
 	return nil
 }

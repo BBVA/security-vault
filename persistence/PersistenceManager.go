@@ -17,9 +17,9 @@ type LeaseInfo struct {
 	Timestamp int64  `json:"timestamp"`
 }
 type LeaseEvent struct {
-	EventType   string
-	ContainerID string
-	Lease       LeaseInfo
+	EventType  string
+	Identifier string
+	Lease      LeaseInfo
 }
 
 type PersistenceObject struct {
@@ -44,10 +44,10 @@ func NewPersistenceManager(cfg config.ConfigHandler) (chan LeaseEvent, *Persiste
 	}
 }
 
-func (api *PersistenceManager) Run() {
+func (p *PersistenceManager) Run() {
 
 	fmt.Println("Starting persistence goroutine..")
-	path := api.config.GetPersistencePath()
+	path := p.config.GetPersistencePath()
 
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
@@ -69,33 +69,33 @@ func (api *PersistenceManager) Run() {
 		}
 		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", file.Name(), lease.LeaseID, lease.LeaseTime, lease.Renewable, lease.Timestamp)
 
-		api.leases[file.Name()] = lease
+		p.leases[file.Name()] = lease
 	}
 
 	for {
 		select {
-		case event := <-api.persistenceChannel:
+		case event := <-p.persistenceChannel:
 			fmt.Println("Lease event received\n")
 
 			switch event.EventType {
 			case "start":
 				fmt.Println("Start event processing")
-				api.leases[event.ContainerID] = event.Lease
+				p.leases[event.Identifier] = event.Lease
 				bytes, err := json.Marshal(&event.Lease)
 				if err != nil {
 					panic(err.Error())
 				}
-				file := filepath.Join(path, event.ContainerID)
+				file := filepath.Join(path, event.Identifier)
 				if err := ioutil.WriteFile(file, bytes, 0777); err != nil {
 					panic(err.Error())
 				}
-				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", event.ContainerID, event.Lease.LeaseID, event.Lease.LeaseTime, event.Lease.Renewable, event.Lease.Timestamp)
+				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", event.Identifier, event.Lease.LeaseID, event.Lease.LeaseTime, event.Lease.Renewable, event.Lease.Timestamp)
 			case "stop":
-				_, ok := api.leases[event.ContainerID]
+				_, ok := p.leases[event.Identifier]
 				if ok {
-					delete(api.leases, event.ContainerID)
+					delete(p.leases, event.Identifier)
 
-					file := filepath.Join(path, event.ContainerID)
+					file := filepath.Join(path, event.Identifier)
 					if err := os.Remove(file); err != nil {
 						panic(err.Error())
 					}

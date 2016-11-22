@@ -3,25 +3,27 @@ package main
 import (
 	"descinet.bbva.es/cloudframe-security-vault/EventConnector"
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 )
 
-
 func main() {
 
-	config,err := config.ReadConfig()
+	cfg, err := config.ReadConfig()
 	if err != nil {
 		panic(err.Error())
 	}
 
-	secretApiHandler, err := SecretApi.NewVaultSecretApi(config)
+	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg)
+
+	secretApiHandler, err := SecretApi.NewVaultSecretApi(cfg, persistenceChannel)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	go secretApiHandler.PersistenceManager()
+	go persistenceManager.Run()
 
-	connector := EventConnector.NewConnector(secretApiHandler,config)
+	connector := EventConnector.NewConnector(secretApiHandler, cfg)
 
 	connector.StartConnector()
 

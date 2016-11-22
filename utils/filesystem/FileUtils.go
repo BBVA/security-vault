@@ -1,8 +1,8 @@
 package filesystem
 
 import (
-	"os"
 	"io/ioutil"
+	"os"
 )
 
 type FileUtils interface {

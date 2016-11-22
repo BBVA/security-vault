@@ -1,10 +1,10 @@
 package EventConnector
 
 import (
+	"fmt"
 	. "github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/events"
 	"golang.org/x/net/context"
-	"fmt"
 )
 
 func (c *DockerConnector) eventHandler(msg *events.Message) {

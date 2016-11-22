@@ -2,83 +2,60 @@ package SecretApi
 
 import (
 	"bytes"
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
-	"encoding/json"
 	"fmt"
 	vault "github.com/hashicorp/vault/api"
 	"github.com/rancher/secrets-bridge/pkg/archive"
-	"io/ioutil"
-	"os"
 	"path/filepath"
 	"time"
 )
 
-type leaseInfo struct {
-	LeaseID   string `json:"lease_id"`
-	LeaseTime int    `json:"lease_time"`
-	Renewable bool   `json:"renewable"`
-	Timestamp int64	`json:"timestamp"`
-}
-type leaseEvent struct {
-	eventType   string
-	containerID string
-	lease       leaseInfo
-}
-
-type persistenceObject struct {
-	leases map[string]leaseInfo
-}
-
 type VaultSecretApi struct {
 	client             *vault.Client
 	role               string
-	leases             map[string]leaseInfo
-	persistenceChannel chan leaseEvent
-	config             config.Config
+	persistenceChannel chan persistence.LeaseEvent
+	config             config.ConfigHandler
 }
 
-func NewVaultSecretApi(mainConfig config.Config) (*VaultSecretApi, error) {
+func NewVaultSecretApi(mainConfig config.ConfigHandler, persistenceChannel chan persistence.LeaseEvent) (*VaultSecretApi, error) {
 
-	config := vault.DefaultConfig()
+	vaultConfig := vault.DefaultConfig()
 
-	if err := config.ReadEnvironment(); err != nil {
+	if err := vaultConfig.ReadEnvironment(); err != nil {
 		return nil, err
 	}
 
-	client, err := vault.NewClient(config)
+	client, err := vault.NewClient(vaultConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := ioutil.ReadFile(mainConfig["tokenPath"])
+	token, err := mainConfig.GetToken()
 	if err != nil {
 		return nil, err
 	}
 
-	client.SetToken(string(token))
-	client.SetAddress(mainConfig["vaultServer"])
-
-	leases := make(map[string]leaseInfo)
-	persistenceChannel := make(chan leaseEvent)
+	client.SetToken(token)
+	client.SetAddress(mainConfig.GetVaultServer())
 
 	return &VaultSecretApi{
 		client:             client,
-		role:               mainConfig["role"],
-		leases:             leases,
+		role:               mainConfig.GetRole(),
 		persistenceChannel: persistenceChannel,
 		config:             mainConfig,
 	}, nil
 }
 
-func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string) (*bytes.Buffer, error) {
+func (api *VaultSecretApi) GetSecretFiles(commonName string, containerID string) (*bytes.Buffer, error) {
 	fmt.Println("Generating secret\n")
 	files := []archive.ArchiveFile{}
 	params := make(map[string]interface{})
 	params["common_name"] = commonName
 
-	path := filepath.Join("pki/issue/", Api.role)
+	path := filepath.Join("pki/issue/", api.role)
 
-	secrets, err := Api.client.Logical().Write(path, params)
+	secrets, err := api.client.Logical().Write(path, params)
 	if err != nil {
 		return nil, err
 	}
@@ -94,10 +71,10 @@ func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string)
 
 	timestamp := time.Now().Unix()
 
-	Api.persistenceChannel <- leaseEvent{
-		eventType:   "start",
-		containerID: containerID,
-		lease: leaseInfo{
+	api.persistenceChannel <- persistence.LeaseEvent{
+		EventType:   "start",
+		ContainerID: containerID,
+		Lease: persistence.LeaseInfo{
 			LeaseID:   secrets.LeaseID,
 			LeaseTime: secrets.LeaseDuration,
 			Renewable: secrets.Renewable,
@@ -109,77 +86,14 @@ func (Api *VaultSecretApi) GetSecretFiles(commonName string, containerID string)
 
 }
 
-func (Api *VaultSecretApi) DeleteSecrets(containerID string) error {
+func (api *VaultSecretApi) DeleteSecrets(containerID string) error {
 	fmt.Println("Deleting secret persistence..")
-	event := leaseEvent{
-		eventType:   "stop",
-		containerID: containerID,
-		lease:       leaseInfo{},
+	event := persistence.LeaseEvent{
+		EventType:   "stop",
+		ContainerID: containerID,
+		Lease:       persistence.LeaseInfo{},
 	}
-	Api.persistenceChannel <- event
+	api.persistenceChannel <- event
 
 	return nil
-}
-
-func (Api *VaultSecretApi) PersistenceManager() {
-
-	fmt.Println("Starting persistence goroutine..")
-	path := Api.config["persistencePath"]
-
-	files, err := ioutil.ReadDir(path)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	for _, file := range files {
-		if file.IsDir() {
-			continue
-		}
-		var lease leaseInfo
-		filepath := filepath.Join(path, file.Name())
-		content, err := ioutil.ReadFile(filepath)
-		if err != nil {
-			panic(err.Error())
-		}
-		if err := json.Unmarshal(content, &lease); err != nil {
-			panic(err.Error())
-		}
-		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n",file.Name(),lease.LeaseID,lease.LeaseTime,lease.Renewable,lease.Timestamp)
-
-		Api.leases[file.Name()] = lease
-	}
-
-	for {
-		select {
-		case event := <-Api.persistenceChannel:
-			fmt.Println("Lease event received\n")
-
-			switch event.eventType {
-			case "start":
-				fmt.Println("Start event processing")
-				Api.leases[event.containerID] = event.lease
-				bytes, err := json.Marshal(&event.lease)
-				if err != nil {
-					panic(err.Error())
-				}
-				file := filepath.Join(path, event.containerID)
-				if err := ioutil.WriteFile(file, bytes, 0777); err != nil {
-					panic(err.Error())
-				}
-				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n",event.containerID,event.lease.LeaseID,event.lease.LeaseTime,event.lease.Renewable,event.lease.Timestamp)
-			case "stop":
-				_, ok := Api.leases[event.containerID]
-				if ok {
-					delete(Api.leases, event.containerID)
-
-					file := filepath.Join(path, event.containerID)
-					if err := os.Remove(file); err != nil {
-						panic(err.Error())
-					}
-					fmt.Printf("Deleted file: %s\n", file)
-				}
-			}
-
-		}
-	}
 }

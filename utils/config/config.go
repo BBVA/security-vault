@@ -1,10 +1,19 @@
 package config
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"os"
 )
+
+type ConfigHandler interface {
+	GetToken() (string, error)
+	GetRole() string
+	GetVaultServer() string
+	GetPersistencePath() string
+	Get(string) (string, error)
+}
 
 type Config map[string]string
 
@@ -20,12 +29,45 @@ func ReadConfig() (Config, error) {
 	configMap["role"] = os.Getenv("ROLE")
 	configMap["persistencePath"] = os.Getenv("PERSISTENCE_PATH")
 
-	for k, v := range configMap {
+	return validateConfiguration(configMap)
+}
+
+func (c Config) GetToken() (string, error) {
+	if token, err := ioutil.ReadFile(c["tokenPath"]); err != nil {
+		return "", err
+	} else {
+
+		return string(token), nil
+	}
+}
+
+func (c Config) GetRole() string {
+	return c["role"]
+}
+
+func (c Config) GetVaultServer() string {
+	return c["vaultServer"]
+}
+
+func (c Config) GetPersistencePath() string {
+	return c["persistencePath"]
+}
+
+func (c Config) Get(key string) (string, error) {
+	if value, ok := c[key]; ok {
+		return value, nil
+	} else {
+		return "", errors.New(fmt.Sprintf("Missing Key: %s", key))
+	}
+}
+
+func validateConfiguration(cfg Config) (Config, error) {
+	for k, v := range cfg {
 		if len(v) == 0 {
-			err := fmt.Sprintf("Undefined configuration: %s",k)
+			err := fmt.Sprintf("Undefined configuration: %s", k)
 			return nil, errors.New(err)
 		}
 	}
-return configMap, nil
-}
 
+	return cfg, nil
+}

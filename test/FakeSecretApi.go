@@ -1,17 +1,32 @@
 package test
 
 import (
-	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
+	"bytes"
 )
 
-type FakeExampleSecretApi struct {
-	getSecretContent string
+type GetSecretFilesTestMetrics struct {
+	secrets *bytes.Buffer
+	error   error
+	MethodCallMetrics
 }
 
-func (f *FakeExampleSecretApi) GetSecret(secretID string) ([]byte,error){
-	return []byte(f.getSecretContent),nil
+type DeleteSecretsTestMetrics struct {
+	error error
+	MethodCallMetrics
 }
-func (f *FakeExampleSecretApi) GetSecretFiles() map[string]*SecretApi.Secret{
-	return map[string]*SecretApi.Secret{}
 
+type FakeSecretApi struct {
+	getSecretFilesTestMetrics GetSecretFilesTestMetrics
+	deleteSecretsTestMetrics  DeleteSecretsTestMetrics
+}
+
+func (f *FakeSecretApi) GetSecretFiles() (*bytes.Buffer, error) {
+	f.getSecretFilesTestMetrics.Call()
+	return f.getSecretFilesTestMetrics.secrets, f.getSecretFilesTestMetrics.error
+
+}
+
+func (f *FakeSecretApi) DeleteSecrets(containerID string) error {
+	f.deleteSecretsTestMetrics.Call()
+	return f.deleteSecretsTestMetrics.error
 }

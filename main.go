@@ -14,10 +14,13 @@ func main() {
 		panic(err.Error())
 	}
 
-	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg)
-
 	secretApiHandler, err := SecretApi.NewVaultSecretApi(cfg)
 	if err != nil {
+		panic(err.Error())
+	}
+
+	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg)
+	if err := persistenceManager.RecoverLeases(); err != nil {
 		panic(err.Error())
 	}
 

@@ -44,14 +44,12 @@ func NewPersistenceManager(cfg config.ConfigHandler) (chan LeaseEvent, *Persiste
 	}
 }
 
-func (p *PersistenceManager) Run() {
-
-	fmt.Println("Starting persistence goroutine..")
+func (p *PersistenceManager) RecoverLeases() error {
 	path := p.config.GetPersistencePath()
 
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	for _, file := range files {
@@ -62,16 +60,22 @@ func (p *PersistenceManager) Run() {
 		filePath := filepath.Join(path, file.Name())
 		content, err := ioutil.ReadFile(filePath)
 		if err != nil {
-			panic(err.Error())
+			return err
 		}
 		if err := json.Unmarshal(content, &lease); err != nil {
-			panic(err.Error())
+			return err
 		}
 		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", file.Name(), lease.LeaseID, lease.LeaseTime, lease.Renewable, lease.Timestamp)
 
 		p.leases[file.Name()] = lease
 	}
 
+	return nil
+}
+
+func (p *PersistenceManager) Run() {
+	path := p.config.GetPersistencePath()
+	
 	for {
 		select {
 		case event := <-p.persistenceChannel:

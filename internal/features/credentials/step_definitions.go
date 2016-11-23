@@ -11,7 +11,6 @@ import (
 	"github.com/docker/docker/client"
 	. "github.com/gucumber/gucumber"
 	"time"
-
 )
 
 type Container struct {
@@ -87,8 +86,8 @@ func createContainerConfiguration() *container.Config {
 	labels["common_name"] = "makecloudframegreatagain.cloudframe.wtf"
 
 	return &container.Config{
-		Cmd:   cmd,
-		Image: "alpine",
+		Cmd:    cmd,
+		Image:  "alpine",
 		Labels: labels,
 	}
 }

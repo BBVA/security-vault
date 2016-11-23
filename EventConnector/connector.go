@@ -1,6 +1,7 @@
 package EventConnector
 
 import (
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"encoding/json"
 	"github.com/docker/engine-api/client"
 	"github.com/docker/engine-api/types"
@@ -8,9 +9,9 @@ import (
 	"github.com/docker/engine-api/types/filters"
 	"golang.org/x/net/context"
 	"log"
-	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
 )
 
 type Connector interface {
@@ -18,19 +19,20 @@ type Connector interface {
 	eventHandler(msg *events.Message)
 }
 
-type DockerConnector struct{
+type DockerConnector struct {
 	secretApiHandler SecretApi.SecretApi
-	cli *client.Client
-	path string
-	dockerClient func() (*client.Client, error)
+	cli              *client.Client
+	path             string
+	dockerClient     func() (*client.Client, error)
+	persistenceChannel chan persistence.LeaseEvent
 }
 
-func NewConnector(secretApiHandler SecretApi.SecretApi, config config.Config) *DockerConnector {
+func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHandler, persistenceChannel chan persistence.LeaseEvent) *DockerConnector {
 	return &DockerConnector{
 		secretApiHandler: secretApiHandler,
-		path: config["secretPath"],
-		dockerClient: getDockerClient,
-
+		path:             config.GetSecretPath(),
+		dockerClient:     getDockerClient,
+		persistenceChannel: persistenceChannel,
 	}
 }
 
@@ -45,7 +47,6 @@ func (c *DockerConnector) StartConnector() error {
 	filterArgs := filters.NewArgs()
 	filterArgs.Add("event", "start")
 	filterArgs.Add("event", "stop")
-
 
 	eventOptions := types.EventsOptions{
 		Filters: filterArgs,

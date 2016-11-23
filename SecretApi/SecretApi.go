@@ -1,13 +1,19 @@
 package SecretApi
 
-import "bytes"
-
 type Secret struct {
 	content []byte
 }
 
-type SecretApi interface {
-	GetSecretFiles(SecretID string, containerID string) (*bytes.Buffer,error)
-	DeleteSecrets(containerID string) error
+type Secrets struct {
+	Public        string
+	Private       string
+	Cacert        string
+	LeaseID       string
+	LeaseDuration int
+	Renewable     bool
 }
 
+type SecretApi interface {
+	GetSecretFiles(string) (*Secrets, error)
+	DeleteSecrets(string) error
+}

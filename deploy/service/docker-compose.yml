@@ -10,6 +10,7 @@ security-vault:
     - TOKEN_PATH=/etc/token
     - SECRET_PATH=/tmp
     - PERSISTENCE_PATH=/tmp/
+    - SOCKET=/var/run/docker.sock
   labels:
     service: security-vault
     io.rancher.scheduler.global: 'true'

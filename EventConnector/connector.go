@@ -36,7 +36,7 @@ func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHand
 	}
 }
 
-func (c *DockerConnector) StartConnector() error {
+func (c *DockerConnector) Start() error {
 
 	cli, err := c.dockerClient()
 	if err != nil {

@@ -24,7 +24,7 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 				panic(err.Error())
 			}
 
-			tarball, err := secretToTarball(secrets)
+			tarball, err := secretsToTarball(secrets)
 			if err != nil {
 				panic(err.Error())
 			}
@@ -63,7 +63,7 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 	}
 }
 
-func secretToTarball (secrets *SecretApi.Secrets) (*bytes.Buffer, error) {
+func secretsToTarball(secrets *SecretApi.Secrets) (*bytes.Buffer, error) {
 	files := []archive.ArchiveFile{}
 	files = append(files, archive.ArchiveFile{Name: "private", Content: secrets.Private})
 	files = append(files, archive.ArchiveFile{Name: "cacert", Content: secrets.Cacert})

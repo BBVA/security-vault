@@ -29,6 +29,7 @@ func ReadConfig() (Config, error) {
 	configMap["secretPath"] = os.Getenv("SECRET_PATH")
 	configMap["role"] = os.Getenv("ROLE")
 	configMap["persistencePath"] = os.Getenv("PERSISTENCE_PATH")
+	configMap["socket"] = os.Getenv("SOCKET")
 
 	return validateConfiguration(configMap)
 }

@@ -36,14 +36,14 @@ security-vault-at:
 vault-server:
   image: vault:0.6.2
   environment:
-    - VAULT_DEV_ROOT_TOKEN_ID=86666040-1b49-35e8-5bb7-e4c323f48df3
+    - VAULT_DEV_ROOT_TOKEN_ID=ffe5c779-f23c-beac-7228-9a600a23b73f
   labels:
     - io.rancher.scheduler.affinity:container_label=service=security-vault
 
 vault-configurator:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/vault-configurator:VERSION
   environment:
-    - VAULT_DEV_ROOT_TOKEN_ID=86666040-1b49-35e8-5bb7-e4c323f48df3
+    - VAULT_DEV_ROOT_TOKEN_ID=ffe5c779-f23c-beac-7228-9a600a23b73f
   depends_on:
     - vault-server
   labels:

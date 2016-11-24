@@ -4,6 +4,12 @@ security-vault:
   image: 894431722748.dkr.ecr.us-east-1.amazonaws.com/security-vault:VERSION
   volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
+  environment:
+    - VAULT_SERVER=http://vault_vault-server_1:8200
+    - ROLE=cloudframe-dot-wtf
+    - TOKEN_PATH=/etc/token
+    - SECRET_PATH=/tmp
+    - PERSISTENCE_PATH=/tmp/
   labels:
     service: security-vault
     io.rancher.scheduler.global: 'true'

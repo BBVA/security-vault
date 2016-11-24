@@ -1,25 +1,49 @@
 package test
 
-import "os"
+import (
+	"os"
+)
+
+type WriteFileTestMetrics struct {
+	error        error
+	writtenBytes string
+	MethodCallMetrics
+}
+
+type ReadFileTestMetrics struct {
+	error   error
+	content string
+	MethodCallMetrics
+}
+
+type ReadEnvTestMetrics struct {
+	content map[string]string
+	MethodCallMetrics
+}
 
 type FakeFileUtils struct {
-	writeCalls         int
-	expectedWriteCalls int
-	writeBytes         string
-	writeError         error
-	bytesRead          string
-	readCalls          int
-	expectedReadCalls  int
-	readError          error
+	writeFile WriteFileTestMetrics
+	readFile  ReadFileTestMetrics
+	readEnv   ReadEnvTestMetrics
 }
 
-func (f *FakeFileUtils) Write(file string, content []byte, perm os.FileMode) error {
-	f.writeCalls++
-	f.writeBytes = string(content[:])
-	return f.writeError
+func (f *FakeFileUtils) WriteFile(file string, content []byte, perm os.FileMode) error {
+	f.writeFile.Call()
+	f.writeFile.writtenBytes = string(content[:])
+	return f.writeFile.error
 }
 
-func (f *FakeFileUtils) Read(file string) ([]byte, error) {
-	f.readCalls++
-	return []byte(f.bytesRead), f.readError
+func (f *FakeFileUtils) ReadFile(file string) ([]byte, error) {
+	f.readFile.Call()
+	return []byte(f.readFile.content), f.readFile.error
+}
+
+func (f *FakeFileUtils) Getenv(env string) string {
+	f.readEnv.Call()
+	value, ok := f.readEnv.content[env];
+	if ok {
+		return value
+	} else {
+		return ""
+	}
 }

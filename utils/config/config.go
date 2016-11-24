@@ -3,11 +3,11 @@ package config
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type ConfigHandler interface {
+	ReadConfig() error
 	GetToken() (string, error)
 	GetRole() string
 	GetVaultServer() string
@@ -16,26 +16,31 @@ type ConfigHandler interface {
 	Get(string) (string, error)
 }
 
-type Config map[string]string
+type Config struct {
+	cfg       map[string]string
+	FileUtils filesystem.FileUtils `inject:""`
+}
 
-func ReadConfig() (Config, error) {
+func (c *Config) ReadConfig() error {
 
-	fmt.Println("Reading environment...\n")
+	fmt.Println("Reading environment...")
 
 	configMap := make(map[string]string)
+	
+	configMap["vaultServer"] = c.FileUtils.Getenv("VAULT_SERVER")
+	configMap["tokenPath"] = c.FileUtils.Getenv("TOKEN_PATH")
+	configMap["secretPath"] = c.FileUtils.Getenv("SECRET_PATH")
+	configMap["role"] = c.FileUtils.Getenv("ROLE")
+	configMap["persistencePath"] = c.FileUtils.Getenv("PERSISTENCE_PATH")
 
-	configMap["vaultServer"] = os.Getenv("VAULT_SERVER")
-	configMap["tokenPath"] = os.Getenv("TOKEN_PATH")
-	configMap["secretPath"] = os.Getenv("SECRET_PATH")
-	configMap["role"] = os.Getenv("ROLE")
-	configMap["persistencePath"] = os.Getenv("PERSISTENCE_PATH")
-	configMap["socket"] = os.Getenv("SOCKET")
+	c.cfg = configMap
 
-	return validateConfiguration(configMap)
+	return c.validateConfiguration()
 }
 
 func (c Config) GetToken() (string, error) {
-	if token, err := ioutil.ReadFile(c["tokenPath"]); err != nil {
+	value, _ := c.Get("tokenPath")
+	if token, err := c.FileUtils.ReadFile(value); err != nil {
 		return "", err
 	} else {
 
@@ -44,36 +49,43 @@ func (c Config) GetToken() (string, error) {
 }
 
 func (c Config) GetRole() string {
-	return c["role"]
+	value, _ := c.Get("role")
+	return value
 }
 
 func (c Config) GetVaultServer() string {
-	return c["vaultServer"]
+	value, _ := c.Get("vaultServer")
+	return value
 }
 
 func (c Config) GetPersistencePath() string {
-	return c["persistencePath"]
+	value, _ := c.Get("persistencePath")
+	return value
 }
 
 func (c Config) GetSecretPath() string {
-	return c["secretPath"]
+	value, _ := c.Get("secretPath")
+	return value
 }
 
 func (c Config) Get(key string) (string, error) {
-	if value, ok := c[key]; ok {
+	fmt.Println(key)
+	fmt.Println(c)
+	if value, ok := c.cfg[key]; ok {
+		fmt.Println(value)
 		return value, nil
 	} else {
 		return "", errors.New(fmt.Sprintf("Missing Key: %s", key))
 	}
 }
 
-func validateConfiguration(cfg Config) (Config, error) {
-	for k, v := range cfg {
+func (c Config)validateConfiguration() error {
+	for k, v := range c.cfg {
 		if len(v) == 0 {
 			err := fmt.Sprintf("Undefined configuration: %s", k)
-			return nil, errors.New(err)
+			return errors.New(err)
 		}
 	}
 
-	return cfg, nil
+	return nil
 }

@@ -6,15 +6,20 @@ import (
 )
 
 type FileUtils interface {
-	Write(file string, content []byte, perm os.FileMode) error
-	Read(file string) ([]byte, error)
+	WriteFile(file string, content []byte, perm os.FileMode) error
+	ReadFile(file string) ([]byte, error)
+	Getenv(string) string
 }
 
 type DefaultFileUtils struct{}
 
-func (*DefaultFileUtils) Write(file string, content []byte, perm os.FileMode) error {
+func (*DefaultFileUtils) WriteFile(file string, content []byte, perm os.FileMode) error {
 	return ioutil.WriteFile(file, content, perm)
 }
-func (*DefaultFileUtils) Read(file string) ([]byte, error) {
+func (*DefaultFileUtils) ReadFile(file string) ([]byte, error) {
 	return ioutil.ReadFile(file)
+}
+
+func (*DefaultFileUtils) Getenv(env string) (string) {
+	return os.Getenv(env)
 }

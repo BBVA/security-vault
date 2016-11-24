@@ -310,6 +310,18 @@
 			"revisionTime": "2016-11-10T21:21:14Z"
 		},
 		{
+			"checksumSHA1": "WRu+mhZ2PfQu27qRr69HVGjtN4Q=",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+			"revisionTime": "2016-10-29T20:57:26Z"
+		},
+		{
+			"checksumSHA1": "a2yC46a1qsJomgY6rb+FkTFiqmE=",
+			"path": "github.com/davecgh/go-spew/spew/testdata",
+			"revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+			"revisionTime": "2016-10-29T20:57:26Z"
+		},
+		{
 			"checksumSHA1": "qqgZCJz+QI/ysTsHLmugSiqjp4U=",
 			"path": "github.com/docker/docker/api/types",
 			"revision": "047400c64c9a19fe9c20176dc9ca5d86301a91ae",
@@ -520,6 +532,48 @@
 			"path": "github.com/duosecurity/duo_api_golang/authapi",
 			"revision": "c1d2dd5fb98cb0b9106339cc08797d6a8a929c44",
 			"revisionTime": "2016-11-10T21:21:14Z"
+		},
+		{
+			"checksumSHA1": "2fJIc4QHz5DLsQZWvscaKLQ5Dqs=",
+			"path": "github.com/facebookgo/ensure",
+			"revision": "b4ab57deab51ee655ae4bd85281f0715a068016d",
+			"revisionTime": "2016-01-27T19:34:07Z"
+		},
+		{
+			"checksumSHA1": "8nVAmMKQVBOrs2DroA996MnB114=",
+			"path": "github.com/facebookgo/inject",
+			"revision": "cc1aa653e50f6a9893bcaef89e673e5b24e1e97b",
+			"revisionTime": "2016-10-06T17:47:21Z"
+		},
+		{
+			"checksumSHA1": "HNleqme+aQoazfyPD20TOLYVrAc=",
+			"path": "github.com/facebookgo/inject/injecttesta",
+			"revision": "cc1aa653e50f6a9893bcaef89e673e5b24e1e97b",
+			"revisionTime": "2016-10-06T17:47:21Z"
+		},
+		{
+			"checksumSHA1": "/3Zmsox0/onvFIzLb1fs4h4RVdc=",
+			"path": "github.com/facebookgo/inject/injecttestb",
+			"revision": "cc1aa653e50f6a9893bcaef89e673e5b24e1e97b",
+			"revisionTime": "2016-10-06T17:47:21Z"
+		},
+		{
+			"checksumSHA1": "vHvJA+LcJOd1VQoK24HnlrIeVmA=",
+			"path": "github.com/facebookgo/stack",
+			"revision": "751773369052141c013c6e827a71e8f35c07879c",
+			"revisionTime": "2016-02-09T18:44:15Z"
+		},
+		{
+			"checksumSHA1": "0AgBHAt2AqjRZ4fS1+mVcJ7Kwm0=",
+			"path": "github.com/facebookgo/structtag",
+			"revision": "217e25fb96916cc60332e399c9aa63f5c422ceed",
+			"revisionTime": "2015-02-14T07:43:06Z"
+		},
+		{
+			"checksumSHA1": "/rcA60cygz3NsLEt9+5ojFAZnZU=",
+			"path": "github.com/facebookgo/subset",
+			"revision": "8dac2c3c48703541e481feddf22975953d4ff842",
+			"revisionTime": "2015-06-12T18:29:17Z"
 		},
 		{
 			"checksumSHA1": "KCWVxG+J8SxHGlGiUghe0KBGsa8=",

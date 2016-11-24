@@ -16,19 +16,7 @@ func TestConfig_ReadConfig(t *testing.T) {
 	}{
 		{
 			fileUtils: FakeFileUtils{
-				readEnv: ReadEnvTestMetrics{
-					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
-						"PERSISTENCE_PATH": "test",
-					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
-				},
+				readEnv: DefaultReadEnvMetrics(),
 			},
 			expectedResponse: nil,
 		},
@@ -42,10 +30,7 @@ func TestConfig_ReadConfig(t *testing.T) {
 						"ROLE": "test",
 						"PERSISTENCE_PATH": "",
 					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
+					MethodCallMetrics: DefaultReadEnvCallMetrics(),
 				},
 			},
 			expectedResponse: errors.New("Undefined configuration: persistencePath"),
@@ -59,10 +44,7 @@ func TestConfig_ReadConfig(t *testing.T) {
 						"SECRET_PATH": "test",
 						"ROLE": "test",
 					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
+					MethodCallMetrics: DefaultReadEnvCallMetrics(),
 				},
 			},
 			expectedResponse: errors.New("Undefined configuration: persistencePath"),
@@ -76,10 +58,7 @@ func TestConfig_ReadConfig(t *testing.T) {
 						"SECRET_PATH": "test",
 						"PERSISTENCE_PATH": "test",
 					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
+					MethodCallMetrics: DefaultReadEnvCallMetrics(),
 				},
 			},
 			expectedResponse: errors.New("Undefined configuration: role"),
@@ -95,7 +74,6 @@ func TestConfig_ReadConfig(t *testing.T) {
 		}
 
 		actualResponse := cfg.ReadConfig()
-
 		fixture.fileUtils.readEnv.Report(t, i)
 
 		if !reflect.DeepEqual(actualResponse, fixture.expectedResponse) {
@@ -112,25 +90,10 @@ func TestConfig_GetToken(t *testing.T) {
 	}{
 		{
 			fileUtils: FakeFileUtils{
-				readEnv: ReadEnvTestMetrics{
-					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
-						"PERSISTENCE_PATH": "test",
-					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
-				},
+				readEnv: DefaultReadEnvMetrics(),
 				readFile: ReadFileTestMetrics{
 					content: "token",
-					MethodCallMetrics: MethodCallMetrics{
-						method: "ReadFile",
-						expectedCalls: 1,
-					},
+					MethodCallMetrics: DefaultReadFileCallMetrics(),
 				},
 			},
 			expectedContent: "token",
@@ -138,26 +101,11 @@ func TestConfig_GetToken(t *testing.T) {
 		},
 		{
 			fileUtils: FakeFileUtils{
-				readEnv: ReadEnvTestMetrics{
-					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
-						"PERSISTENCE_PATH": "test",
-					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
-				},
+				readEnv: DefaultReadEnvMetrics(),
 				readFile: ReadFileTestMetrics{
 					content: "",
 					error: errors.New("error"),
-					MethodCallMetrics: MethodCallMetrics{
-						method: "ReadFile",
-						expectedCalls: 1,
-					},
+					MethodCallMetrics: DefaultReadFileCallMetrics(),
 				},
 			},
 			expectedContent: "",
@@ -197,19 +145,7 @@ func TestConfig_Get(t *testing.T) {
 	}{
 		{
 			fileUtils: FakeFileUtils{
-				readEnv: ReadEnvTestMetrics{
-					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
-						"PERSISTENCE_PATH": "test",
-					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
-				},
+				readEnv: DefaultReadEnvMetrics(),
 			},
 			testKey: "role",
 			expectedContent: "test",
@@ -217,19 +153,7 @@ func TestConfig_Get(t *testing.T) {
 		},
 		{
 			fileUtils: FakeFileUtils{
-				readEnv: ReadEnvTestMetrics{
-					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
-						"PERSISTENCE_PATH": "test",
-					},
-					MethodCallMetrics: MethodCallMetrics{
-						method: "Readenv",
-						expectedCalls: 5,
-					},
-				},
+				readEnv: DefaultReadEnvMetrics(),
 			},
 			testKey: "undefined",
 			expectedContent: "",
@@ -256,5 +180,32 @@ func TestConfig_Get(t *testing.T) {
 		if !reflect.DeepEqual(err, fixture.expectedError) {
 			t.Errorf("%d - Expected %v, Received %v\n", i, fixture.expectedError, err)
 		}
+	}
+}
+
+func DefaultReadEnvCallMetrics() MethodCallMetrics {
+	return MethodCallMetrics{
+		method: "Readenv",
+		expectedCalls: 5,
+	}
+}
+
+func DefaultReadFileCallMetrics() MethodCallMetrics {
+	return MethodCallMetrics{
+		method: "ReadFile",
+		expectedCalls: 1,
+	}
+}
+
+func DefaultReadEnvMetrics() ReadEnvTestMetrics {
+	return ReadEnvTestMetrics{
+		content: map[string]string{
+			"VAULT_SERVER": "test",
+			"TOKEN_PATH": "test",
+			"SECRET_PATH": "test",
+			"ROLE": "test",
+			"PERSISTENCE_PATH": "test",
+		},
+		MethodCallMetrics: DefaultReadEnvCallMetrics(),
 	}
 }

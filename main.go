@@ -25,7 +25,12 @@ func main() {
 		panic(err.Error())
 	}
 
-	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg)
+
+	persistenceCfg := &persistence.PersistenceManager{}
+	if err := inject.Populate(persistenceCfg,&filesystem.DefaultFileUtils{}); err != nil {
+		panic(err.Error())
+	}
+	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg,persistenceCfg)
 	if err := persistenceManager.RecoverLeases(); err != nil {
 		panic(err.Error())
 	}

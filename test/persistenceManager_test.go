@@ -90,6 +90,32 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 			},
 			expectedError: errors.New("error"),
 		},
+		{
+			fileUtils: FakeFileUtils{
+				readEnv: DefaultReadEnvMetrics(),
+				readDir: ReadDirTestMetrics{
+					content: []os.FileInfo{
+						os.FileInfo(FakeFileInfo{"test",false}),
+						os.FileInfo(FakeFileInfo{"test2",false}),
+						os.FileInfo(FakeFileInfo{"test3",true}),
+					},
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 1,
+						method: "readdir",
+					},
+				},
+
+				readFile: ReadFileTestMetrics{
+					content: "{}",
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 2,
+						method: "readfile",
+					},
+				},
+
+			},
+			expectedError: nil,
+		},
 	}
 
 	for i, fixture := range fixtures {

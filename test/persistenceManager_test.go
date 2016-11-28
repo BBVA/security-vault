@@ -7,6 +7,7 @@ import (
 	"descinet.bbva.es/cloudframe-security-vault/persistence"
 	"reflect"
 	"os"
+	"errors"
 )
 
 func TestPersistenceManager_RecoverLeases(t *testing.T) {
@@ -21,7 +22,7 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 				readEnv: DefaultReadEnvMetrics(),
 				readDir: ReadDirTestMetrics{
 					content: []os.FileInfo{
-						os.FileInfo(FakeFileInfo{"test"}),
+						os.FileInfo(FakeFileInfo{"test",false}),
 					},
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 1,
@@ -39,6 +40,55 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 
 			},
 			expectedError: nil,
+		},
+		{
+			fileUtils: FakeFileUtils{
+				readEnv: DefaultReadEnvMetrics(),
+				readDir: ReadDirTestMetrics{
+					content: []os.FileInfo{
+						os.FileInfo(FakeFileInfo{"test",true}),
+					},
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 1,
+						method: "readdir",
+					},
+				},
+
+				readFile: ReadFileTestMetrics{
+					content: "{}",
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 0,
+						method: "readfile",
+					},
+				},
+
+			},
+			expectedError: nil,
+		},
+		{
+			fileUtils: FakeFileUtils{
+				readEnv: DefaultReadEnvMetrics(),
+				readDir: ReadDirTestMetrics{
+					content: []os.FileInfo{
+						os.FileInfo(FakeFileInfo{}),
+					},
+					error: errors.New("error"),
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 1,
+						method: "readdir",
+					},
+				},
+
+				readFile: ReadFileTestMetrics{
+					content: "{}",
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 0,
+						method: "readfile",
+					},
+				},
+
+			},
+			expectedError: errors.New("error"),
 		},
 	}
 

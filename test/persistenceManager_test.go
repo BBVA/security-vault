@@ -1,20 +1,19 @@
 package test
 
 import (
-	"descinet.bbva.es/cloudframe-security-vault/utils/config"
-	"github.com/facebookgo/inject"
-	"testing"
 	"descinet.bbva.es/cloudframe-security-vault/persistence"
-	"reflect"
-	"os"
+	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 	"errors"
+	"github.com/facebookgo/inject"
+	"os"
+	"reflect"
+	"testing"
 )
 
 func TestPersistenceManager_RecoverLeases(t *testing.T) {
 
-
 	fixtures := []struct {
-		fileUtils        FakeFileUtils
+		fileUtils     FakeFileUtils
 		expectedError error
 	}{
 		{
@@ -22,11 +21,11 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 				readEnv: DefaultReadEnvMetrics(),
 				readDir: ReadDirTestMetrics{
 					content: []os.FileInfo{
-						os.FileInfo(FakeFileInfo{"test",false}),
+						os.FileInfo(FakeFileInfo{"test", false}),
 					},
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 1,
-						method: "readdir",
+						method:        "readdir",
 					},
 				},
 
@@ -34,10 +33,9 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 					content: "{}",
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 1,
-						method: "readfile",
+						method:        "readfile",
 					},
 				},
-
 			},
 			expectedError: nil,
 		},
@@ -46,11 +44,11 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 				readEnv: DefaultReadEnvMetrics(),
 				readDir: ReadDirTestMetrics{
 					content: []os.FileInfo{
-						os.FileInfo(FakeFileInfo{"test",true}),
+						os.FileInfo(FakeFileInfo{"test", true}),
 					},
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 1,
-						method: "readdir",
+						method:        "readdir",
 					},
 				},
 
@@ -58,10 +56,9 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 					content: "{}",
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 0,
-						method: "readfile",
+						method:        "readfile",
 					},
 				},
-
 			},
 			expectedError: nil,
 		},
@@ -75,7 +72,7 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 					error: errors.New("error"),
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 1,
-						method: "readdir",
+						method:        "readdir",
 					},
 				},
 
@@ -83,10 +80,9 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 					content: "{}",
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 0,
-						method: "readfile",
+						method:        "readfile",
 					},
 				},
-
 			},
 			expectedError: errors.New("error"),
 		},
@@ -95,13 +91,13 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 				readEnv: DefaultReadEnvMetrics(),
 				readDir: ReadDirTestMetrics{
 					content: []os.FileInfo{
-						os.FileInfo(FakeFileInfo{"test",false}),
-						os.FileInfo(FakeFileInfo{"test2",false}),
-						os.FileInfo(FakeFileInfo{"test3",true}),
+						os.FileInfo(FakeFileInfo{"test", false}),
+						os.FileInfo(FakeFileInfo{"test2", false}),
+						os.FileInfo(FakeFileInfo{"test3", true}),
 					},
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 1,
-						method: "readdir",
+						method:        "readdir",
 					},
 				},
 
@@ -109,10 +105,9 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 					content: "{}",
 					MethodCallMetrics: MethodCallMetrics{
 						expectedCalls: 2,
-						method: "readfile",
+						method:        "readfile",
 					},
 				},
-
 			},
 			expectedError: nil,
 		},
@@ -128,10 +123,10 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 		cfg.ReadConfig()
 
 		persistenceCfg := &persistence.PersistenceManager{}
-		if err := inject.Populate(persistenceCfg,&fixture.fileUtils); err != nil {
+		if err := inject.Populate(persistenceCfg, &fixture.fileUtils); err != nil {
 			t.Error(err.Error())
 		}
-		_, persistenceManager := persistence.NewPersistenceManager(cfg,persistenceCfg)
+		_, persistenceManager := persistence.NewPersistenceManager(cfg, persistenceCfg)
 
 		err := persistenceManager.RecoverLeases()
 		fixture.fileUtils.readEnv.Report(t, i)
@@ -143,3 +138,146 @@ func TestPersistenceManager_RecoverLeases(t *testing.T) {
 		}
 	}
 }
+
+func TestPersistenceManager_Run(t *testing.T) {
+
+	fixtures := []struct {
+		fileUtils     FakeFileUtils
+		events        []persistence.LeaseEvent
+		expectedError error
+	}{
+		{
+			fileUtils: FakeFileUtils{
+				readEnv: DefaultReadEnvMetrics(),
+				writeFile: WriteFileTestMetrics{
+					writtenBytes: "23",
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 1,
+						method:        "writefile",
+					},
+				},
+				remove: RemoveTestMetrics{
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 0,
+						method:        "remove",
+					},
+				},
+			},
+			events: []persistence.LeaseEvent{
+				{
+					EventType:  "start",
+					Identifier: "testid",
+					Lease: persistence.LeaseInfo{
+						LeaseID:   "test",
+						LeaseTime: 1,
+						Renewable: false,
+						Timestamp: 3245564343,
+					},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			fileUtils: FakeFileUtils{
+				readEnv: DefaultReadEnvMetrics(),
+				writeFile: WriteFileTestMetrics{
+					writtenBytes: "23",
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 0,
+						method:        "writefile",
+					},
+				},
+				remove: RemoveTestMetrics{
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 0,
+						method:        "remove",
+					},
+				},
+			},
+			events: []persistence.LeaseEvent{
+				{
+					EventType:  "stop",
+					Identifier: "testid",
+					Lease: persistence.LeaseInfo{
+						LeaseID:   "test",
+						LeaseTime: 1,
+						Renewable: false,
+						Timestamp: 3245564343,
+					},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			fileUtils: FakeFileUtils{
+				readEnv: DefaultReadEnvMetrics(),
+				writeFile: WriteFileTestMetrics{
+					writtenBytes: "23",
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 1,
+						method:        "writefile",
+					},
+				},
+				remove: RemoveTestMetrics{
+					MethodCallMetrics: MethodCallMetrics{
+						expectedCalls: 1,
+						method:        "remove",
+					},
+				},
+			},
+			events: []persistence.LeaseEvent{
+				{
+					EventType:  "start",
+					Identifier: "testid",
+					Lease: persistence.LeaseInfo{
+						LeaseID:   "test",
+						LeaseTime: 1,
+						Renewable: false,
+						Timestamp: 3245564343,
+					},
+				},
+				{
+					EventType:  "stop",
+					Identifier: "testid",
+					Lease: persistence.LeaseInfo{
+						LeaseID:   "test",
+						LeaseTime: 1,
+						Renewable: false,
+						Timestamp: 3245564343,
+					},
+				},
+			},
+			expectedError: nil,
+		},
+	}
+	for i, fixture := range fixtures {
+
+		cfg := &config.Config{}
+
+		if err := inject.Populate(cfg, &fixture.fileUtils); err != nil {
+			t.Error(err.Error())
+		}
+
+		cfg.ReadConfig()
+
+		persistenceCfg := &persistence.PersistenceManager{}
+		if err := inject.Populate(persistenceCfg, &fixture.fileUtils); err != nil {
+			t.Error(err.Error())
+		}
+		persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg, persistenceCfg)
+
+		go persistenceManager.Run()
+
+		for _,event := range fixture.events {
+			persistenceChannel <- event
+		}
+
+		persistenceChannel <- persistence.LeaseEvent{
+			EventType: "die",
+		}
+		fixture.fileUtils.readEnv.Report(t, i)
+		fixture.fileUtils.writeFile.Report(t, i)
+		fixture.fileUtils.remove.Report(t, i)
+	}
+}
+

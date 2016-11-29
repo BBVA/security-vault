@@ -95,6 +95,7 @@ func (p *PersistenceManager) Run() {
 				}
 				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", event.Identifier, event.Lease.LeaseID, event.Lease.LeaseTime, event.Lease.Renewable, event.Lease.Timestamp)
 			case "stop":
+				fmt.Println("Stop event processing")
 				_, ok := p.leases[event.Identifier]
 				if ok {
 					delete(p.leases, event.Identifier)

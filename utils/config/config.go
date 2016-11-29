@@ -69,10 +69,7 @@ func (c Config) GetSecretPath() string {
 }
 
 func (c Config) Get(key string) (string, error) {
-	fmt.Println(key)
-	fmt.Println(c)
 	if value, ok := c.cfg[key]; ok {
-		fmt.Println(value)
 		return value, nil
 	} else {
 		return "", errors.New(fmt.Sprintf("Missing Key: %s", key))
@@ -82,8 +79,7 @@ func (c Config) Get(key string) (string, error) {
 func (c Config)validateConfiguration() error {
 	for k, v := range c.cfg {
 		if len(v) == 0 {
-			err := fmt.Sprintf("Undefined configuration: %s", k)
-			return errors.New(err)
+			return errors.New(fmt.Sprintf("Undefined configuration: %s", k))
 		}
 	}
 

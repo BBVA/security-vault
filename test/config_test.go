@@ -68,7 +68,6 @@ func TestConfig_ReadConfig(t *testing.T) {
 
 	for i, fixture := range fixtures {
 		cfg := config.Config{}
-
 		if err := inject.Populate(&cfg, &fixture.fileUtils); err != nil {
 			t.Error(err.Error())
 		}
@@ -115,7 +114,6 @@ func TestConfig_GetToken(t *testing.T) {
 
 	for i, fixture := range fixtures {
 		cfg := config.Config{}
-
 		if err := inject.Populate(&cfg, &fixture.fileUtils); err != nil {
 			t.Error(err.Error())
 		}
@@ -162,8 +160,7 @@ func TestConfig_Get(t *testing.T) {
 	}
 
 	for i, fixture := range fixtures {
-		cfg := config.Config{}
-
+		var cfg config.Config
 		if err := inject.Populate(&cfg, &fixture.fileUtils); err != nil {
 			t.Error(err.Error())
 		}

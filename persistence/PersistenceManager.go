@@ -75,7 +75,7 @@ func (p *PersistenceManager) RecoverLeases() error {
 
 func (p *PersistenceManager) Run() {
 	path := p.config.GetPersistencePath()
-	
+	Infinity:
 	for {
 		select {
 		case event := <-p.persistenceChannel:
@@ -105,8 +105,10 @@ func (p *PersistenceManager) Run() {
 					}
 					fmt.Printf("Deleted file: %s\n", file)
 				}
+			case "die":
+				fmt.Printf("Die switch triggered\n. Stopping persistance manager")
+				break Infinity
 			}
-
 		}
 	}
 }

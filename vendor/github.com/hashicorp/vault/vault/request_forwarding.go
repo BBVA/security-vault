@@ -68,9 +68,7 @@ func (c *Core) startForwarding() error {
 		go func() {
 			defer shutdownWg.Done()
 
-			if c.logger.IsInfo() {
-				c.logger.Info("core/startClusterListener: starting listener", "listener_address", laddr)
-			}
+			c.logger.Info("core/startClusterListener: starting listener")
 
 			// Create a TCP listener. We do this separately and specifically
 			// with TCP so that we can set deadlines.

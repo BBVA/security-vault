@@ -80,7 +80,7 @@ func (mc *mysqlConn) readPacket() ([]byte, error) {
 func (mc *mysqlConn) writePacket(data []byte) error {
 	pktLen := len(data) - 4
 
-	if pktLen > mc.maxAllowedPacket {
+	if pktLen > mc.maxPacketAllowed {
 		return ErrPktTooLarge
 	}
 
@@ -372,26 +372,6 @@ func (mc *mysqlConn) writeClearAuthPacket() error {
 	return mc.writePacket(data)
 }
 
-//  Native password authentication method
-// http://dev.mysql.com/doc/internals/en/connection-phase-packets.html#packet-Protocol::AuthSwitchResponse
-func (mc *mysqlConn) writeNativeAuthPacket(cipher []byte) error {
-	scrambleBuff := scramblePassword(cipher, []byte(mc.cfg.Passwd))
-
-	// Calculate the packet length and add a tailing 0
-	pktLen := len(scrambleBuff)
-	data := mc.buf.takeSmallBuffer(4 + pktLen)
-	if data == nil {
-		// can not take the buffer. Something must be wrong with the connection
-		errLog.Print(ErrBusyBuffer)
-		return driver.ErrBadConn
-	}
-
-	// Add the scramble
-	copy(data[4:], scrambleBuff)
-
-	return mc.writePacket(data)
-}
-
 /******************************************************************************
 *                             Command Packets                                 *
 ******************************************************************************/
@@ -465,42 +445,36 @@ func (mc *mysqlConn) writeCommandPacketUint32(command byte, arg uint32) error {
 ******************************************************************************/
 
 // Returns error if Packet is not an 'Result OK'-Packet
-func (mc *mysqlConn) readResultOK() ([]byte, error) {
+func (mc *mysqlConn) readResultOK() error {
 	data, err := mc.readPacket()
 	if err == nil {
 		// packet indicator
 		switch data[0] {
 
 		case iOK:
-			return nil, mc.handleOkPacket(data)
+			return mc.handleOkPacket(data)
 
 		case iEOF:
 			if len(data) > 1 {
-				pluginEndIndex := bytes.IndexByte(data, 0x00)
-				plugin := string(data[1:pluginEndIndex])
-				cipher := data[pluginEndIndex+1 : len(data)-1]
-
+				plugin := string(data[1:bytes.IndexByte(data, 0x00)])
 				if plugin == "mysql_old_password" {
 					// using old_passwords
-					return cipher, ErrOldPassword
+					return ErrOldPassword
 				} else if plugin == "mysql_clear_password" {
 					// using clear text password
-					return cipher, ErrCleartextPassword
-				} else if plugin == "mysql_native_password" {
-					// using mysql default authentication method
-					return cipher, ErrNativePassword
+					return ErrCleartextPassword
 				} else {
-					return cipher, ErrUnknownPlugin
+					return ErrUnknownPlugin
 				}
 			} else {
-				return nil, ErrOldPassword
+				return ErrOldPassword
 			}
 
 		default: // Error otherwise
-			return nil, mc.handleErrorPacket(data)
+			return mc.handleErrorPacket(data)
 		}
 	}
-	return nil, err
+	return err
 }
 
 // Result Set Header Packet
@@ -812,7 +786,7 @@ func (stmt *mysqlStmt) readPrepareResultPacket() (uint16, error) {
 
 // http://dev.mysql.com/doc/internals/en/com-stmt-send-long-data.html
 func (stmt *mysqlStmt) writeCommandLongData(paramID int, arg []byte) error {
-	maxLen := stmt.mc.maxAllowedPacket - 1
+	maxLen := stmt.mc.maxPacketAllowed - 1
 	pktLen := maxLen
 
 	// After the header (bytes 0-3) follows before the data:
@@ -1003,7 +977,7 @@ func (stmt *mysqlStmt) writeExecutePacket(args []driver.Value) error {
 					paramTypes[i+i] = fieldTypeString
 					paramTypes[i+i+1] = 0x00
 
-					if len(v) < mc.maxAllowedPacket-pos-len(paramValues)-(len(args)-(i+1))*64 {
+					if len(v) < mc.maxPacketAllowed-pos-len(paramValues)-(len(args)-(i+1))*64 {
 						paramValues = appendLengthEncodedInteger(paramValues,
 							uint64(len(v)),
 						)
@@ -1025,7 +999,7 @@ func (stmt *mysqlStmt) writeExecutePacket(args []driver.Value) error {
 				paramTypes[i+i] = fieldTypeString
 				paramTypes[i+i+1] = 0x00
 
-				if len(v) < mc.maxAllowedPacket-pos-len(paramValues)-(len(args)-(i+1))*64 {
+				if len(v) < mc.maxPacketAllowed-pos-len(paramValues)-(len(args)-(i+1))*64 {
 					paramValues = appendLengthEncodedInteger(paramValues,
 						uint64(len(v)),
 					)

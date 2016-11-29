@@ -137,6 +137,9 @@ type Config struct {
 	// accelerate enabled. If the bucket is not enabled for accelerate an error
 	// will be returned. The bucket name must be DNS compatible to also work
 	// with accelerate.
+	//
+	// Not compatible with UseDualStack requests will fail if both flags are
+	// specified.
 	S3UseAccelerate *bool
 
 	// Set this to `true` to disable the EC2Metadata client from overriding the

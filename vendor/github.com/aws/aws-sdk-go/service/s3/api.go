@@ -21,8 +21,6 @@ const opAbortMultipartUpload = "AbortMultipartUpload"
 // value can be used to capture response data after the request's "Send" method
 // is called.
 //
-// See AbortMultipartUpload for usage and error information.
-//
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
 // access properties on the request object before or after sending the request. If
@@ -57,25 +55,11 @@ func (c *S3) AbortMultipartUploadRequest(input *AbortMultipartUploadInput) (req 
 	return
 }
 
-// AbortMultipartUpload API operation for Amazon Simple Storage Service.
-//
 // Aborts a multipart upload.
 //
 // To verify that all parts have been removed, so you don't get charged for
 // the part storage, you should call the List Parts operation and ensure the
 // parts list is empty.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation AbortMultipartUpload for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchUpload
-//   The specified multipart upload does not exist.
-//
 func (c *S3) AbortMultipartUpload(input *AbortMultipartUploadInput) (*AbortMultipartUploadOutput, error) {
 	req, out := c.AbortMultipartUploadRequest(input)
 	err := req.Send()
@@ -88,8 +72,6 @@ const opCompleteMultipartUpload = "CompleteMultipartUpload"
 // client's request for the CompleteMultipartUpload operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See CompleteMultipartUpload for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -125,16 +107,7 @@ func (c *S3) CompleteMultipartUploadRequest(input *CompleteMultipartUploadInput)
 	return
 }
 
-// CompleteMultipartUpload API operation for Amazon Simple Storage Service.
-//
 // Completes a multipart upload by assembling previously uploaded parts.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation CompleteMultipartUpload for usage and error information.
 func (c *S3) CompleteMultipartUpload(input *CompleteMultipartUploadInput) (*CompleteMultipartUploadOutput, error) {
 	req, out := c.CompleteMultipartUploadRequest(input)
 	err := req.Send()
@@ -147,8 +120,6 @@ const opCopyObject = "CopyObject"
 // client's request for the CopyObject operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See CopyObject for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -184,22 +155,7 @@ func (c *S3) CopyObjectRequest(input *CopyObjectInput) (req *request.Request, ou
 	return
 }
 
-// CopyObject API operation for Amazon Simple Storage Service.
-//
 // Creates a copy of an object that is already stored in Amazon S3.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation CopyObject for usage and error information.
-//
-// Returned Error Codes:
-//   * ObjectNotInActiveTierError
-//   The source object of the COPY operation is not in the active tier and is
-//   only stored in Amazon Glacier.
-//
 func (c *S3) CopyObject(input *CopyObjectInput) (*CopyObjectOutput, error) {
 	req, out := c.CopyObjectRequest(input)
 	err := req.Send()
@@ -212,8 +168,6 @@ const opCreateBucket = "CreateBucket"
 // client's request for the CreateBucket operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See CreateBucket for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -249,25 +203,7 @@ func (c *S3) CreateBucketRequest(input *CreateBucketInput) (req *request.Request
 	return
 }
 
-// CreateBucket API operation for Amazon Simple Storage Service.
-//
 // Creates a new bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation CreateBucket for usage and error information.
-//
-// Returned Error Codes:
-//   * BucketAlreadyExists
-//   The requested bucket name is not available. The bucket namespace is shared
-//   by all users of the system. Please select a different name and try again.
-//
-//   * BucketAlreadyOwnedByYou
-
-//
 func (c *S3) CreateBucket(input *CreateBucketInput) (*CreateBucketOutput, error) {
 	req, out := c.CreateBucketRequest(input)
 	err := req.Send()
@@ -280,8 +216,6 @@ const opCreateMultipartUpload = "CreateMultipartUpload"
 // client's request for the CreateMultipartUpload operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See CreateMultipartUpload for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -317,8 +251,6 @@ func (c *S3) CreateMultipartUploadRequest(input *CreateMultipartUploadInput) (re
 	return
 }
 
-// CreateMultipartUpload API operation for Amazon Simple Storage Service.
-//
 // Initiates a multipart upload and returns an upload ID.
 //
 // Note: After you initiate multipart upload and upload one or more parts, you
@@ -326,13 +258,6 @@ func (c *S3) CreateMultipartUploadRequest(input *CreateMultipartUploadInput) (re
 // for storage of the uploaded parts. Only after you either complete or abort
 // multipart upload, Amazon S3 frees up the parts storage and stops charging
 // you for the parts storage.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation CreateMultipartUpload for usage and error information.
 func (c *S3) CreateMultipartUpload(input *CreateMultipartUploadInput) (*CreateMultipartUploadOutput, error) {
 	req, out := c.CreateMultipartUploadRequest(input)
 	err := req.Send()
@@ -345,8 +270,6 @@ const opDeleteBucket = "DeleteBucket"
 // client's request for the DeleteBucket operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucket for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -384,17 +307,8 @@ func (c *S3) DeleteBucketRequest(input *DeleteBucketInput) (req *request.Request
 	return
 }
 
-// DeleteBucket API operation for Amazon Simple Storage Service.
-//
 // Deletes the bucket. All objects (including all object versions and Delete
 // Markers) in the bucket must be deleted before the bucket itself can be deleted.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucket for usage and error information.
 func (c *S3) DeleteBucket(input *DeleteBucketInput) (*DeleteBucketOutput, error) {
 	req, out := c.DeleteBucketRequest(input)
 	err := req.Send()
@@ -407,8 +321,6 @@ const opDeleteBucketCors = "DeleteBucketCors"
 // client's request for the DeleteBucketCors operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucketCors for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -446,16 +358,7 @@ func (c *S3) DeleteBucketCorsRequest(input *DeleteBucketCorsInput) (req *request
 	return
 }
 
-// DeleteBucketCors API operation for Amazon Simple Storage Service.
-//
 // Deletes the cors configuration information set for the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucketCors for usage and error information.
 func (c *S3) DeleteBucketCors(input *DeleteBucketCorsInput) (*DeleteBucketCorsOutput, error) {
 	req, out := c.DeleteBucketCorsRequest(input)
 	err := req.Send()
@@ -468,8 +371,6 @@ const opDeleteBucketLifecycle = "DeleteBucketLifecycle"
 // client's request for the DeleteBucketLifecycle operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucketLifecycle for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -507,16 +408,7 @@ func (c *S3) DeleteBucketLifecycleRequest(input *DeleteBucketLifecycleInput) (re
 	return
 }
 
-// DeleteBucketLifecycle API operation for Amazon Simple Storage Service.
-//
 // Deletes the lifecycle configuration from the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucketLifecycle for usage and error information.
 func (c *S3) DeleteBucketLifecycle(input *DeleteBucketLifecycleInput) (*DeleteBucketLifecycleOutput, error) {
 	req, out := c.DeleteBucketLifecycleRequest(input)
 	err := req.Send()
@@ -529,8 +421,6 @@ const opDeleteBucketPolicy = "DeleteBucketPolicy"
 // client's request for the DeleteBucketPolicy operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucketPolicy for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -568,16 +458,7 @@ func (c *S3) DeleteBucketPolicyRequest(input *DeleteBucketPolicyInput) (req *req
 	return
 }
 
-// DeleteBucketPolicy API operation for Amazon Simple Storage Service.
-//
 // Deletes the policy from the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucketPolicy for usage and error information.
 func (c *S3) DeleteBucketPolicy(input *DeleteBucketPolicyInput) (*DeleteBucketPolicyOutput, error) {
 	req, out := c.DeleteBucketPolicyRequest(input)
 	err := req.Send()
@@ -590,8 +471,6 @@ const opDeleteBucketReplication = "DeleteBucketReplication"
 // client's request for the DeleteBucketReplication operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucketReplication for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -629,16 +508,7 @@ func (c *S3) DeleteBucketReplicationRequest(input *DeleteBucketReplicationInput)
 	return
 }
 
-// DeleteBucketReplication API operation for Amazon Simple Storage Service.
-//
 // Deletes the replication configuration from the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucketReplication for usage and error information.
 func (c *S3) DeleteBucketReplication(input *DeleteBucketReplicationInput) (*DeleteBucketReplicationOutput, error) {
 	req, out := c.DeleteBucketReplicationRequest(input)
 	err := req.Send()
@@ -651,8 +521,6 @@ const opDeleteBucketTagging = "DeleteBucketTagging"
 // client's request for the DeleteBucketTagging operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucketTagging for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -690,16 +558,7 @@ func (c *S3) DeleteBucketTaggingRequest(input *DeleteBucketTaggingInput) (req *r
 	return
 }
 
-// DeleteBucketTagging API operation for Amazon Simple Storage Service.
-//
 // Deletes the tags from the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucketTagging for usage and error information.
 func (c *S3) DeleteBucketTagging(input *DeleteBucketTaggingInput) (*DeleteBucketTaggingOutput, error) {
 	req, out := c.DeleteBucketTaggingRequest(input)
 	err := req.Send()
@@ -712,8 +571,6 @@ const opDeleteBucketWebsite = "DeleteBucketWebsite"
 // client's request for the DeleteBucketWebsite operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteBucketWebsite for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -751,16 +608,7 @@ func (c *S3) DeleteBucketWebsiteRequest(input *DeleteBucketWebsiteInput) (req *r
 	return
 }
 
-// DeleteBucketWebsite API operation for Amazon Simple Storage Service.
-//
 // This operation removes the website configuration from the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteBucketWebsite for usage and error information.
 func (c *S3) DeleteBucketWebsite(input *DeleteBucketWebsiteInput) (*DeleteBucketWebsiteOutput, error) {
 	req, out := c.DeleteBucketWebsiteRequest(input)
 	err := req.Send()
@@ -773,8 +621,6 @@ const opDeleteObject = "DeleteObject"
 // client's request for the DeleteObject operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteObject for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -810,18 +656,9 @@ func (c *S3) DeleteObjectRequest(input *DeleteObjectInput) (req *request.Request
 	return
 }
 
-// DeleteObject API operation for Amazon Simple Storage Service.
-//
 // Removes the null version (if there is one) of an object and inserts a delete
 // marker, which becomes the latest version of the object. If there isn't a
 // null version, Amazon S3 does not remove any objects.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteObject for usage and error information.
 func (c *S3) DeleteObject(input *DeleteObjectInput) (*DeleteObjectOutput, error) {
 	req, out := c.DeleteObjectRequest(input)
 	err := req.Send()
@@ -834,8 +671,6 @@ const opDeleteObjects = "DeleteObjects"
 // client's request for the DeleteObjects operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See DeleteObjects for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -871,17 +706,8 @@ func (c *S3) DeleteObjectsRequest(input *DeleteObjectsInput) (req *request.Reque
 	return
 }
 
-// DeleteObjects API operation for Amazon Simple Storage Service.
-//
 // This operation enables you to delete multiple objects from a bucket using
 // a single HTTP request. You may specify up to 1000 keys.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation DeleteObjects for usage and error information.
 func (c *S3) DeleteObjects(input *DeleteObjectsInput) (*DeleteObjectsOutput, error) {
 	req, out := c.DeleteObjectsRequest(input)
 	err := req.Send()
@@ -894,8 +720,6 @@ const opGetBucketAccelerateConfiguration = "GetBucketAccelerateConfiguration"
 // client's request for the GetBucketAccelerateConfiguration operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketAccelerateConfiguration for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -931,16 +755,7 @@ func (c *S3) GetBucketAccelerateConfigurationRequest(input *GetBucketAccelerateC
 	return
 }
 
-// GetBucketAccelerateConfiguration API operation for Amazon Simple Storage Service.
-//
 // Returns the accelerate configuration of a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketAccelerateConfiguration for usage and error information.
 func (c *S3) GetBucketAccelerateConfiguration(input *GetBucketAccelerateConfigurationInput) (*GetBucketAccelerateConfigurationOutput, error) {
 	req, out := c.GetBucketAccelerateConfigurationRequest(input)
 	err := req.Send()
@@ -953,8 +768,6 @@ const opGetBucketAcl = "GetBucketAcl"
 // client's request for the GetBucketAcl operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketAcl for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -990,16 +803,7 @@ func (c *S3) GetBucketAclRequest(input *GetBucketAclInput) (req *request.Request
 	return
 }
 
-// GetBucketAcl API operation for Amazon Simple Storage Service.
-//
 // Gets the access control policy for the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketAcl for usage and error information.
 func (c *S3) GetBucketAcl(input *GetBucketAclInput) (*GetBucketAclOutput, error) {
 	req, out := c.GetBucketAclRequest(input)
 	err := req.Send()
@@ -1012,8 +816,6 @@ const opGetBucketCors = "GetBucketCors"
 // client's request for the GetBucketCors operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketCors for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1049,16 +851,7 @@ func (c *S3) GetBucketCorsRequest(input *GetBucketCorsInput) (req *request.Reque
 	return
 }
 
-// GetBucketCors API operation for Amazon Simple Storage Service.
-//
 // Returns the cors configuration for the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketCors for usage and error information.
 func (c *S3) GetBucketCors(input *GetBucketCorsInput) (*GetBucketCorsOutput, error) {
 	req, out := c.GetBucketCorsRequest(input)
 	err := req.Send()
@@ -1071,8 +864,6 @@ const opGetBucketLifecycle = "GetBucketLifecycle"
 // client's request for the GetBucketLifecycle operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketLifecycle for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1111,16 +902,7 @@ func (c *S3) GetBucketLifecycleRequest(input *GetBucketLifecycleInput) (req *req
 	return
 }
 
-// GetBucketLifecycle API operation for Amazon Simple Storage Service.
-//
 // Deprecated, see the GetBucketLifecycleConfiguration operation.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketLifecycle for usage and error information.
 func (c *S3) GetBucketLifecycle(input *GetBucketLifecycleInput) (*GetBucketLifecycleOutput, error) {
 	req, out := c.GetBucketLifecycleRequest(input)
 	err := req.Send()
@@ -1133,8 +915,6 @@ const opGetBucketLifecycleConfiguration = "GetBucketLifecycleConfiguration"
 // client's request for the GetBucketLifecycleConfiguration operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketLifecycleConfiguration for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1170,16 +950,7 @@ func (c *S3) GetBucketLifecycleConfigurationRequest(input *GetBucketLifecycleCon
 	return
 }
 
-// GetBucketLifecycleConfiguration API operation for Amazon Simple Storage Service.
-//
 // Returns the lifecycle configuration information set on the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketLifecycleConfiguration for usage and error information.
 func (c *S3) GetBucketLifecycleConfiguration(input *GetBucketLifecycleConfigurationInput) (*GetBucketLifecycleConfigurationOutput, error) {
 	req, out := c.GetBucketLifecycleConfigurationRequest(input)
 	err := req.Send()
@@ -1192,8 +963,6 @@ const opGetBucketLocation = "GetBucketLocation"
 // client's request for the GetBucketLocation operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketLocation for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1229,16 +998,7 @@ func (c *S3) GetBucketLocationRequest(input *GetBucketLocationInput) (req *reque
 	return
 }
 
-// GetBucketLocation API operation for Amazon Simple Storage Service.
-//
 // Returns the region the bucket resides in.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketLocation for usage and error information.
 func (c *S3) GetBucketLocation(input *GetBucketLocationInput) (*GetBucketLocationOutput, error) {
 	req, out := c.GetBucketLocationRequest(input)
 	err := req.Send()
@@ -1251,8 +1011,6 @@ const opGetBucketLogging = "GetBucketLogging"
 // client's request for the GetBucketLogging operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketLogging for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1288,17 +1046,8 @@ func (c *S3) GetBucketLoggingRequest(input *GetBucketLoggingInput) (req *request
 	return
 }
 
-// GetBucketLogging API operation for Amazon Simple Storage Service.
-//
 // Returns the logging status of a bucket and the permissions users have to
 // view and modify that status. To use GET, you must be the bucket owner.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketLogging for usage and error information.
 func (c *S3) GetBucketLogging(input *GetBucketLoggingInput) (*GetBucketLoggingOutput, error) {
 	req, out := c.GetBucketLoggingRequest(input)
 	err := req.Send()
@@ -1311,8 +1060,6 @@ const opGetBucketNotification = "GetBucketNotification"
 // client's request for the GetBucketNotification operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketNotification for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1351,16 +1098,7 @@ func (c *S3) GetBucketNotificationRequest(input *GetBucketNotificationConfigurat
 	return
 }
 
-// GetBucketNotification API operation for Amazon Simple Storage Service.
-//
 // Deprecated, see the GetBucketNotificationConfiguration operation.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketNotification for usage and error information.
 func (c *S3) GetBucketNotification(input *GetBucketNotificationConfigurationRequest) (*NotificationConfigurationDeprecated, error) {
 	req, out := c.GetBucketNotificationRequest(input)
 	err := req.Send()
@@ -1373,8 +1111,6 @@ const opGetBucketNotificationConfiguration = "GetBucketNotificationConfiguration
 // client's request for the GetBucketNotificationConfiguration operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketNotificationConfiguration for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1410,16 +1146,7 @@ func (c *S3) GetBucketNotificationConfigurationRequest(input *GetBucketNotificat
 	return
 }
 
-// GetBucketNotificationConfiguration API operation for Amazon Simple Storage Service.
-//
 // Returns the notification configuration of a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketNotificationConfiguration for usage and error information.
 func (c *S3) GetBucketNotificationConfiguration(input *GetBucketNotificationConfigurationRequest) (*NotificationConfiguration, error) {
 	req, out := c.GetBucketNotificationConfigurationRequest(input)
 	err := req.Send()
@@ -1432,8 +1159,6 @@ const opGetBucketPolicy = "GetBucketPolicy"
 // client's request for the GetBucketPolicy operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketPolicy for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1469,16 +1194,7 @@ func (c *S3) GetBucketPolicyRequest(input *GetBucketPolicyInput) (req *request.R
 	return
 }
 
-// GetBucketPolicy API operation for Amazon Simple Storage Service.
-//
 // Returns the policy of a specified bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketPolicy for usage and error information.
 func (c *S3) GetBucketPolicy(input *GetBucketPolicyInput) (*GetBucketPolicyOutput, error) {
 	req, out := c.GetBucketPolicyRequest(input)
 	err := req.Send()
@@ -1491,8 +1207,6 @@ const opGetBucketReplication = "GetBucketReplication"
 // client's request for the GetBucketReplication operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketReplication for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1528,16 +1242,7 @@ func (c *S3) GetBucketReplicationRequest(input *GetBucketReplicationInput) (req 
 	return
 }
 
-// GetBucketReplication API operation for Amazon Simple Storage Service.
-//
 // Returns the replication configuration of a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketReplication for usage and error information.
 func (c *S3) GetBucketReplication(input *GetBucketReplicationInput) (*GetBucketReplicationOutput, error) {
 	req, out := c.GetBucketReplicationRequest(input)
 	err := req.Send()
@@ -1550,8 +1255,6 @@ const opGetBucketRequestPayment = "GetBucketRequestPayment"
 // client's request for the GetBucketRequestPayment operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketRequestPayment for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1587,16 +1290,7 @@ func (c *S3) GetBucketRequestPaymentRequest(input *GetBucketRequestPaymentInput)
 	return
 }
 
-// GetBucketRequestPayment API operation for Amazon Simple Storage Service.
-//
 // Returns the request payment configuration of a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketRequestPayment for usage and error information.
 func (c *S3) GetBucketRequestPayment(input *GetBucketRequestPaymentInput) (*GetBucketRequestPaymentOutput, error) {
 	req, out := c.GetBucketRequestPaymentRequest(input)
 	err := req.Send()
@@ -1609,8 +1303,6 @@ const opGetBucketTagging = "GetBucketTagging"
 // client's request for the GetBucketTagging operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketTagging for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1646,16 +1338,7 @@ func (c *S3) GetBucketTaggingRequest(input *GetBucketTaggingInput) (req *request
 	return
 }
 
-// GetBucketTagging API operation for Amazon Simple Storage Service.
-//
 // Returns the tag set associated with the bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketTagging for usage and error information.
 func (c *S3) GetBucketTagging(input *GetBucketTaggingInput) (*GetBucketTaggingOutput, error) {
 	req, out := c.GetBucketTaggingRequest(input)
 	err := req.Send()
@@ -1668,8 +1351,6 @@ const opGetBucketVersioning = "GetBucketVersioning"
 // client's request for the GetBucketVersioning operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketVersioning for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1705,16 +1386,7 @@ func (c *S3) GetBucketVersioningRequest(input *GetBucketVersioningInput) (req *r
 	return
 }
 
-// GetBucketVersioning API operation for Amazon Simple Storage Service.
-//
 // Returns the versioning state of a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketVersioning for usage and error information.
 func (c *S3) GetBucketVersioning(input *GetBucketVersioningInput) (*GetBucketVersioningOutput, error) {
 	req, out := c.GetBucketVersioningRequest(input)
 	err := req.Send()
@@ -1727,8 +1399,6 @@ const opGetBucketWebsite = "GetBucketWebsite"
 // client's request for the GetBucketWebsite operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetBucketWebsite for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1764,16 +1434,7 @@ func (c *S3) GetBucketWebsiteRequest(input *GetBucketWebsiteInput) (req *request
 	return
 }
 
-// GetBucketWebsite API operation for Amazon Simple Storage Service.
-//
 // Returns the website configuration for a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetBucketWebsite for usage and error information.
 func (c *S3) GetBucketWebsite(input *GetBucketWebsiteInput) (*GetBucketWebsiteOutput, error) {
 	req, out := c.GetBucketWebsiteRequest(input)
 	err := req.Send()
@@ -1786,8 +1447,6 @@ const opGetObject = "GetObject"
 // client's request for the GetObject operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetObject for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1823,21 +1482,7 @@ func (c *S3) GetObjectRequest(input *GetObjectInput) (req *request.Request, outp
 	return
 }
 
-// GetObject API operation for Amazon Simple Storage Service.
-//
 // Retrieves objects from Amazon S3.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetObject for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchKey
-//   The specified key does not exist.
-//
 func (c *S3) GetObject(input *GetObjectInput) (*GetObjectOutput, error) {
 	req, out := c.GetObjectRequest(input)
 	err := req.Send()
@@ -1850,8 +1495,6 @@ const opGetObjectAcl = "GetObjectAcl"
 // client's request for the GetObjectAcl operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetObjectAcl for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1887,21 +1530,7 @@ func (c *S3) GetObjectAclRequest(input *GetObjectAclInput) (req *request.Request
 	return
 }
 
-// GetObjectAcl API operation for Amazon Simple Storage Service.
-//
 // Returns the access control list (ACL) of an object.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetObjectAcl for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchKey
-//   The specified key does not exist.
-//
 func (c *S3) GetObjectAcl(input *GetObjectAclInput) (*GetObjectAclOutput, error) {
 	req, out := c.GetObjectAclRequest(input)
 	err := req.Send()
@@ -1914,8 +1543,6 @@ const opGetObjectTorrent = "GetObjectTorrent"
 // client's request for the GetObjectTorrent operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See GetObjectTorrent for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -1951,16 +1578,7 @@ func (c *S3) GetObjectTorrentRequest(input *GetObjectTorrentInput) (req *request
 	return
 }
 
-// GetObjectTorrent API operation for Amazon Simple Storage Service.
-//
 // Return torrent files from a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation GetObjectTorrent for usage and error information.
 func (c *S3) GetObjectTorrent(input *GetObjectTorrentInput) (*GetObjectTorrentOutput, error) {
 	req, out := c.GetObjectTorrentRequest(input)
 	err := req.Send()
@@ -1973,8 +1591,6 @@ const opHeadBucket = "HeadBucket"
 // client's request for the HeadBucket operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See HeadBucket for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2012,22 +1628,8 @@ func (c *S3) HeadBucketRequest(input *HeadBucketInput) (req *request.Request, ou
 	return
 }
 
-// HeadBucket API operation for Amazon Simple Storage Service.
-//
 // This operation is useful to determine if a bucket exists and you have permission
 // to access it.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation HeadBucket for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchBucket
-//   The specified bucket does not exist.
-//
 func (c *S3) HeadBucket(input *HeadBucketInput) (*HeadBucketOutput, error) {
 	req, out := c.HeadBucketRequest(input)
 	err := req.Send()
@@ -2040,8 +1642,6 @@ const opHeadObject = "HeadObject"
 // client's request for the HeadObject operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See HeadObject for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2077,23 +1677,9 @@ func (c *S3) HeadObjectRequest(input *HeadObjectInput) (req *request.Request, ou
 	return
 }
 
-// HeadObject API operation for Amazon Simple Storage Service.
-//
 // The HEAD operation retrieves metadata from an object without returning the
 // object itself. This operation is useful if you're only interested in an object's
 // metadata. To use HEAD, you must have READ access to the object.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation HeadObject for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchKey
-//   The specified key does not exist.
-//
 func (c *S3) HeadObject(input *HeadObjectInput) (*HeadObjectOutput, error) {
 	req, out := c.HeadObjectRequest(input)
 	err := req.Send()
@@ -2106,8 +1692,6 @@ const opListBuckets = "ListBuckets"
 // client's request for the ListBuckets operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See ListBuckets for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2143,16 +1727,7 @@ func (c *S3) ListBucketsRequest(input *ListBucketsInput) (req *request.Request, 
 	return
 }
 
-// ListBuckets API operation for Amazon Simple Storage Service.
-//
 // Returns a list of all buckets owned by the authenticated sender of the request.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation ListBuckets for usage and error information.
 func (c *S3) ListBuckets(input *ListBucketsInput) (*ListBucketsOutput, error) {
 	req, out := c.ListBucketsRequest(input)
 	err := req.Send()
@@ -2165,8 +1740,6 @@ const opListMultipartUploads = "ListMultipartUploads"
 // client's request for the ListMultipartUploads operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See ListMultipartUploads for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2208,16 +1781,7 @@ func (c *S3) ListMultipartUploadsRequest(input *ListMultipartUploadsInput) (req 
 	return
 }
 
-// ListMultipartUploads API operation for Amazon Simple Storage Service.
-//
 // This operation lists in-progress multipart uploads.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation ListMultipartUploads for usage and error information.
 func (c *S3) ListMultipartUploads(input *ListMultipartUploadsInput) (*ListMultipartUploadsOutput, error) {
 	req, out := c.ListMultipartUploadsRequest(input)
 	err := req.Send()
@@ -2255,8 +1819,6 @@ const opListObjectVersions = "ListObjectVersions"
 // client's request for the ListObjectVersions operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See ListObjectVersions for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2298,16 +1860,7 @@ func (c *S3) ListObjectVersionsRequest(input *ListObjectVersionsInput) (req *req
 	return
 }
 
-// ListObjectVersions API operation for Amazon Simple Storage Service.
-//
 // Returns metadata about all of the versions of objects in a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation ListObjectVersions for usage and error information.
 func (c *S3) ListObjectVersions(input *ListObjectVersionsInput) (*ListObjectVersionsOutput, error) {
 	req, out := c.ListObjectVersionsRequest(input)
 	err := req.Send()
@@ -2345,8 +1898,6 @@ const opListObjects = "ListObjects"
 // client's request for the ListObjects operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See ListObjects for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2388,23 +1939,9 @@ func (c *S3) ListObjectsRequest(input *ListObjectsInput) (req *request.Request, 
 	return
 }
 
-// ListObjects API operation for Amazon Simple Storage Service.
-//
 // Returns some or all (up to 1000) of the objects in a bucket. You can use
 // the request parameters as selection criteria to return a subset of the objects
 // in a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation ListObjects for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchBucket
-//   The specified bucket does not exist.
-//
 func (c *S3) ListObjects(input *ListObjectsInput) (*ListObjectsOutput, error) {
 	req, out := c.ListObjectsRequest(input)
 	err := req.Send()
@@ -2442,8 +1979,6 @@ const opListObjectsV2 = "ListObjectsV2"
 // client's request for the ListObjectsV2 operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See ListObjectsV2 for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2485,24 +2020,10 @@ func (c *S3) ListObjectsV2Request(input *ListObjectsV2Input) (req *request.Reque
 	return
 }
 
-// ListObjectsV2 API operation for Amazon Simple Storage Service.
-//
 // Returns some or all (up to 1000) of the objects in a bucket. You can use
 // the request parameters as selection criteria to return a subset of the objects
 // in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend
 // you use this revised API for new application development.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation ListObjectsV2 for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchBucket
-//   The specified bucket does not exist.
-//
 func (c *S3) ListObjectsV2(input *ListObjectsV2Input) (*ListObjectsV2Output, error) {
 	req, out := c.ListObjectsV2Request(input)
 	err := req.Send()
@@ -2540,8 +2061,6 @@ const opListParts = "ListParts"
 // client's request for the ListParts operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See ListParts for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2583,16 +2102,7 @@ func (c *S3) ListPartsRequest(input *ListPartsInput) (req *request.Request, outp
 	return
 }
 
-// ListParts API operation for Amazon Simple Storage Service.
-//
 // Lists the parts that have been uploaded for a specific multipart upload.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation ListParts for usage and error information.
 func (c *S3) ListParts(input *ListPartsInput) (*ListPartsOutput, error) {
 	req, out := c.ListPartsRequest(input)
 	err := req.Send()
@@ -2631,8 +2141,6 @@ const opPutBucketAccelerateConfiguration = "PutBucketAccelerateConfiguration"
 // value can be used to capture response data after the request's "Send" method
 // is called.
 //
-// See PutBucketAccelerateConfiguration for usage and error information.
-//
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
 // access properties on the request object before or after sending the request. If
@@ -2669,16 +2177,7 @@ func (c *S3) PutBucketAccelerateConfigurationRequest(input *PutBucketAccelerateC
 	return
 }
 
-// PutBucketAccelerateConfiguration API operation for Amazon Simple Storage Service.
-//
 // Sets the accelerate configuration of an existing bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketAccelerateConfiguration for usage and error information.
 func (c *S3) PutBucketAccelerateConfiguration(input *PutBucketAccelerateConfigurationInput) (*PutBucketAccelerateConfigurationOutput, error) {
 	req, out := c.PutBucketAccelerateConfigurationRequest(input)
 	err := req.Send()
@@ -2691,8 +2190,6 @@ const opPutBucketAcl = "PutBucketAcl"
 // client's request for the PutBucketAcl operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketAcl for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2730,16 +2227,7 @@ func (c *S3) PutBucketAclRequest(input *PutBucketAclInput) (req *request.Request
 	return
 }
 
-// PutBucketAcl API operation for Amazon Simple Storage Service.
-//
 // Sets the permissions on a bucket using access control lists (ACL).
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketAcl for usage and error information.
 func (c *S3) PutBucketAcl(input *PutBucketAclInput) (*PutBucketAclOutput, error) {
 	req, out := c.PutBucketAclRequest(input)
 	err := req.Send()
@@ -2752,8 +2240,6 @@ const opPutBucketCors = "PutBucketCors"
 // client's request for the PutBucketCors operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketCors for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2791,16 +2277,7 @@ func (c *S3) PutBucketCorsRequest(input *PutBucketCorsInput) (req *request.Reque
 	return
 }
 
-// PutBucketCors API operation for Amazon Simple Storage Service.
-//
 // Sets the cors configuration for a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketCors for usage and error information.
 func (c *S3) PutBucketCors(input *PutBucketCorsInput) (*PutBucketCorsOutput, error) {
 	req, out := c.PutBucketCorsRequest(input)
 	err := req.Send()
@@ -2813,8 +2290,6 @@ const opPutBucketLifecycle = "PutBucketLifecycle"
 // client's request for the PutBucketLifecycle operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketLifecycle for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2855,16 +2330,7 @@ func (c *S3) PutBucketLifecycleRequest(input *PutBucketLifecycleInput) (req *req
 	return
 }
 
-// PutBucketLifecycle API operation for Amazon Simple Storage Service.
-//
 // Deprecated, see the PutBucketLifecycleConfiguration operation.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketLifecycle for usage and error information.
 func (c *S3) PutBucketLifecycle(input *PutBucketLifecycleInput) (*PutBucketLifecycleOutput, error) {
 	req, out := c.PutBucketLifecycleRequest(input)
 	err := req.Send()
@@ -2877,8 +2343,6 @@ const opPutBucketLifecycleConfiguration = "PutBucketLifecycleConfiguration"
 // client's request for the PutBucketLifecycleConfiguration operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketLifecycleConfiguration for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2916,17 +2380,8 @@ func (c *S3) PutBucketLifecycleConfigurationRequest(input *PutBucketLifecycleCon
 	return
 }
 
-// PutBucketLifecycleConfiguration API operation for Amazon Simple Storage Service.
-//
 // Sets lifecycle configuration for your bucket. If a lifecycle configuration
 // exists, it replaces it.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketLifecycleConfiguration for usage and error information.
 func (c *S3) PutBucketLifecycleConfiguration(input *PutBucketLifecycleConfigurationInput) (*PutBucketLifecycleConfigurationOutput, error) {
 	req, out := c.PutBucketLifecycleConfigurationRequest(input)
 	err := req.Send()
@@ -2939,8 +2394,6 @@ const opPutBucketLogging = "PutBucketLogging"
 // client's request for the PutBucketLogging operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketLogging for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -2978,18 +2431,9 @@ func (c *S3) PutBucketLoggingRequest(input *PutBucketLoggingInput) (req *request
 	return
 }
 
-// PutBucketLogging API operation for Amazon Simple Storage Service.
-//
 // Set the logging parameters for a bucket and to specify permissions for who
 // can view and modify the logging parameters. To set the logging status of
 // a bucket, you must be the bucket owner.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketLogging for usage and error information.
 func (c *S3) PutBucketLogging(input *PutBucketLoggingInput) (*PutBucketLoggingOutput, error) {
 	req, out := c.PutBucketLoggingRequest(input)
 	err := req.Send()
@@ -3002,8 +2446,6 @@ const opPutBucketNotification = "PutBucketNotification"
 // client's request for the PutBucketNotification operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketNotification for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3044,16 +2486,7 @@ func (c *S3) PutBucketNotificationRequest(input *PutBucketNotificationInput) (re
 	return
 }
 
-// PutBucketNotification API operation for Amazon Simple Storage Service.
-//
 // Deprecated, see the PutBucketNotificationConfiguraiton operation.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketNotification for usage and error information.
 func (c *S3) PutBucketNotification(input *PutBucketNotificationInput) (*PutBucketNotificationOutput, error) {
 	req, out := c.PutBucketNotificationRequest(input)
 	err := req.Send()
@@ -3066,8 +2499,6 @@ const opPutBucketNotificationConfiguration = "PutBucketNotificationConfiguration
 // client's request for the PutBucketNotificationConfiguration operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketNotificationConfiguration for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3105,16 +2536,7 @@ func (c *S3) PutBucketNotificationConfigurationRequest(input *PutBucketNotificat
 	return
 }
 
-// PutBucketNotificationConfiguration API operation for Amazon Simple Storage Service.
-//
 // Enables notifications of specified events for a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketNotificationConfiguration for usage and error information.
 func (c *S3) PutBucketNotificationConfiguration(input *PutBucketNotificationConfigurationInput) (*PutBucketNotificationConfigurationOutput, error) {
 	req, out := c.PutBucketNotificationConfigurationRequest(input)
 	err := req.Send()
@@ -3127,8 +2549,6 @@ const opPutBucketPolicy = "PutBucketPolicy"
 // client's request for the PutBucketPolicy operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketPolicy for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3166,17 +2586,8 @@ func (c *S3) PutBucketPolicyRequest(input *PutBucketPolicyInput) (req *request.R
 	return
 }
 
-// PutBucketPolicy API operation for Amazon Simple Storage Service.
-//
 // Replaces a policy on a bucket. If the bucket already has a policy, the one
 // in this request completely replaces it.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketPolicy for usage and error information.
 func (c *S3) PutBucketPolicy(input *PutBucketPolicyInput) (*PutBucketPolicyOutput, error) {
 	req, out := c.PutBucketPolicyRequest(input)
 	err := req.Send()
@@ -3189,8 +2600,6 @@ const opPutBucketReplication = "PutBucketReplication"
 // client's request for the PutBucketReplication operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketReplication for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3228,17 +2637,8 @@ func (c *S3) PutBucketReplicationRequest(input *PutBucketReplicationInput) (req 
 	return
 }
 
-// PutBucketReplication API operation for Amazon Simple Storage Service.
-//
 // Creates a new replication configuration (or replaces an existing one, if
 // present).
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketReplication for usage and error information.
 func (c *S3) PutBucketReplication(input *PutBucketReplicationInput) (*PutBucketReplicationOutput, error) {
 	req, out := c.PutBucketReplicationRequest(input)
 	err := req.Send()
@@ -3251,8 +2651,6 @@ const opPutBucketRequestPayment = "PutBucketRequestPayment"
 // client's request for the PutBucketRequestPayment operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketRequestPayment for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3290,20 +2688,11 @@ func (c *S3) PutBucketRequestPaymentRequest(input *PutBucketRequestPaymentInput)
 	return
 }
 
-// PutBucketRequestPayment API operation for Amazon Simple Storage Service.
-//
 // Sets the request payment configuration for a bucket. By default, the bucket
 // owner pays for downloads from the bucket. This configuration parameter enables
 // the bucket owner (only) to specify that the person requesting the download
 // will be charged for the download. Documentation on requester pays buckets
 // can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketRequestPayment for usage and error information.
 func (c *S3) PutBucketRequestPayment(input *PutBucketRequestPaymentInput) (*PutBucketRequestPaymentOutput, error) {
 	req, out := c.PutBucketRequestPaymentRequest(input)
 	err := req.Send()
@@ -3316,8 +2705,6 @@ const opPutBucketTagging = "PutBucketTagging"
 // client's request for the PutBucketTagging operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketTagging for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3355,16 +2742,7 @@ func (c *S3) PutBucketTaggingRequest(input *PutBucketTaggingInput) (req *request
 	return
 }
 
-// PutBucketTagging API operation for Amazon Simple Storage Service.
-//
 // Sets the tags for a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketTagging for usage and error information.
 func (c *S3) PutBucketTagging(input *PutBucketTaggingInput) (*PutBucketTaggingOutput, error) {
 	req, out := c.PutBucketTaggingRequest(input)
 	err := req.Send()
@@ -3377,8 +2755,6 @@ const opPutBucketVersioning = "PutBucketVersioning"
 // client's request for the PutBucketVersioning operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketVersioning for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3416,17 +2792,8 @@ func (c *S3) PutBucketVersioningRequest(input *PutBucketVersioningInput) (req *r
 	return
 }
 
-// PutBucketVersioning API operation for Amazon Simple Storage Service.
-//
 // Sets the versioning state of an existing bucket. To set the versioning state,
 // you must be the bucket owner.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketVersioning for usage and error information.
 func (c *S3) PutBucketVersioning(input *PutBucketVersioningInput) (*PutBucketVersioningOutput, error) {
 	req, out := c.PutBucketVersioningRequest(input)
 	err := req.Send()
@@ -3439,8 +2806,6 @@ const opPutBucketWebsite = "PutBucketWebsite"
 // client's request for the PutBucketWebsite operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutBucketWebsite for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3478,16 +2843,7 @@ func (c *S3) PutBucketWebsiteRequest(input *PutBucketWebsiteInput) (req *request
 	return
 }
 
-// PutBucketWebsite API operation for Amazon Simple Storage Service.
-//
 // Set the website configuration for a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutBucketWebsite for usage and error information.
 func (c *S3) PutBucketWebsite(input *PutBucketWebsiteInput) (*PutBucketWebsiteOutput, error) {
 	req, out := c.PutBucketWebsiteRequest(input)
 	err := req.Send()
@@ -3500,8 +2856,6 @@ const opPutObject = "PutObject"
 // client's request for the PutObject operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutObject for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3537,16 +2891,7 @@ func (c *S3) PutObjectRequest(input *PutObjectInput) (req *request.Request, outp
 	return
 }
 
-// PutObject API operation for Amazon Simple Storage Service.
-//
 // Adds an object to a bucket.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutObject for usage and error information.
 func (c *S3) PutObject(input *PutObjectInput) (*PutObjectOutput, error) {
 	req, out := c.PutObjectRequest(input)
 	err := req.Send()
@@ -3559,8 +2904,6 @@ const opPutObjectAcl = "PutObjectAcl"
 // client's request for the PutObjectAcl operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See PutObjectAcl for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3596,22 +2939,8 @@ func (c *S3) PutObjectAclRequest(input *PutObjectAclInput) (req *request.Request
 	return
 }
 
-// PutObjectAcl API operation for Amazon Simple Storage Service.
-//
 // uses the acl subresource to set the access control list (ACL) permissions
 // for an object that already exists in a bucket
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation PutObjectAcl for usage and error information.
-//
-// Returned Error Codes:
-//   * NoSuchKey
-//   The specified key does not exist.
-//
 func (c *S3) PutObjectAcl(input *PutObjectAclInput) (*PutObjectAclOutput, error) {
 	req, out := c.PutObjectAclRequest(input)
 	err := req.Send()
@@ -3624,8 +2953,6 @@ const opRestoreObject = "RestoreObject"
 // client's request for the RestoreObject operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See RestoreObject for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3661,21 +2988,7 @@ func (c *S3) RestoreObjectRequest(input *RestoreObjectInput) (req *request.Reque
 	return
 }
 
-// RestoreObject API operation for Amazon Simple Storage Service.
-//
 // Restores an archived copy of an object back into Amazon S3
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation RestoreObject for usage and error information.
-//
-// Returned Error Codes:
-//   * ObjectAlreadyInActiveTierError
-//   This operation is not allowed against this storage tier
-//
 func (c *S3) RestoreObject(input *RestoreObjectInput) (*RestoreObjectOutput, error) {
 	req, out := c.RestoreObjectRequest(input)
 	err := req.Send()
@@ -3688,8 +3001,6 @@ const opUploadPart = "UploadPart"
 // client's request for the UploadPart operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See UploadPart for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3725,8 +3036,6 @@ func (c *S3) UploadPartRequest(input *UploadPartInput) (req *request.Request, ou
 	return
 }
 
-// UploadPart API operation for Amazon Simple Storage Service.
-//
 // Uploads a part in a multipart upload.
 //
 // Note: After you initiate multipart upload and upload one or more parts, you
@@ -3734,13 +3043,6 @@ func (c *S3) UploadPartRequest(input *UploadPartInput) (req *request.Request, ou
 // for storage of the uploaded parts. Only after you either complete or abort
 // multipart upload, Amazon S3 frees up the parts storage and stops charging
 // you for the parts storage.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation UploadPart for usage and error information.
 func (c *S3) UploadPart(input *UploadPartInput) (*UploadPartOutput, error) {
 	req, out := c.UploadPartRequest(input)
 	err := req.Send()
@@ -3753,8 +3055,6 @@ const opUploadPartCopy = "UploadPartCopy"
 // client's request for the UploadPartCopy operation. The "output" return
 // value can be used to capture response data after the request's "Send" method
 // is called.
-//
-// See UploadPartCopy for usage and error information.
 //
 // Creating a request object using this method should be used when you want to inject
 // custom logic into the request's lifecycle using a custom handler, or if you want to
@@ -3790,16 +3090,7 @@ func (c *S3) UploadPartCopyRequest(input *UploadPartCopyInput) (req *request.Req
 	return
 }
 
-// UploadPartCopy API operation for Amazon Simple Storage Service.
-//
 // Uploads a part by copying data from an existing object as data source.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for Amazon Simple Storage Service's
-// API operation UploadPartCopy for usage and error information.
 func (c *S3) UploadPartCopy(input *UploadPartCopyInput) (*UploadPartCopyOutput, error) {
 	req, out := c.UploadPartCopyRequest(input)
 	err := req.Send()
@@ -3826,19 +3117,11 @@ func (s AbortIncompleteMultipartUpload) GoString() string {
 	return s.String()
 }
 
-// SetDaysAfterInitiation sets the DaysAfterInitiation field's value.
-func (s *AbortIncompleteMultipartUpload) SetDaysAfterInitiation(v int64) *AbortIncompleteMultipartUpload {
-	s.DaysAfterInitiation = &v
-	return s
-}
-
 type AbortMultipartUploadInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -3847,7 +3130,6 @@ type AbortMultipartUploadInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string" enum:"RequestPayer"`
 
-	// UploadId is a required field
 	UploadId *string `location:"querystring" locationName:"uploadId" type:"string" required:"true"`
 }
 
@@ -3883,30 +3165,6 @@ func (s *AbortMultipartUploadInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *AbortMultipartUploadInput) SetBucket(v string) *AbortMultipartUploadInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *AbortMultipartUploadInput) SetKey(v string) *AbortMultipartUploadInput {
-	s.Key = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *AbortMultipartUploadInput) SetRequestPayer(v string) *AbortMultipartUploadInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *AbortMultipartUploadInput) SetUploadId(v string) *AbortMultipartUploadInput {
-	s.UploadId = &v
-	return s
-}
-
 type AbortMultipartUploadOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3925,12 +3183,6 @@ func (s AbortMultipartUploadOutput) GoString() string {
 	return s.String()
 }
 
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *AbortMultipartUploadOutput) SetRequestCharged(v string) *AbortMultipartUploadOutput {
-	s.RequestCharged = &v
-	return s
-}
-
 type AccelerateConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -3946,12 +3198,6 @@ func (s AccelerateConfiguration) String() string {
 // GoString returns the string representation
 func (s AccelerateConfiguration) GoString() string {
 	return s.String()
-}
-
-// SetStatus sets the Status field's value.
-func (s *AccelerateConfiguration) SetStatus(v string) *AccelerateConfiguration {
-	s.Status = &v
-	return s
 }
 
 type AccessControlPolicy struct {
@@ -3993,18 +3239,6 @@ func (s *AccessControlPolicy) Validate() error {
 	return nil
 }
 
-// SetGrants sets the Grants field's value.
-func (s *AccessControlPolicy) SetGrants(v []*Grant) *AccessControlPolicy {
-	s.Grants = v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *AccessControlPolicy) SetOwner(v *Owner) *AccessControlPolicy {
-	s.Owner = v
-	return s
-}
-
 type Bucket struct {
 	_ struct{} `type:"structure"`
 
@@ -4025,22 +3259,9 @@ func (s Bucket) GoString() string {
 	return s.String()
 }
 
-// SetCreationDate sets the CreationDate field's value.
-func (s *Bucket) SetCreationDate(v time.Time) *Bucket {
-	s.CreationDate = &v
-	return s
-}
-
-// SetName sets the Name field's value.
-func (s *Bucket) SetName(v string) *Bucket {
-	s.Name = &v
-	return s
-}
-
 type BucketLifecycleConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Rules is a required field
 	Rules []*LifecycleRule `locationName:"Rule" type:"list" flattened:"true" required:"true"`
 }
 
@@ -4077,12 +3298,6 @@ func (s *BucketLifecycleConfiguration) Validate() error {
 	return nil
 }
 
-// SetRules sets the Rules field's value.
-func (s *BucketLifecycleConfiguration) SetRules(v []*LifecycleRule) *BucketLifecycleConfiguration {
-	s.Rules = v
-	return s
-}
-
 type BucketLoggingStatus struct {
 	_ struct{} `type:"structure"`
 
@@ -4114,16 +3329,9 @@ func (s *BucketLoggingStatus) Validate() error {
 	return nil
 }
 
-// SetLoggingEnabled sets the LoggingEnabled field's value.
-func (s *BucketLoggingStatus) SetLoggingEnabled(v *LoggingEnabled) *BucketLoggingStatus {
-	s.LoggingEnabled = v
-	return s
-}
-
 type CORSConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// CORSRules is a required field
 	CORSRules []*CORSRule `locationName:"CORSRule" type:"list" flattened:"true" required:"true"`
 }
 
@@ -4160,12 +3368,6 @@ func (s *CORSConfiguration) Validate() error {
 	return nil
 }
 
-// SetCORSRules sets the CORSRules field's value.
-func (s *CORSConfiguration) SetCORSRules(v []*CORSRule) *CORSConfiguration {
-	s.CORSRules = v
-	return s
-}
-
 type CORSRule struct {
 	_ struct{} `type:"structure"`
 
@@ -4174,13 +3376,9 @@ type CORSRule struct {
 
 	// Identifies HTTP methods that the domain/origin specified in the rule is allowed
 	// to execute.
-	//
-	// AllowedMethods is a required field
 	AllowedMethods []*string `locationName:"AllowedMethod" type:"list" flattened:"true" required:"true"`
 
 	// One or more origins you want customers to be able to access the bucket from.
-	//
-	// AllowedOrigins is a required field
 	AllowedOrigins []*string `locationName:"AllowedOrigin" type:"list" flattened:"true" required:"true"`
 
 	// One or more headers in the response that you want customers to be able to
@@ -4219,36 +3417,6 @@ func (s *CORSRule) Validate() error {
 	return nil
 }
 
-// SetAllowedHeaders sets the AllowedHeaders field's value.
-func (s *CORSRule) SetAllowedHeaders(v []*string) *CORSRule {
-	s.AllowedHeaders = v
-	return s
-}
-
-// SetAllowedMethods sets the AllowedMethods field's value.
-func (s *CORSRule) SetAllowedMethods(v []*string) *CORSRule {
-	s.AllowedMethods = v
-	return s
-}
-
-// SetAllowedOrigins sets the AllowedOrigins field's value.
-func (s *CORSRule) SetAllowedOrigins(v []*string) *CORSRule {
-	s.AllowedOrigins = v
-	return s
-}
-
-// SetExposeHeaders sets the ExposeHeaders field's value.
-func (s *CORSRule) SetExposeHeaders(v []*string) *CORSRule {
-	s.ExposeHeaders = v
-	return s
-}
-
-// SetMaxAgeSeconds sets the MaxAgeSeconds field's value.
-func (s *CORSRule) SetMaxAgeSeconds(v int64) *CORSRule {
-	s.MaxAgeSeconds = &v
-	return s
-}
-
 type CloudFunctionConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -4276,36 +3444,6 @@ func (s CloudFunctionConfiguration) GoString() string {
 	return s.String()
 }
 
-// SetCloudFunction sets the CloudFunction field's value.
-func (s *CloudFunctionConfiguration) SetCloudFunction(v string) *CloudFunctionConfiguration {
-	s.CloudFunction = &v
-	return s
-}
-
-// SetEvent sets the Event field's value.
-func (s *CloudFunctionConfiguration) SetEvent(v string) *CloudFunctionConfiguration {
-	s.Event = &v
-	return s
-}
-
-// SetEvents sets the Events field's value.
-func (s *CloudFunctionConfiguration) SetEvents(v []*string) *CloudFunctionConfiguration {
-	s.Events = v
-	return s
-}
-
-// SetId sets the Id field's value.
-func (s *CloudFunctionConfiguration) SetId(v string) *CloudFunctionConfiguration {
-	s.Id = &v
-	return s
-}
-
-// SetInvocationRole sets the InvocationRole field's value.
-func (s *CloudFunctionConfiguration) SetInvocationRole(v string) *CloudFunctionConfiguration {
-	s.InvocationRole = &v
-	return s
-}
-
 type CommonPrefix struct {
 	_ struct{} `type:"structure"`
 
@@ -4322,19 +3460,11 @@ func (s CommonPrefix) GoString() string {
 	return s.String()
 }
 
-// SetPrefix sets the Prefix field's value.
-func (s *CommonPrefix) SetPrefix(v string) *CommonPrefix {
-	s.Prefix = &v
-	return s
-}
-
 type CompleteMultipartUploadInput struct {
 	_ struct{} `type:"structure" payload:"MultipartUpload"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	MultipartUpload *CompletedMultipartUpload `locationName:"CompleteMultipartUpload" type:"structure"`
@@ -4345,7 +3475,6 @@ type CompleteMultipartUploadInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string" enum:"RequestPayer"`
 
-	// UploadId is a required field
 	UploadId *string `location:"querystring" locationName:"uploadId" type:"string" required:"true"`
 }
 
@@ -4379,36 +3508,6 @@ func (s *CompleteMultipartUploadInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *CompleteMultipartUploadInput) SetBucket(v string) *CompleteMultipartUploadInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *CompleteMultipartUploadInput) SetKey(v string) *CompleteMultipartUploadInput {
-	s.Key = &v
-	return s
-}
-
-// SetMultipartUpload sets the MultipartUpload field's value.
-func (s *CompleteMultipartUploadInput) SetMultipartUpload(v *CompletedMultipartUpload) *CompleteMultipartUploadInput {
-	s.MultipartUpload = v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *CompleteMultipartUploadInput) SetRequestPayer(v string) *CompleteMultipartUploadInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *CompleteMultipartUploadInput) SetUploadId(v string) *CompleteMultipartUploadInput {
-	s.UploadId = &v
-	return s
 }
 
 type CompleteMultipartUploadOutput struct {
@@ -4453,60 +3552,6 @@ func (s CompleteMultipartUploadOutput) GoString() string {
 	return s.String()
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *CompleteMultipartUploadOutput) SetBucket(v string) *CompleteMultipartUploadOutput {
-	s.Bucket = &v
-	return s
-}
-
-// SetETag sets the ETag field's value.
-func (s *CompleteMultipartUploadOutput) SetETag(v string) *CompleteMultipartUploadOutput {
-	s.ETag = &v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *CompleteMultipartUploadOutput) SetExpiration(v string) *CompleteMultipartUploadOutput {
-	s.Expiration = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *CompleteMultipartUploadOutput) SetKey(v string) *CompleteMultipartUploadOutput {
-	s.Key = &v
-	return s
-}
-
-// SetLocation sets the Location field's value.
-func (s *CompleteMultipartUploadOutput) SetLocation(v string) *CompleteMultipartUploadOutput {
-	s.Location = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *CompleteMultipartUploadOutput) SetRequestCharged(v string) *CompleteMultipartUploadOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *CompleteMultipartUploadOutput) SetSSEKMSKeyId(v string) *CompleteMultipartUploadOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *CompleteMultipartUploadOutput) SetServerSideEncryption(v string) *CompleteMultipartUploadOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *CompleteMultipartUploadOutput) SetVersionId(v string) *CompleteMultipartUploadOutput {
-	s.VersionId = &v
-	return s
-}
-
 type CompletedMultipartUpload struct {
 	_ struct{} `type:"structure"`
 
@@ -4521,12 +3566,6 @@ func (s CompletedMultipartUpload) String() string {
 // GoString returns the string representation
 func (s CompletedMultipartUpload) GoString() string {
 	return s.String()
-}
-
-// SetParts sets the Parts field's value.
-func (s *CompletedMultipartUpload) SetParts(v []*CompletedPart) *CompletedMultipartUpload {
-	s.Parts = v
-	return s
 }
 
 type CompletedPart struct {
@@ -4548,18 +3587,6 @@ func (s CompletedPart) String() string {
 // GoString returns the string representation
 func (s CompletedPart) GoString() string {
 	return s.String()
-}
-
-// SetETag sets the ETag field's value.
-func (s *CompletedPart) SetETag(v string) *CompletedPart {
-	s.ETag = &v
-	return s
-}
-
-// SetPartNumber sets the PartNumber field's value.
-func (s *CompletedPart) SetPartNumber(v int64) *CompletedPart {
-	s.PartNumber = &v
-	return s
 }
 
 type Condition struct {
@@ -4592,25 +3619,12 @@ func (s Condition) GoString() string {
 	return s.String()
 }
 
-// SetHttpErrorCodeReturnedEquals sets the HttpErrorCodeReturnedEquals field's value.
-func (s *Condition) SetHttpErrorCodeReturnedEquals(v string) *Condition {
-	s.HttpErrorCodeReturnedEquals = &v
-	return s
-}
-
-// SetKeyPrefixEquals sets the KeyPrefixEquals field's value.
-func (s *Condition) SetKeyPrefixEquals(v string) *Condition {
-	s.KeyPrefixEquals = &v
-	return s
-}
-
 type CopyObjectInput struct {
 	_ struct{} `type:"structure"`
 
 	// The canned ACL to apply to the object.
 	ACL *string `location:"header" locationName:"x-amz-acl" type:"string" enum:"ObjectCannedACL"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Specifies caching behavior along the request/reply chain.
@@ -4632,8 +3646,6 @@ type CopyObjectInput struct {
 
 	// The name of the source bucket and key name of the source object, separated
 	// by a slash (/). Must be URL-encoded.
-	//
-	// CopySource is a required field
 	CopySource *string `location:"header" locationName:"x-amz-copy-source" type:"string" required:"true"`
 
 	// Copies the object if its entity tag (ETag) matches the specified tag.
@@ -4677,7 +3689,6 @@ type CopyObjectInput struct {
 	// Allows grantee to write the ACL for the applicable object.
 	GrantWriteACP *string `location:"header" locationName:"x-amz-grant-write-acp" type:"string"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// A map of metadata to store with the object in S3.
@@ -4759,192 +3770,6 @@ func (s *CopyObjectInput) Validate() error {
 	return nil
 }
 
-// SetACL sets the ACL field's value.
-func (s *CopyObjectInput) SetACL(v string) *CopyObjectInput {
-	s.ACL = &v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *CopyObjectInput) SetBucket(v string) *CopyObjectInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCacheControl sets the CacheControl field's value.
-func (s *CopyObjectInput) SetCacheControl(v string) *CopyObjectInput {
-	s.CacheControl = &v
-	return s
-}
-
-// SetContentDisposition sets the ContentDisposition field's value.
-func (s *CopyObjectInput) SetContentDisposition(v string) *CopyObjectInput {
-	s.ContentDisposition = &v
-	return s
-}
-
-// SetContentEncoding sets the ContentEncoding field's value.
-func (s *CopyObjectInput) SetContentEncoding(v string) *CopyObjectInput {
-	s.ContentEncoding = &v
-	return s
-}
-
-// SetContentLanguage sets the ContentLanguage field's value.
-func (s *CopyObjectInput) SetContentLanguage(v string) *CopyObjectInput {
-	s.ContentLanguage = &v
-	return s
-}
-
-// SetContentType sets the ContentType field's value.
-func (s *CopyObjectInput) SetContentType(v string) *CopyObjectInput {
-	s.ContentType = &v
-	return s
-}
-
-// SetCopySource sets the CopySource field's value.
-func (s *CopyObjectInput) SetCopySource(v string) *CopyObjectInput {
-	s.CopySource = &v
-	return s
-}
-
-// SetCopySourceIfMatch sets the CopySourceIfMatch field's value.
-func (s *CopyObjectInput) SetCopySourceIfMatch(v string) *CopyObjectInput {
-	s.CopySourceIfMatch = &v
-	return s
-}
-
-// SetCopySourceIfModifiedSince sets the CopySourceIfModifiedSince field's value.
-func (s *CopyObjectInput) SetCopySourceIfModifiedSince(v time.Time) *CopyObjectInput {
-	s.CopySourceIfModifiedSince = &v
-	return s
-}
-
-// SetCopySourceIfNoneMatch sets the CopySourceIfNoneMatch field's value.
-func (s *CopyObjectInput) SetCopySourceIfNoneMatch(v string) *CopyObjectInput {
-	s.CopySourceIfNoneMatch = &v
-	return s
-}
-
-// SetCopySourceIfUnmodifiedSince sets the CopySourceIfUnmodifiedSince field's value.
-func (s *CopyObjectInput) SetCopySourceIfUnmodifiedSince(v time.Time) *CopyObjectInput {
-	s.CopySourceIfUnmodifiedSince = &v
-	return s
-}
-
-// SetCopySourceSSECustomerAlgorithm sets the CopySourceSSECustomerAlgorithm field's value.
-func (s *CopyObjectInput) SetCopySourceSSECustomerAlgorithm(v string) *CopyObjectInput {
-	s.CopySourceSSECustomerAlgorithm = &v
-	return s
-}
-
-// SetCopySourceSSECustomerKey sets the CopySourceSSECustomerKey field's value.
-func (s *CopyObjectInput) SetCopySourceSSECustomerKey(v string) *CopyObjectInput {
-	s.CopySourceSSECustomerKey = &v
-	return s
-}
-
-// SetCopySourceSSECustomerKeyMD5 sets the CopySourceSSECustomerKeyMD5 field's value.
-func (s *CopyObjectInput) SetCopySourceSSECustomerKeyMD5(v string) *CopyObjectInput {
-	s.CopySourceSSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetExpires sets the Expires field's value.
-func (s *CopyObjectInput) SetExpires(v time.Time) *CopyObjectInput {
-	s.Expires = &v
-	return s
-}
-
-// SetGrantFullControl sets the GrantFullControl field's value.
-func (s *CopyObjectInput) SetGrantFullControl(v string) *CopyObjectInput {
-	s.GrantFullControl = &v
-	return s
-}
-
-// SetGrantRead sets the GrantRead field's value.
-func (s *CopyObjectInput) SetGrantRead(v string) *CopyObjectInput {
-	s.GrantRead = &v
-	return s
-}
-
-// SetGrantReadACP sets the GrantReadACP field's value.
-func (s *CopyObjectInput) SetGrantReadACP(v string) *CopyObjectInput {
-	s.GrantReadACP = &v
-	return s
-}
-
-// SetGrantWriteACP sets the GrantWriteACP field's value.
-func (s *CopyObjectInput) SetGrantWriteACP(v string) *CopyObjectInput {
-	s.GrantWriteACP = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *CopyObjectInput) SetKey(v string) *CopyObjectInput {
-	s.Key = &v
-	return s
-}
-
-// SetMetadata sets the Metadata field's value.
-func (s *CopyObjectInput) SetMetadata(v map[string]*string) *CopyObjectInput {
-	s.Metadata = v
-	return s
-}
-
-// SetMetadataDirective sets the MetadataDirective field's value.
-func (s *CopyObjectInput) SetMetadataDirective(v string) *CopyObjectInput {
-	s.MetadataDirective = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *CopyObjectInput) SetRequestPayer(v string) *CopyObjectInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *CopyObjectInput) SetSSECustomerAlgorithm(v string) *CopyObjectInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *CopyObjectInput) SetSSECustomerKey(v string) *CopyObjectInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *CopyObjectInput) SetSSECustomerKeyMD5(v string) *CopyObjectInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *CopyObjectInput) SetSSEKMSKeyId(v string) *CopyObjectInput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *CopyObjectInput) SetServerSideEncryption(v string) *CopyObjectInput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *CopyObjectInput) SetStorageClass(v string) *CopyObjectInput {
-	s.StorageClass = &v
-	return s
-}
-
-// SetWebsiteRedirectLocation sets the WebsiteRedirectLocation field's value.
-func (s *CopyObjectInput) SetWebsiteRedirectLocation(v string) *CopyObjectInput {
-	s.WebsiteRedirectLocation = &v
-	return s
-}
-
 type CopyObjectOutput struct {
 	_ struct{} `type:"structure" payload:"CopyObjectResult"`
 
@@ -4991,60 +3816,6 @@ func (s CopyObjectOutput) GoString() string {
 	return s.String()
 }
 
-// SetCopyObjectResult sets the CopyObjectResult field's value.
-func (s *CopyObjectOutput) SetCopyObjectResult(v *CopyObjectResult) *CopyObjectOutput {
-	s.CopyObjectResult = v
-	return s
-}
-
-// SetCopySourceVersionId sets the CopySourceVersionId field's value.
-func (s *CopyObjectOutput) SetCopySourceVersionId(v string) *CopyObjectOutput {
-	s.CopySourceVersionId = &v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *CopyObjectOutput) SetExpiration(v string) *CopyObjectOutput {
-	s.Expiration = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *CopyObjectOutput) SetRequestCharged(v string) *CopyObjectOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *CopyObjectOutput) SetSSECustomerAlgorithm(v string) *CopyObjectOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *CopyObjectOutput) SetSSECustomerKeyMD5(v string) *CopyObjectOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *CopyObjectOutput) SetSSEKMSKeyId(v string) *CopyObjectOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *CopyObjectOutput) SetServerSideEncryption(v string) *CopyObjectOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *CopyObjectOutput) SetVersionId(v string) *CopyObjectOutput {
-	s.VersionId = &v
-	return s
-}
-
 type CopyObjectResult struct {
 	_ struct{} `type:"structure"`
 
@@ -5061,18 +3832,6 @@ func (s CopyObjectResult) String() string {
 // GoString returns the string representation
 func (s CopyObjectResult) GoString() string {
 	return s.String()
-}
-
-// SetETag sets the ETag field's value.
-func (s *CopyObjectResult) SetETag(v string) *CopyObjectResult {
-	s.ETag = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *CopyObjectResult) SetLastModified(v time.Time) *CopyObjectResult {
-	s.LastModified = &v
-	return s
 }
 
 type CopyPartResult struct {
@@ -5095,18 +3854,6 @@ func (s CopyPartResult) GoString() string {
 	return s.String()
 }
 
-// SetETag sets the ETag field's value.
-func (s *CopyPartResult) SetETag(v string) *CopyPartResult {
-	s.ETag = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *CopyPartResult) SetLastModified(v time.Time) *CopyPartResult {
-	s.LastModified = &v
-	return s
-}
-
 type CreateBucketConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -5125,19 +3872,12 @@ func (s CreateBucketConfiguration) GoString() string {
 	return s.String()
 }
 
-// SetLocationConstraint sets the LocationConstraint field's value.
-func (s *CreateBucketConfiguration) SetLocationConstraint(v string) *CreateBucketConfiguration {
-	s.LocationConstraint = &v
-	return s
-}
-
 type CreateBucketInput struct {
 	_ struct{} `type:"structure" payload:"CreateBucketConfiguration"`
 
 	// The canned ACL to apply to the bucket.
 	ACL *string `location:"header" locationName:"x-amz-acl" type:"string" enum:"BucketCannedACL"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	CreateBucketConfiguration *CreateBucketConfiguration `locationName:"CreateBucketConfiguration" type:"structure"`
@@ -5182,54 +3922,6 @@ func (s *CreateBucketInput) Validate() error {
 	return nil
 }
 
-// SetACL sets the ACL field's value.
-func (s *CreateBucketInput) SetACL(v string) *CreateBucketInput {
-	s.ACL = &v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *CreateBucketInput) SetBucket(v string) *CreateBucketInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCreateBucketConfiguration sets the CreateBucketConfiguration field's value.
-func (s *CreateBucketInput) SetCreateBucketConfiguration(v *CreateBucketConfiguration) *CreateBucketInput {
-	s.CreateBucketConfiguration = v
-	return s
-}
-
-// SetGrantFullControl sets the GrantFullControl field's value.
-func (s *CreateBucketInput) SetGrantFullControl(v string) *CreateBucketInput {
-	s.GrantFullControl = &v
-	return s
-}
-
-// SetGrantRead sets the GrantRead field's value.
-func (s *CreateBucketInput) SetGrantRead(v string) *CreateBucketInput {
-	s.GrantRead = &v
-	return s
-}
-
-// SetGrantReadACP sets the GrantReadACP field's value.
-func (s *CreateBucketInput) SetGrantReadACP(v string) *CreateBucketInput {
-	s.GrantReadACP = &v
-	return s
-}
-
-// SetGrantWrite sets the GrantWrite field's value.
-func (s *CreateBucketInput) SetGrantWrite(v string) *CreateBucketInput {
-	s.GrantWrite = &v
-	return s
-}
-
-// SetGrantWriteACP sets the GrantWriteACP field's value.
-func (s *CreateBucketInput) SetGrantWriteACP(v string) *CreateBucketInput {
-	s.GrantWriteACP = &v
-	return s
-}
-
 type CreateBucketOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -5246,19 +3938,12 @@ func (s CreateBucketOutput) GoString() string {
 	return s.String()
 }
 
-// SetLocation sets the Location field's value.
-func (s *CreateBucketOutput) SetLocation(v string) *CreateBucketOutput {
-	s.Location = &v
-	return s
-}
-
 type CreateMultipartUploadInput struct {
 	_ struct{} `type:"structure"`
 
 	// The canned ACL to apply to the object.
 	ACL *string `location:"header" locationName:"x-amz-acl" type:"string" enum:"ObjectCannedACL"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Specifies caching behavior along the request/reply chain.
@@ -5293,7 +3978,6 @@ type CreateMultipartUploadInput struct {
 	// Allows grantee to write the ACL for the applicable object.
 	GrantWriteACP *string `location:"header" locationName:"x-amz-grant-write-acp" type:"string"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// A map of metadata to store with the object in S3.
@@ -5368,138 +4052,6 @@ func (s *CreateMultipartUploadInput) Validate() error {
 	return nil
 }
 
-// SetACL sets the ACL field's value.
-func (s *CreateMultipartUploadInput) SetACL(v string) *CreateMultipartUploadInput {
-	s.ACL = &v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *CreateMultipartUploadInput) SetBucket(v string) *CreateMultipartUploadInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCacheControl sets the CacheControl field's value.
-func (s *CreateMultipartUploadInput) SetCacheControl(v string) *CreateMultipartUploadInput {
-	s.CacheControl = &v
-	return s
-}
-
-// SetContentDisposition sets the ContentDisposition field's value.
-func (s *CreateMultipartUploadInput) SetContentDisposition(v string) *CreateMultipartUploadInput {
-	s.ContentDisposition = &v
-	return s
-}
-
-// SetContentEncoding sets the ContentEncoding field's value.
-func (s *CreateMultipartUploadInput) SetContentEncoding(v string) *CreateMultipartUploadInput {
-	s.ContentEncoding = &v
-	return s
-}
-
-// SetContentLanguage sets the ContentLanguage field's value.
-func (s *CreateMultipartUploadInput) SetContentLanguage(v string) *CreateMultipartUploadInput {
-	s.ContentLanguage = &v
-	return s
-}
-
-// SetContentType sets the ContentType field's value.
-func (s *CreateMultipartUploadInput) SetContentType(v string) *CreateMultipartUploadInput {
-	s.ContentType = &v
-	return s
-}
-
-// SetExpires sets the Expires field's value.
-func (s *CreateMultipartUploadInput) SetExpires(v time.Time) *CreateMultipartUploadInput {
-	s.Expires = &v
-	return s
-}
-
-// SetGrantFullControl sets the GrantFullControl field's value.
-func (s *CreateMultipartUploadInput) SetGrantFullControl(v string) *CreateMultipartUploadInput {
-	s.GrantFullControl = &v
-	return s
-}
-
-// SetGrantRead sets the GrantRead field's value.
-func (s *CreateMultipartUploadInput) SetGrantRead(v string) *CreateMultipartUploadInput {
-	s.GrantRead = &v
-	return s
-}
-
-// SetGrantReadACP sets the GrantReadACP field's value.
-func (s *CreateMultipartUploadInput) SetGrantReadACP(v string) *CreateMultipartUploadInput {
-	s.GrantReadACP = &v
-	return s
-}
-
-// SetGrantWriteACP sets the GrantWriteACP field's value.
-func (s *CreateMultipartUploadInput) SetGrantWriteACP(v string) *CreateMultipartUploadInput {
-	s.GrantWriteACP = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *CreateMultipartUploadInput) SetKey(v string) *CreateMultipartUploadInput {
-	s.Key = &v
-	return s
-}
-
-// SetMetadata sets the Metadata field's value.
-func (s *CreateMultipartUploadInput) SetMetadata(v map[string]*string) *CreateMultipartUploadInput {
-	s.Metadata = v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *CreateMultipartUploadInput) SetRequestPayer(v string) *CreateMultipartUploadInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *CreateMultipartUploadInput) SetSSECustomerAlgorithm(v string) *CreateMultipartUploadInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *CreateMultipartUploadInput) SetSSECustomerKey(v string) *CreateMultipartUploadInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *CreateMultipartUploadInput) SetSSECustomerKeyMD5(v string) *CreateMultipartUploadInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *CreateMultipartUploadInput) SetSSEKMSKeyId(v string) *CreateMultipartUploadInput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *CreateMultipartUploadInput) SetServerSideEncryption(v string) *CreateMultipartUploadInput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *CreateMultipartUploadInput) SetStorageClass(v string) *CreateMultipartUploadInput {
-	s.StorageClass = &v
-	return s
-}
-
-// SetWebsiteRedirectLocation sets the WebsiteRedirectLocation field's value.
-func (s *CreateMultipartUploadInput) SetWebsiteRedirectLocation(v string) *CreateMultipartUploadInput {
-	s.WebsiteRedirectLocation = &v
-	return s
-}
-
 type CreateMultipartUploadOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -5552,70 +4104,9 @@ func (s CreateMultipartUploadOutput) GoString() string {
 	return s.String()
 }
 
-// SetAbortDate sets the AbortDate field's value.
-func (s *CreateMultipartUploadOutput) SetAbortDate(v time.Time) *CreateMultipartUploadOutput {
-	s.AbortDate = &v
-	return s
-}
-
-// SetAbortRuleId sets the AbortRuleId field's value.
-func (s *CreateMultipartUploadOutput) SetAbortRuleId(v string) *CreateMultipartUploadOutput {
-	s.AbortRuleId = &v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *CreateMultipartUploadOutput) SetBucket(v string) *CreateMultipartUploadOutput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *CreateMultipartUploadOutput) SetKey(v string) *CreateMultipartUploadOutput {
-	s.Key = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *CreateMultipartUploadOutput) SetRequestCharged(v string) *CreateMultipartUploadOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *CreateMultipartUploadOutput) SetSSECustomerAlgorithm(v string) *CreateMultipartUploadOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *CreateMultipartUploadOutput) SetSSECustomerKeyMD5(v string) *CreateMultipartUploadOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *CreateMultipartUploadOutput) SetSSEKMSKeyId(v string) *CreateMultipartUploadOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *CreateMultipartUploadOutput) SetServerSideEncryption(v string) *CreateMultipartUploadOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *CreateMultipartUploadOutput) SetUploadId(v string) *CreateMultipartUploadOutput {
-	s.UploadId = &v
-	return s
-}
-
 type Delete struct {
 	_ struct{} `type:"structure"`
 
-	// Objects is a required field
 	Objects []*ObjectIdentifier `locationName:"Object" type:"list" flattened:"true" required:"true"`
 
 	// Element to enable quiet mode for the request. When you add this element,
@@ -5656,22 +4147,9 @@ func (s *Delete) Validate() error {
 	return nil
 }
 
-// SetObjects sets the Objects field's value.
-func (s *Delete) SetObjects(v []*ObjectIdentifier) *Delete {
-	s.Objects = v
-	return s
-}
-
-// SetQuiet sets the Quiet field's value.
-func (s *Delete) SetQuiet(v bool) *Delete {
-	s.Quiet = &v
-	return s
-}
-
 type DeleteBucketCorsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5698,12 +4176,6 @@ func (s *DeleteBucketCorsInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketCorsInput) SetBucket(v string) *DeleteBucketCorsInput {
-	s.Bucket = &v
-	return s
-}
-
 type DeleteBucketCorsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -5721,7 +4193,6 @@ func (s DeleteBucketCorsOutput) GoString() string {
 type DeleteBucketInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5748,16 +4219,9 @@ func (s *DeleteBucketInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketInput) SetBucket(v string) *DeleteBucketInput {
-	s.Bucket = &v
-	return s
-}
-
 type DeleteBucketLifecycleInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5782,12 +4246,6 @@ func (s *DeleteBucketLifecycleInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketLifecycleInput) SetBucket(v string) *DeleteBucketLifecycleInput {
-	s.Bucket = &v
-	return s
 }
 
 type DeleteBucketLifecycleOutput struct {
@@ -5821,7 +4279,6 @@ func (s DeleteBucketOutput) GoString() string {
 type DeleteBucketPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5848,12 +4305,6 @@ func (s *DeleteBucketPolicyInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketPolicyInput) SetBucket(v string) *DeleteBucketPolicyInput {
-	s.Bucket = &v
-	return s
-}
-
 type DeleteBucketPolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -5871,7 +4322,6 @@ func (s DeleteBucketPolicyOutput) GoString() string {
 type DeleteBucketReplicationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5898,12 +4348,6 @@ func (s *DeleteBucketReplicationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketReplicationInput) SetBucket(v string) *DeleteBucketReplicationInput {
-	s.Bucket = &v
-	return s
-}
-
 type DeleteBucketReplicationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -5921,7 +4365,6 @@ func (s DeleteBucketReplicationOutput) GoString() string {
 type DeleteBucketTaggingInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5948,12 +4391,6 @@ func (s *DeleteBucketTaggingInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketTaggingInput) SetBucket(v string) *DeleteBucketTaggingInput {
-	s.Bucket = &v
-	return s
-}
-
 type DeleteBucketTaggingOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -5971,7 +4408,6 @@ func (s DeleteBucketTaggingOutput) GoString() string {
 type DeleteBucketWebsiteInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -5996,12 +4432,6 @@ func (s *DeleteBucketWebsiteInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *DeleteBucketWebsiteInput) SetBucket(v string) *DeleteBucketWebsiteInput {
-	s.Bucket = &v
-	return s
 }
 
 type DeleteBucketWebsiteOutput struct {
@@ -6047,43 +4477,11 @@ func (s DeleteMarkerEntry) GoString() string {
 	return s.String()
 }
 
-// SetIsLatest sets the IsLatest field's value.
-func (s *DeleteMarkerEntry) SetIsLatest(v bool) *DeleteMarkerEntry {
-	s.IsLatest = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *DeleteMarkerEntry) SetKey(v string) *DeleteMarkerEntry {
-	s.Key = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *DeleteMarkerEntry) SetLastModified(v time.Time) *DeleteMarkerEntry {
-	s.LastModified = &v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *DeleteMarkerEntry) SetOwner(v *Owner) *DeleteMarkerEntry {
-	s.Owner = v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *DeleteMarkerEntry) SetVersionId(v string) *DeleteMarkerEntry {
-	s.VersionId = &v
-	return s
-}
-
 type DeleteObjectInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// The concatenation of the authentication device's serial number, a space,
@@ -6129,36 +4527,6 @@ func (s *DeleteObjectInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteObjectInput) SetBucket(v string) *DeleteObjectInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *DeleteObjectInput) SetKey(v string) *DeleteObjectInput {
-	s.Key = &v
-	return s
-}
-
-// SetMFA sets the MFA field's value.
-func (s *DeleteObjectInput) SetMFA(v string) *DeleteObjectInput {
-	s.MFA = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *DeleteObjectInput) SetRequestPayer(v string) *DeleteObjectInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *DeleteObjectInput) SetVersionId(v string) *DeleteObjectInput {
-	s.VersionId = &v
-	return s
-}
-
 type DeleteObjectOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6185,31 +4553,11 @@ func (s DeleteObjectOutput) GoString() string {
 	return s.String()
 }
 
-// SetDeleteMarker sets the DeleteMarker field's value.
-func (s *DeleteObjectOutput) SetDeleteMarker(v bool) *DeleteObjectOutput {
-	s.DeleteMarker = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *DeleteObjectOutput) SetRequestCharged(v string) *DeleteObjectOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *DeleteObjectOutput) SetVersionId(v string) *DeleteObjectOutput {
-	s.VersionId = &v
-	return s
-}
-
 type DeleteObjectsInput struct {
 	_ struct{} `type:"structure" payload:"Delete"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Delete is a required field
 	Delete *Delete `locationName:"Delete" type:"structure" required:"true"`
 
 	// The concatenation of the authentication device's serial number, a space,
@@ -6254,30 +4602,6 @@ func (s *DeleteObjectsInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *DeleteObjectsInput) SetBucket(v string) *DeleteObjectsInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetDelete sets the Delete field's value.
-func (s *DeleteObjectsInput) SetDelete(v *Delete) *DeleteObjectsInput {
-	s.Delete = v
-	return s
-}
-
-// SetMFA sets the MFA field's value.
-func (s *DeleteObjectsInput) SetMFA(v string) *DeleteObjectsInput {
-	s.MFA = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *DeleteObjectsInput) SetRequestPayer(v string) *DeleteObjectsInput {
-	s.RequestPayer = &v
-	return s
-}
-
 type DeleteObjectsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6298,24 +4622,6 @@ func (s DeleteObjectsOutput) String() string {
 // GoString returns the string representation
 func (s DeleteObjectsOutput) GoString() string {
 	return s.String()
-}
-
-// SetDeleted sets the Deleted field's value.
-func (s *DeleteObjectsOutput) SetDeleted(v []*DeletedObject) *DeleteObjectsOutput {
-	s.Deleted = v
-	return s
-}
-
-// SetErrors sets the Errors field's value.
-func (s *DeleteObjectsOutput) SetErrors(v []*Error) *DeleteObjectsOutput {
-	s.Errors = v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *DeleteObjectsOutput) SetRequestCharged(v string) *DeleteObjectsOutput {
-	s.RequestCharged = &v
-	return s
 }
 
 type DeletedObject struct {
@@ -6340,37 +4646,11 @@ func (s DeletedObject) GoString() string {
 	return s.String()
 }
 
-// SetDeleteMarker sets the DeleteMarker field's value.
-func (s *DeletedObject) SetDeleteMarker(v bool) *DeletedObject {
-	s.DeleteMarker = &v
-	return s
-}
-
-// SetDeleteMarkerVersionId sets the DeleteMarkerVersionId field's value.
-func (s *DeletedObject) SetDeleteMarkerVersionId(v string) *DeletedObject {
-	s.DeleteMarkerVersionId = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *DeletedObject) SetKey(v string) *DeletedObject {
-	s.Key = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *DeletedObject) SetVersionId(v string) *DeletedObject {
-	s.VersionId = &v
-	return s
-}
-
 type Destination struct {
 	_ struct{} `type:"structure"`
 
 	// Amazon resource name (ARN) of the bucket where you want Amazon S3 to store
 	// replicas of the object identified by the rule.
-	//
-	// Bucket is a required field
 	Bucket *string `type:"string" required:"true"`
 
 	// The class of storage used to store the object.
@@ -6400,18 +4680,6 @@ func (s *Destination) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *Destination) SetBucket(v string) *Destination {
-	s.Bucket = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *Destination) SetStorageClass(v string) *Destination {
-	s.StorageClass = &v
-	return s
-}
-
 type Error struct {
 	_ struct{} `type:"structure"`
 
@@ -6434,36 +4702,10 @@ func (s Error) GoString() string {
 	return s.String()
 }
 
-// SetCode sets the Code field's value.
-func (s *Error) SetCode(v string) *Error {
-	s.Code = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *Error) SetKey(v string) *Error {
-	s.Key = &v
-	return s
-}
-
-// SetMessage sets the Message field's value.
-func (s *Error) SetMessage(v string) *Error {
-	s.Message = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *Error) SetVersionId(v string) *Error {
-	s.VersionId = &v
-	return s
-}
-
 type ErrorDocument struct {
 	_ struct{} `type:"structure"`
 
 	// The object key name to use when a 4XX class error occurs.
-	//
-	// Key is a required field
 	Key *string `min:"1" type:"string" required:"true"`
 }
 
@@ -6493,12 +4735,6 @@ func (s *ErrorDocument) Validate() error {
 	return nil
 }
 
-// SetKey sets the Key field's value.
-func (s *ErrorDocument) SetKey(v string) *ErrorDocument {
-	s.Key = &v
-	return s
-}
-
 // Container for key value pair that defines the criteria for the filter rule.
 type FilterRule struct {
 	_ struct{} `type:"structure"`
@@ -6507,6 +4743,7 @@ type FilterRule struct {
 	// the filtering rule applies. Maximum prefix length can be up to 1,024 characters.
 	// Overlapping prefixes and suffixes are not supported. For more information,
 	// go to Configuring Event Notifications (http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+	// in the Amazon Simple Storage Service Developer Guide.
 	Name *string `type:"string" enum:"FilterRuleName"`
 
 	Value *string `type:"string"`
@@ -6522,24 +4759,10 @@ func (s FilterRule) GoString() string {
 	return s.String()
 }
 
-// SetName sets the Name field's value.
-func (s *FilterRule) SetName(v string) *FilterRule {
-	s.Name = &v
-	return s
-}
-
-// SetValue sets the Value field's value.
-func (s *FilterRule) SetValue(v string) *FilterRule {
-	s.Value = &v
-	return s
-}
-
 type GetBucketAccelerateConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
 	// Name of the bucket for which the accelerate configuration is retrieved.
-	//
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6566,12 +4789,6 @@ func (s *GetBucketAccelerateConfigurationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketAccelerateConfigurationInput) SetBucket(v string) *GetBucketAccelerateConfigurationInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketAccelerateConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6589,16 +4806,9 @@ func (s GetBucketAccelerateConfigurationOutput) GoString() string {
 	return s.String()
 }
 
-// SetStatus sets the Status field's value.
-func (s *GetBucketAccelerateConfigurationOutput) SetStatus(v string) *GetBucketAccelerateConfigurationOutput {
-	s.Status = &v
-	return s
-}
-
 type GetBucketAclInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6625,12 +4835,6 @@ func (s *GetBucketAclInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketAclInput) SetBucket(v string) *GetBucketAclInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketAclOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6650,22 +4854,9 @@ func (s GetBucketAclOutput) GoString() string {
 	return s.String()
 }
 
-// SetGrants sets the Grants field's value.
-func (s *GetBucketAclOutput) SetGrants(v []*Grant) *GetBucketAclOutput {
-	s.Grants = v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *GetBucketAclOutput) SetOwner(v *Owner) *GetBucketAclOutput {
-	s.Owner = v
-	return s
-}
-
 type GetBucketCorsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6692,12 +4883,6 @@ func (s *GetBucketCorsInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketCorsInput) SetBucket(v string) *GetBucketCorsInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketCorsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6714,16 +4899,9 @@ func (s GetBucketCorsOutput) GoString() string {
 	return s.String()
 }
 
-// SetCORSRules sets the CORSRules field's value.
-func (s *GetBucketCorsOutput) SetCORSRules(v []*CORSRule) *GetBucketCorsOutput {
-	s.CORSRules = v
-	return s
-}
-
 type GetBucketLifecycleConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6750,12 +4928,6 @@ func (s *GetBucketLifecycleConfigurationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketLifecycleConfigurationInput) SetBucket(v string) *GetBucketLifecycleConfigurationInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketLifecycleConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6772,16 +4944,9 @@ func (s GetBucketLifecycleConfigurationOutput) GoString() string {
 	return s.String()
 }
 
-// SetRules sets the Rules field's value.
-func (s *GetBucketLifecycleConfigurationOutput) SetRules(v []*LifecycleRule) *GetBucketLifecycleConfigurationOutput {
-	s.Rules = v
-	return s
-}
-
 type GetBucketLifecycleInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6808,12 +4973,6 @@ func (s *GetBucketLifecycleInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketLifecycleInput) SetBucket(v string) *GetBucketLifecycleInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketLifecycleOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6830,16 +4989,9 @@ func (s GetBucketLifecycleOutput) GoString() string {
 	return s.String()
 }
 
-// SetRules sets the Rules field's value.
-func (s *GetBucketLifecycleOutput) SetRules(v []*Rule) *GetBucketLifecycleOutput {
-	s.Rules = v
-	return s
-}
-
 type GetBucketLocationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6866,12 +5018,6 @@ func (s *GetBucketLocationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketLocationInput) SetBucket(v string) *GetBucketLocationInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketLocationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6888,16 +5034,9 @@ func (s GetBucketLocationOutput) GoString() string {
 	return s.String()
 }
 
-// SetLocationConstraint sets the LocationConstraint field's value.
-func (s *GetBucketLocationOutput) SetLocationConstraint(v string) *GetBucketLocationOutput {
-	s.LocationConstraint = &v
-	return s
-}
-
 type GetBucketLoggingInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6924,12 +5063,6 @@ func (s *GetBucketLoggingInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketLoggingInput) SetBucket(v string) *GetBucketLoggingInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketLoggingOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6946,18 +5079,10 @@ func (s GetBucketLoggingOutput) GoString() string {
 	return s.String()
 }
 
-// SetLoggingEnabled sets the LoggingEnabled field's value.
-func (s *GetBucketLoggingOutput) SetLoggingEnabled(v *LoggingEnabled) *GetBucketLoggingOutput {
-	s.LoggingEnabled = v
-	return s
-}
-
 type GetBucketNotificationConfigurationRequest struct {
 	_ struct{} `type:"structure"`
 
 	// Name of the bucket to get the notification configuration for.
-	//
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -6984,16 +5109,9 @@ func (s *GetBucketNotificationConfigurationRequest) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketNotificationConfigurationRequest) SetBucket(v string) *GetBucketNotificationConfigurationRequest {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -7020,12 +5138,6 @@ func (s *GetBucketPolicyInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketPolicyInput) SetBucket(v string) *GetBucketPolicyInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketPolicyOutput struct {
 	_ struct{} `type:"structure" payload:"Policy"`
 
@@ -7043,16 +5155,9 @@ func (s GetBucketPolicyOutput) GoString() string {
 	return s.String()
 }
 
-// SetPolicy sets the Policy field's value.
-func (s *GetBucketPolicyOutput) SetPolicy(v string) *GetBucketPolicyOutput {
-	s.Policy = &v
-	return s
-}
-
 type GetBucketReplicationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -7079,12 +5184,6 @@ func (s *GetBucketReplicationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketReplicationInput) SetBucket(v string) *GetBucketReplicationInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketReplicationOutput struct {
 	_ struct{} `type:"structure" payload:"ReplicationConfiguration"`
 
@@ -7103,16 +5202,9 @@ func (s GetBucketReplicationOutput) GoString() string {
 	return s.String()
 }
 
-// SetReplicationConfiguration sets the ReplicationConfiguration field's value.
-func (s *GetBucketReplicationOutput) SetReplicationConfiguration(v *ReplicationConfiguration) *GetBucketReplicationOutput {
-	s.ReplicationConfiguration = v
-	return s
-}
-
 type GetBucketRequestPaymentInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -7139,12 +5231,6 @@ func (s *GetBucketRequestPaymentInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketRequestPaymentInput) SetBucket(v string) *GetBucketRequestPaymentInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketRequestPaymentOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7162,16 +5248,9 @@ func (s GetBucketRequestPaymentOutput) GoString() string {
 	return s.String()
 }
 
-// SetPayer sets the Payer field's value.
-func (s *GetBucketRequestPaymentOutput) SetPayer(v string) *GetBucketRequestPaymentOutput {
-	s.Payer = &v
-	return s
-}
-
 type GetBucketTaggingInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -7198,16 +5277,9 @@ func (s *GetBucketTaggingInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketTaggingInput) SetBucket(v string) *GetBucketTaggingInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketTaggingOutput struct {
 	_ struct{} `type:"structure"`
 
-	// TagSet is a required field
 	TagSet []*Tag `locationNameList:"Tag" type:"list" required:"true"`
 }
 
@@ -7221,16 +5293,9 @@ func (s GetBucketTaggingOutput) GoString() string {
 	return s.String()
 }
 
-// SetTagSet sets the TagSet field's value.
-func (s *GetBucketTaggingOutput) SetTagSet(v []*Tag) *GetBucketTaggingOutput {
-	s.TagSet = v
-	return s
-}
-
 type GetBucketVersioningInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -7257,12 +5322,6 @@ func (s *GetBucketVersioningInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketVersioningInput) SetBucket(v string) *GetBucketVersioningInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketVersioningOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7285,22 +5344,9 @@ func (s GetBucketVersioningOutput) GoString() string {
 	return s.String()
 }
 
-// SetMFADelete sets the MFADelete field's value.
-func (s *GetBucketVersioningOutput) SetMFADelete(v string) *GetBucketVersioningOutput {
-	s.MFADelete = &v
-	return s
-}
-
-// SetStatus sets the Status field's value.
-func (s *GetBucketVersioningOutput) SetStatus(v string) *GetBucketVersioningOutput {
-	s.Status = &v
-	return s
-}
-
 type GetBucketWebsiteInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -7327,12 +5373,6 @@ func (s *GetBucketWebsiteInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetBucketWebsiteInput) SetBucket(v string) *GetBucketWebsiteInput {
-	s.Bucket = &v
-	return s
-}
-
 type GetBucketWebsiteOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7355,37 +5395,11 @@ func (s GetBucketWebsiteOutput) GoString() string {
 	return s.String()
 }
 
-// SetErrorDocument sets the ErrorDocument field's value.
-func (s *GetBucketWebsiteOutput) SetErrorDocument(v *ErrorDocument) *GetBucketWebsiteOutput {
-	s.ErrorDocument = v
-	return s
-}
-
-// SetIndexDocument sets the IndexDocument field's value.
-func (s *GetBucketWebsiteOutput) SetIndexDocument(v *IndexDocument) *GetBucketWebsiteOutput {
-	s.IndexDocument = v
-	return s
-}
-
-// SetRedirectAllRequestsTo sets the RedirectAllRequestsTo field's value.
-func (s *GetBucketWebsiteOutput) SetRedirectAllRequestsTo(v *RedirectAllRequestsTo) *GetBucketWebsiteOutput {
-	s.RedirectAllRequestsTo = v
-	return s
-}
-
-// SetRoutingRules sets the RoutingRules field's value.
-func (s *GetBucketWebsiteOutput) SetRoutingRules(v []*RoutingRule) *GetBucketWebsiteOutput {
-	s.RoutingRules = v
-	return s
-}
-
 type GetObjectAclInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -7427,30 +5441,6 @@ func (s *GetObjectAclInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetObjectAclInput) SetBucket(v string) *GetObjectAclInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *GetObjectAclInput) SetKey(v string) *GetObjectAclInput {
-	s.Key = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *GetObjectAclInput) SetRequestPayer(v string) *GetObjectAclInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *GetObjectAclInput) SetVersionId(v string) *GetObjectAclInput {
-	s.VersionId = &v
-	return s
-}
-
 type GetObjectAclOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7474,28 +5464,9 @@ func (s GetObjectAclOutput) GoString() string {
 	return s.String()
 }
 
-// SetGrants sets the Grants field's value.
-func (s *GetObjectAclOutput) SetGrants(v []*Grant) *GetObjectAclOutput {
-	s.Grants = v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *GetObjectAclOutput) SetOwner(v *Owner) *GetObjectAclOutput {
-	s.Owner = v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *GetObjectAclOutput) SetRequestCharged(v string) *GetObjectAclOutput {
-	s.RequestCharged = &v
-	return s
-}
-
 type GetObjectInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Return the object only if its entity tag (ETag) is the same as the one specified,
@@ -7514,13 +5485,7 @@ type GetObjectInput struct {
 	// otherwise return a 412 (precondition failed).
 	IfUnmodifiedSince *time.Time `location:"header" locationName:"If-Unmodified-Since" type:"timestamp" timestampFormat:"rfc822"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
-
-	// Part number of the object being read. This is a positive integer between
-	// 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified.
-	// Useful for downloading just a part of an object.
-	PartNumber *int64 `location:"querystring" locationName:"partNumber" type:"integer"`
 
 	// Downloads the specified range bytes of an object. For more information about
 	// the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.
@@ -7598,120 +5563,6 @@ func (s *GetObjectInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetObjectInput) SetBucket(v string) *GetObjectInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetIfMatch sets the IfMatch field's value.
-func (s *GetObjectInput) SetIfMatch(v string) *GetObjectInput {
-	s.IfMatch = &v
-	return s
-}
-
-// SetIfModifiedSince sets the IfModifiedSince field's value.
-func (s *GetObjectInput) SetIfModifiedSince(v time.Time) *GetObjectInput {
-	s.IfModifiedSince = &v
-	return s
-}
-
-// SetIfNoneMatch sets the IfNoneMatch field's value.
-func (s *GetObjectInput) SetIfNoneMatch(v string) *GetObjectInput {
-	s.IfNoneMatch = &v
-	return s
-}
-
-// SetIfUnmodifiedSince sets the IfUnmodifiedSince field's value.
-func (s *GetObjectInput) SetIfUnmodifiedSince(v time.Time) *GetObjectInput {
-	s.IfUnmodifiedSince = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *GetObjectInput) SetKey(v string) *GetObjectInput {
-	s.Key = &v
-	return s
-}
-
-// SetPartNumber sets the PartNumber field's value.
-func (s *GetObjectInput) SetPartNumber(v int64) *GetObjectInput {
-	s.PartNumber = &v
-	return s
-}
-
-// SetRange sets the Range field's value.
-func (s *GetObjectInput) SetRange(v string) *GetObjectInput {
-	s.Range = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *GetObjectInput) SetRequestPayer(v string) *GetObjectInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetResponseCacheControl sets the ResponseCacheControl field's value.
-func (s *GetObjectInput) SetResponseCacheControl(v string) *GetObjectInput {
-	s.ResponseCacheControl = &v
-	return s
-}
-
-// SetResponseContentDisposition sets the ResponseContentDisposition field's value.
-func (s *GetObjectInput) SetResponseContentDisposition(v string) *GetObjectInput {
-	s.ResponseContentDisposition = &v
-	return s
-}
-
-// SetResponseContentEncoding sets the ResponseContentEncoding field's value.
-func (s *GetObjectInput) SetResponseContentEncoding(v string) *GetObjectInput {
-	s.ResponseContentEncoding = &v
-	return s
-}
-
-// SetResponseContentLanguage sets the ResponseContentLanguage field's value.
-func (s *GetObjectInput) SetResponseContentLanguage(v string) *GetObjectInput {
-	s.ResponseContentLanguage = &v
-	return s
-}
-
-// SetResponseContentType sets the ResponseContentType field's value.
-func (s *GetObjectInput) SetResponseContentType(v string) *GetObjectInput {
-	s.ResponseContentType = &v
-	return s
-}
-
-// SetResponseExpires sets the ResponseExpires field's value.
-func (s *GetObjectInput) SetResponseExpires(v time.Time) *GetObjectInput {
-	s.ResponseExpires = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *GetObjectInput) SetSSECustomerAlgorithm(v string) *GetObjectInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *GetObjectInput) SetSSECustomerKey(v string) *GetObjectInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *GetObjectInput) SetSSECustomerKeyMD5(v string) *GetObjectInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *GetObjectInput) SetVersionId(v string) *GetObjectInput {
-	s.VersionId = &v
-	return s
-}
-
 type GetObjectOutput struct {
 	_ struct{} `type:"structure" payload:"Body"`
 
@@ -7772,9 +5623,6 @@ type GetObjectOutput struct {
 	// you can create metadata whose values are not legal HTTP headers.
 	MissingMeta *int64 `location:"header" locationName:"x-amz-missing-meta" type:"integer"`
 
-	// The count of parts this object has.
-	PartsCount *int64 `location:"header" locationName:"x-amz-mp-parts-count" type:"integer"`
-
 	ReplicationStatus *string `location:"header" locationName:"x-amz-replication-status" type:"string" enum:"ReplicationStatus"`
 
 	// If present, indicates that the requester was successfully charged for the
@@ -7824,175 +5672,11 @@ func (s GetObjectOutput) GoString() string {
 	return s.String()
 }
 
-// SetAcceptRanges sets the AcceptRanges field's value.
-func (s *GetObjectOutput) SetAcceptRanges(v string) *GetObjectOutput {
-	s.AcceptRanges = &v
-	return s
-}
-
-// SetBody sets the Body field's value.
-func (s *GetObjectOutput) SetBody(v io.ReadCloser) *GetObjectOutput {
-	s.Body = v
-	return s
-}
-
-// SetCacheControl sets the CacheControl field's value.
-func (s *GetObjectOutput) SetCacheControl(v string) *GetObjectOutput {
-	s.CacheControl = &v
-	return s
-}
-
-// SetContentDisposition sets the ContentDisposition field's value.
-func (s *GetObjectOutput) SetContentDisposition(v string) *GetObjectOutput {
-	s.ContentDisposition = &v
-	return s
-}
-
-// SetContentEncoding sets the ContentEncoding field's value.
-func (s *GetObjectOutput) SetContentEncoding(v string) *GetObjectOutput {
-	s.ContentEncoding = &v
-	return s
-}
-
-// SetContentLanguage sets the ContentLanguage field's value.
-func (s *GetObjectOutput) SetContentLanguage(v string) *GetObjectOutput {
-	s.ContentLanguage = &v
-	return s
-}
-
-// SetContentLength sets the ContentLength field's value.
-func (s *GetObjectOutput) SetContentLength(v int64) *GetObjectOutput {
-	s.ContentLength = &v
-	return s
-}
-
-// SetContentRange sets the ContentRange field's value.
-func (s *GetObjectOutput) SetContentRange(v string) *GetObjectOutput {
-	s.ContentRange = &v
-	return s
-}
-
-// SetContentType sets the ContentType field's value.
-func (s *GetObjectOutput) SetContentType(v string) *GetObjectOutput {
-	s.ContentType = &v
-	return s
-}
-
-// SetDeleteMarker sets the DeleteMarker field's value.
-func (s *GetObjectOutput) SetDeleteMarker(v bool) *GetObjectOutput {
-	s.DeleteMarker = &v
-	return s
-}
-
-// SetETag sets the ETag field's value.
-func (s *GetObjectOutput) SetETag(v string) *GetObjectOutput {
-	s.ETag = &v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *GetObjectOutput) SetExpiration(v string) *GetObjectOutput {
-	s.Expiration = &v
-	return s
-}
-
-// SetExpires sets the Expires field's value.
-func (s *GetObjectOutput) SetExpires(v string) *GetObjectOutput {
-	s.Expires = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *GetObjectOutput) SetLastModified(v time.Time) *GetObjectOutput {
-	s.LastModified = &v
-	return s
-}
-
-// SetMetadata sets the Metadata field's value.
-func (s *GetObjectOutput) SetMetadata(v map[string]*string) *GetObjectOutput {
-	s.Metadata = v
-	return s
-}
-
-// SetMissingMeta sets the MissingMeta field's value.
-func (s *GetObjectOutput) SetMissingMeta(v int64) *GetObjectOutput {
-	s.MissingMeta = &v
-	return s
-}
-
-// SetPartsCount sets the PartsCount field's value.
-func (s *GetObjectOutput) SetPartsCount(v int64) *GetObjectOutput {
-	s.PartsCount = &v
-	return s
-}
-
-// SetReplicationStatus sets the ReplicationStatus field's value.
-func (s *GetObjectOutput) SetReplicationStatus(v string) *GetObjectOutput {
-	s.ReplicationStatus = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *GetObjectOutput) SetRequestCharged(v string) *GetObjectOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetRestore sets the Restore field's value.
-func (s *GetObjectOutput) SetRestore(v string) *GetObjectOutput {
-	s.Restore = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *GetObjectOutput) SetSSECustomerAlgorithm(v string) *GetObjectOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *GetObjectOutput) SetSSECustomerKeyMD5(v string) *GetObjectOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *GetObjectOutput) SetSSEKMSKeyId(v string) *GetObjectOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *GetObjectOutput) SetServerSideEncryption(v string) *GetObjectOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *GetObjectOutput) SetStorageClass(v string) *GetObjectOutput {
-	s.StorageClass = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *GetObjectOutput) SetVersionId(v string) *GetObjectOutput {
-	s.VersionId = &v
-	return s
-}
-
-// SetWebsiteRedirectLocation sets the WebsiteRedirectLocation field's value.
-func (s *GetObjectOutput) SetWebsiteRedirectLocation(v string) *GetObjectOutput {
-	s.WebsiteRedirectLocation = &v
-	return s
-}
-
 type GetObjectTorrentInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -8031,24 +5715,6 @@ func (s *GetObjectTorrentInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *GetObjectTorrentInput) SetBucket(v string) *GetObjectTorrentInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *GetObjectTorrentInput) SetKey(v string) *GetObjectTorrentInput {
-	s.Key = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *GetObjectTorrentInput) SetRequestPayer(v string) *GetObjectTorrentInput {
-	s.RequestPayer = &v
-	return s
-}
-
 type GetObjectTorrentOutput struct {
 	_ struct{} `type:"structure" payload:"Body"`
 
@@ -8067,18 +5733,6 @@ func (s GetObjectTorrentOutput) String() string {
 // GoString returns the string representation
 func (s GetObjectTorrentOutput) GoString() string {
 	return s.String()
-}
-
-// SetBody sets the Body field's value.
-func (s *GetObjectTorrentOutput) SetBody(v io.ReadCloser) *GetObjectTorrentOutput {
-	s.Body = v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *GetObjectTorrentOutput) SetRequestCharged(v string) *GetObjectTorrentOutput {
-	s.RequestCharged = &v
-	return s
 }
 
 type Grant struct {
@@ -8115,18 +5769,6 @@ func (s *Grant) Validate() error {
 	return nil
 }
 
-// SetGrantee sets the Grantee field's value.
-func (s *Grant) SetGrantee(v *Grantee) *Grant {
-	s.Grantee = v
-	return s
-}
-
-// SetPermission sets the Permission field's value.
-func (s *Grant) SetPermission(v string) *Grant {
-	s.Permission = &v
-	return s
-}
-
 type Grantee struct {
 	_ struct{} `type:"structure" xmlPrefix:"xsi" xmlURI:"http://www.w3.org/2001/XMLSchema-instance"`
 
@@ -8140,8 +5782,6 @@ type Grantee struct {
 	ID *string `type:"string"`
 
 	// Type of grantee
-	//
-	// Type is a required field
 	Type *string `locationName:"xsi:type" type:"string" xmlAttribute:"true" required:"true" enum:"Type"`
 
 	// URI of the grantee group.
@@ -8171,40 +5811,9 @@ func (s *Grantee) Validate() error {
 	return nil
 }
 
-// SetDisplayName sets the DisplayName field's value.
-func (s *Grantee) SetDisplayName(v string) *Grantee {
-	s.DisplayName = &v
-	return s
-}
-
-// SetEmailAddress sets the EmailAddress field's value.
-func (s *Grantee) SetEmailAddress(v string) *Grantee {
-	s.EmailAddress = &v
-	return s
-}
-
-// SetID sets the ID field's value.
-func (s *Grantee) SetID(v string) *Grantee {
-	s.ID = &v
-	return s
-}
-
-// SetType sets the Type field's value.
-func (s *Grantee) SetType(v string) *Grantee {
-	s.Type = &v
-	return s
-}
-
-// SetURI sets the URI field's value.
-func (s *Grantee) SetURI(v string) *Grantee {
-	s.URI = &v
-	return s
-}
-
 type HeadBucketInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -8231,12 +5840,6 @@ func (s *HeadBucketInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *HeadBucketInput) SetBucket(v string) *HeadBucketInput {
-	s.Bucket = &v
-	return s
-}
-
 type HeadBucketOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -8254,7 +5857,6 @@ func (s HeadBucketOutput) GoString() string {
 type HeadObjectInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Return the object only if its entity tag (ETag) is the same as the one specified,
@@ -8273,14 +5875,7 @@ type HeadObjectInput struct {
 	// otherwise return a 412 (precondition failed).
 	IfUnmodifiedSince *time.Time `location:"header" locationName:"If-Unmodified-Since" type:"timestamp" timestampFormat:"rfc822"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
-
-	// Part number of the object being read. This is a positive integer between
-	// 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified.
-	// Useful querying about the size of the part and the number of parts in this
-	// object.
-	PartNumber *int64 `location:"querystring" locationName:"partNumber" type:"integer"`
 
 	// Downloads the specified range bytes of an object. For more information about
 	// the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.
@@ -8340,84 +5935,6 @@ func (s *HeadObjectInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *HeadObjectInput) SetBucket(v string) *HeadObjectInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetIfMatch sets the IfMatch field's value.
-func (s *HeadObjectInput) SetIfMatch(v string) *HeadObjectInput {
-	s.IfMatch = &v
-	return s
-}
-
-// SetIfModifiedSince sets the IfModifiedSince field's value.
-func (s *HeadObjectInput) SetIfModifiedSince(v time.Time) *HeadObjectInput {
-	s.IfModifiedSince = &v
-	return s
-}
-
-// SetIfNoneMatch sets the IfNoneMatch field's value.
-func (s *HeadObjectInput) SetIfNoneMatch(v string) *HeadObjectInput {
-	s.IfNoneMatch = &v
-	return s
-}
-
-// SetIfUnmodifiedSince sets the IfUnmodifiedSince field's value.
-func (s *HeadObjectInput) SetIfUnmodifiedSince(v time.Time) *HeadObjectInput {
-	s.IfUnmodifiedSince = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *HeadObjectInput) SetKey(v string) *HeadObjectInput {
-	s.Key = &v
-	return s
-}
-
-// SetPartNumber sets the PartNumber field's value.
-func (s *HeadObjectInput) SetPartNumber(v int64) *HeadObjectInput {
-	s.PartNumber = &v
-	return s
-}
-
-// SetRange sets the Range field's value.
-func (s *HeadObjectInput) SetRange(v string) *HeadObjectInput {
-	s.Range = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *HeadObjectInput) SetRequestPayer(v string) *HeadObjectInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *HeadObjectInput) SetSSECustomerAlgorithm(v string) *HeadObjectInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *HeadObjectInput) SetSSECustomerKey(v string) *HeadObjectInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *HeadObjectInput) SetSSECustomerKeyMD5(v string) *HeadObjectInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *HeadObjectInput) SetVersionId(v string) *HeadObjectInput {
-	s.VersionId = &v
-	return s
-}
-
 type HeadObjectOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -8472,9 +5989,6 @@ type HeadObjectOutput struct {
 	// you can create metadata whose values are not legal HTTP headers.
 	MissingMeta *int64 `location:"header" locationName:"x-amz-missing-meta" type:"integer"`
 
-	// The count of parts this object has.
-	PartsCount *int64 `location:"header" locationName:"x-amz-mp-parts-count" type:"integer"`
-
 	ReplicationStatus *string `location:"header" locationName:"x-amz-replication-status" type:"string" enum:"ReplicationStatus"`
 
 	// If present, indicates that the requester was successfully charged for the
@@ -8524,156 +6038,6 @@ func (s HeadObjectOutput) GoString() string {
 	return s.String()
 }
 
-// SetAcceptRanges sets the AcceptRanges field's value.
-func (s *HeadObjectOutput) SetAcceptRanges(v string) *HeadObjectOutput {
-	s.AcceptRanges = &v
-	return s
-}
-
-// SetCacheControl sets the CacheControl field's value.
-func (s *HeadObjectOutput) SetCacheControl(v string) *HeadObjectOutput {
-	s.CacheControl = &v
-	return s
-}
-
-// SetContentDisposition sets the ContentDisposition field's value.
-func (s *HeadObjectOutput) SetContentDisposition(v string) *HeadObjectOutput {
-	s.ContentDisposition = &v
-	return s
-}
-
-// SetContentEncoding sets the ContentEncoding field's value.
-func (s *HeadObjectOutput) SetContentEncoding(v string) *HeadObjectOutput {
-	s.ContentEncoding = &v
-	return s
-}
-
-// SetContentLanguage sets the ContentLanguage field's value.
-func (s *HeadObjectOutput) SetContentLanguage(v string) *HeadObjectOutput {
-	s.ContentLanguage = &v
-	return s
-}
-
-// SetContentLength sets the ContentLength field's value.
-func (s *HeadObjectOutput) SetContentLength(v int64) *HeadObjectOutput {
-	s.ContentLength = &v
-	return s
-}
-
-// SetContentType sets the ContentType field's value.
-func (s *HeadObjectOutput) SetContentType(v string) *HeadObjectOutput {
-	s.ContentType = &v
-	return s
-}
-
-// SetDeleteMarker sets the DeleteMarker field's value.
-func (s *HeadObjectOutput) SetDeleteMarker(v bool) *HeadObjectOutput {
-	s.DeleteMarker = &v
-	return s
-}
-
-// SetETag sets the ETag field's value.
-func (s *HeadObjectOutput) SetETag(v string) *HeadObjectOutput {
-	s.ETag = &v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *HeadObjectOutput) SetExpiration(v string) *HeadObjectOutput {
-	s.Expiration = &v
-	return s
-}
-
-// SetExpires sets the Expires field's value.
-func (s *HeadObjectOutput) SetExpires(v string) *HeadObjectOutput {
-	s.Expires = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *HeadObjectOutput) SetLastModified(v time.Time) *HeadObjectOutput {
-	s.LastModified = &v
-	return s
-}
-
-// SetMetadata sets the Metadata field's value.
-func (s *HeadObjectOutput) SetMetadata(v map[string]*string) *HeadObjectOutput {
-	s.Metadata = v
-	return s
-}
-
-// SetMissingMeta sets the MissingMeta field's value.
-func (s *HeadObjectOutput) SetMissingMeta(v int64) *HeadObjectOutput {
-	s.MissingMeta = &v
-	return s
-}
-
-// SetPartsCount sets the PartsCount field's value.
-func (s *HeadObjectOutput) SetPartsCount(v int64) *HeadObjectOutput {
-	s.PartsCount = &v
-	return s
-}
-
-// SetReplicationStatus sets the ReplicationStatus field's value.
-func (s *HeadObjectOutput) SetReplicationStatus(v string) *HeadObjectOutput {
-	s.ReplicationStatus = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *HeadObjectOutput) SetRequestCharged(v string) *HeadObjectOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetRestore sets the Restore field's value.
-func (s *HeadObjectOutput) SetRestore(v string) *HeadObjectOutput {
-	s.Restore = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *HeadObjectOutput) SetSSECustomerAlgorithm(v string) *HeadObjectOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *HeadObjectOutput) SetSSECustomerKeyMD5(v string) *HeadObjectOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *HeadObjectOutput) SetSSEKMSKeyId(v string) *HeadObjectOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *HeadObjectOutput) SetServerSideEncryption(v string) *HeadObjectOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *HeadObjectOutput) SetStorageClass(v string) *HeadObjectOutput {
-	s.StorageClass = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *HeadObjectOutput) SetVersionId(v string) *HeadObjectOutput {
-	s.VersionId = &v
-	return s
-}
-
-// SetWebsiteRedirectLocation sets the WebsiteRedirectLocation field's value.
-func (s *HeadObjectOutput) SetWebsiteRedirectLocation(v string) *HeadObjectOutput {
-	s.WebsiteRedirectLocation = &v
-	return s
-}
-
 type IndexDocument struct {
 	_ struct{} `type:"structure"`
 
@@ -8681,8 +6045,6 @@ type IndexDocument struct {
 	// endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/
 	// the data that is returned will be for the object with the key name images/index.html)
 	// The suffix must not be empty and must not include a slash character.
-	//
-	// Suffix is a required field
 	Suffix *string `type:"string" required:"true"`
 }
 
@@ -8709,12 +6071,6 @@ func (s *IndexDocument) Validate() error {
 	return nil
 }
 
-// SetSuffix sets the Suffix field's value.
-func (s *IndexDocument) SetSuffix(v string) *IndexDocument {
-	s.Suffix = &v
-	return s
-}
-
 type Initiator struct {
 	_ struct{} `type:"structure"`
 
@@ -8736,18 +6092,6 @@ func (s Initiator) GoString() string {
 	return s.String()
 }
 
-// SetDisplayName sets the DisplayName field's value.
-func (s *Initiator) SetDisplayName(v string) *Initiator {
-	s.DisplayName = &v
-	return s
-}
-
-// SetID sets the ID field's value.
-func (s *Initiator) SetID(v string) *Initiator {
-	s.ID = &v
-	return s
-}
-
 // Container for object key name prefix and suffix filtering rules.
 type KeyFilter struct {
 	_ struct{} `type:"structure"`
@@ -8767,21 +6111,15 @@ func (s KeyFilter) GoString() string {
 	return s.String()
 }
 
-// SetFilterRules sets the FilterRules field's value.
-func (s *KeyFilter) SetFilterRules(v []*FilterRule) *KeyFilter {
-	s.FilterRules = v
-	return s
-}
-
 // Container for specifying the AWS Lambda notification configuration.
 type LambdaFunctionConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Events is a required field
 	Events []*string `locationName:"Event" type:"list" flattened:"true" required:"true"`
 
 	// Container for object key name filtering rules. For information about key
 	// name filtering, go to Configuring Event Notifications (http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+	// in the Amazon Simple Storage Service Developer Guide.
 	Filter *NotificationConfigurationFilter `type:"structure"`
 
 	// Optional unique identifier for configurations in a notification configuration.
@@ -8790,8 +6128,6 @@ type LambdaFunctionConfiguration struct {
 
 	// Lambda cloud function ARN that Amazon S3 can invoke when it detects events
 	// of the specified type.
-	//
-	// LambdaFunctionArn is a required field
 	LambdaFunctionArn *string `locationName:"CloudFunction" type:"string" required:"true"`
 }
 
@@ -8821,34 +6157,9 @@ func (s *LambdaFunctionConfiguration) Validate() error {
 	return nil
 }
 
-// SetEvents sets the Events field's value.
-func (s *LambdaFunctionConfiguration) SetEvents(v []*string) *LambdaFunctionConfiguration {
-	s.Events = v
-	return s
-}
-
-// SetFilter sets the Filter field's value.
-func (s *LambdaFunctionConfiguration) SetFilter(v *NotificationConfigurationFilter) *LambdaFunctionConfiguration {
-	s.Filter = v
-	return s
-}
-
-// SetId sets the Id field's value.
-func (s *LambdaFunctionConfiguration) SetId(v string) *LambdaFunctionConfiguration {
-	s.Id = &v
-	return s
-}
-
-// SetLambdaFunctionArn sets the LambdaFunctionArn field's value.
-func (s *LambdaFunctionConfiguration) SetLambdaFunctionArn(v string) *LambdaFunctionConfiguration {
-	s.LambdaFunctionArn = &v
-	return s
-}
-
 type LifecycleConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Rules is a required field
 	Rules []*Rule `locationName:"Rule" type:"list" flattened:"true" required:"true"`
 }
 
@@ -8885,12 +6196,6 @@ func (s *LifecycleConfiguration) Validate() error {
 	return nil
 }
 
-// SetRules sets the Rules field's value.
-func (s *LifecycleConfiguration) SetRules(v []*Rule) *LifecycleConfiguration {
-	s.Rules = v
-	return s
-}
-
 type LifecycleExpiration struct {
 	_ struct{} `type:"structure"`
 
@@ -8919,24 +6224,6 @@ func (s LifecycleExpiration) GoString() string {
 	return s.String()
 }
 
-// SetDate sets the Date field's value.
-func (s *LifecycleExpiration) SetDate(v time.Time) *LifecycleExpiration {
-	s.Date = &v
-	return s
-}
-
-// SetDays sets the Days field's value.
-func (s *LifecycleExpiration) SetDays(v int64) *LifecycleExpiration {
-	s.Days = &v
-	return s
-}
-
-// SetExpiredObjectDeleteMarker sets the ExpiredObjectDeleteMarker field's value.
-func (s *LifecycleExpiration) SetExpiredObjectDeleteMarker(v bool) *LifecycleExpiration {
-	s.ExpiredObjectDeleteMarker = &v
-	return s
-}
-
 type LifecycleRule struct {
 	_ struct{} `type:"structure"`
 
@@ -8959,14 +6246,10 @@ type LifecycleRule struct {
 	NoncurrentVersionTransitions []*NoncurrentVersionTransition `locationName:"NoncurrentVersionTransition" type:"list" flattened:"true"`
 
 	// Prefix identifying one or more objects to which the rule applies.
-	//
-	// Prefix is a required field
 	Prefix *string `type:"string" required:"true"`
 
 	// If 'Enabled', the rule is currently being applied. If 'Disabled', the rule
 	// is not currently being applied.
-	//
-	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"ExpirationStatus"`
 
 	Transitions []*Transition `locationName:"Transition" type:"list" flattened:"true"`
@@ -8996,54 +6279,6 @@ func (s *LifecycleRule) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetAbortIncompleteMultipartUpload sets the AbortIncompleteMultipartUpload field's value.
-func (s *LifecycleRule) SetAbortIncompleteMultipartUpload(v *AbortIncompleteMultipartUpload) *LifecycleRule {
-	s.AbortIncompleteMultipartUpload = v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *LifecycleRule) SetExpiration(v *LifecycleExpiration) *LifecycleRule {
-	s.Expiration = v
-	return s
-}
-
-// SetID sets the ID field's value.
-func (s *LifecycleRule) SetID(v string) *LifecycleRule {
-	s.ID = &v
-	return s
-}
-
-// SetNoncurrentVersionExpiration sets the NoncurrentVersionExpiration field's value.
-func (s *LifecycleRule) SetNoncurrentVersionExpiration(v *NoncurrentVersionExpiration) *LifecycleRule {
-	s.NoncurrentVersionExpiration = v
-	return s
-}
-
-// SetNoncurrentVersionTransitions sets the NoncurrentVersionTransitions field's value.
-func (s *LifecycleRule) SetNoncurrentVersionTransitions(v []*NoncurrentVersionTransition) *LifecycleRule {
-	s.NoncurrentVersionTransitions = v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *LifecycleRule) SetPrefix(v string) *LifecycleRule {
-	s.Prefix = &v
-	return s
-}
-
-// SetStatus sets the Status field's value.
-func (s *LifecycleRule) SetStatus(v string) *LifecycleRule {
-	s.Status = &v
-	return s
-}
-
-// SetTransitions sets the Transitions field's value.
-func (s *LifecycleRule) SetTransitions(v []*Transition) *LifecycleRule {
-	s.Transitions = v
-	return s
 }
 
 type ListBucketsInput struct {
@@ -9078,22 +6313,9 @@ func (s ListBucketsOutput) GoString() string {
 	return s.String()
 }
 
-// SetBuckets sets the Buckets field's value.
-func (s *ListBucketsOutput) SetBuckets(v []*Bucket) *ListBucketsOutput {
-	s.Buckets = v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *ListBucketsOutput) SetOwner(v *Owner) *ListBucketsOutput {
-	s.Owner = v
-	return s
-}
-
 type ListMultipartUploadsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Character you use to group keys.
@@ -9147,48 +6369,6 @@ func (s *ListMultipartUploadsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *ListMultipartUploadsInput) SetBucket(v string) *ListMultipartUploadsInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListMultipartUploadsInput) SetDelimiter(v string) *ListMultipartUploadsInput {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListMultipartUploadsInput) SetEncodingType(v string) *ListMultipartUploadsInput {
-	s.EncodingType = &v
-	return s
-}
-
-// SetKeyMarker sets the KeyMarker field's value.
-func (s *ListMultipartUploadsInput) SetKeyMarker(v string) *ListMultipartUploadsInput {
-	s.KeyMarker = &v
-	return s
-}
-
-// SetMaxUploads sets the MaxUploads field's value.
-func (s *ListMultipartUploadsInput) SetMaxUploads(v int64) *ListMultipartUploadsInput {
-	s.MaxUploads = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListMultipartUploadsInput) SetPrefix(v string) *ListMultipartUploadsInput {
-	s.Prefix = &v
-	return s
-}
-
-// SetUploadIdMarker sets the UploadIdMarker field's value.
-func (s *ListMultipartUploadsInput) SetUploadIdMarker(v string) *ListMultipartUploadsInput {
-	s.UploadIdMarker = &v
-	return s
 }
 
 type ListMultipartUploadsOutput struct {
@@ -9245,82 +6425,9 @@ func (s ListMultipartUploadsOutput) GoString() string {
 	return s.String()
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *ListMultipartUploadsOutput) SetBucket(v string) *ListMultipartUploadsOutput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCommonPrefixes sets the CommonPrefixes field's value.
-func (s *ListMultipartUploadsOutput) SetCommonPrefixes(v []*CommonPrefix) *ListMultipartUploadsOutput {
-	s.CommonPrefixes = v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListMultipartUploadsOutput) SetDelimiter(v string) *ListMultipartUploadsOutput {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListMultipartUploadsOutput) SetEncodingType(v string) *ListMultipartUploadsOutput {
-	s.EncodingType = &v
-	return s
-}
-
-// SetIsTruncated sets the IsTruncated field's value.
-func (s *ListMultipartUploadsOutput) SetIsTruncated(v bool) *ListMultipartUploadsOutput {
-	s.IsTruncated = &v
-	return s
-}
-
-// SetKeyMarker sets the KeyMarker field's value.
-func (s *ListMultipartUploadsOutput) SetKeyMarker(v string) *ListMultipartUploadsOutput {
-	s.KeyMarker = &v
-	return s
-}
-
-// SetMaxUploads sets the MaxUploads field's value.
-func (s *ListMultipartUploadsOutput) SetMaxUploads(v int64) *ListMultipartUploadsOutput {
-	s.MaxUploads = &v
-	return s
-}
-
-// SetNextKeyMarker sets the NextKeyMarker field's value.
-func (s *ListMultipartUploadsOutput) SetNextKeyMarker(v string) *ListMultipartUploadsOutput {
-	s.NextKeyMarker = &v
-	return s
-}
-
-// SetNextUploadIdMarker sets the NextUploadIdMarker field's value.
-func (s *ListMultipartUploadsOutput) SetNextUploadIdMarker(v string) *ListMultipartUploadsOutput {
-	s.NextUploadIdMarker = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListMultipartUploadsOutput) SetPrefix(v string) *ListMultipartUploadsOutput {
-	s.Prefix = &v
-	return s
-}
-
-// SetUploadIdMarker sets the UploadIdMarker field's value.
-func (s *ListMultipartUploadsOutput) SetUploadIdMarker(v string) *ListMultipartUploadsOutput {
-	s.UploadIdMarker = &v
-	return s
-}
-
-// SetUploads sets the Uploads field's value.
-func (s *ListMultipartUploadsOutput) SetUploads(v []*MultipartUpload) *ListMultipartUploadsOutput {
-	s.Uploads = v
-	return s
-}
-
 type ListObjectVersionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// A delimiter is a character you use to group keys.
@@ -9369,48 +6476,6 @@ func (s *ListObjectVersionsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *ListObjectVersionsInput) SetBucket(v string) *ListObjectVersionsInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListObjectVersionsInput) SetDelimiter(v string) *ListObjectVersionsInput {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListObjectVersionsInput) SetEncodingType(v string) *ListObjectVersionsInput {
-	s.EncodingType = &v
-	return s
-}
-
-// SetKeyMarker sets the KeyMarker field's value.
-func (s *ListObjectVersionsInput) SetKeyMarker(v string) *ListObjectVersionsInput {
-	s.KeyMarker = &v
-	return s
-}
-
-// SetMaxKeys sets the MaxKeys field's value.
-func (s *ListObjectVersionsInput) SetMaxKeys(v int64) *ListObjectVersionsInput {
-	s.MaxKeys = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListObjectVersionsInput) SetPrefix(v string) *ListObjectVersionsInput {
-	s.Prefix = &v
-	return s
-}
-
-// SetVersionIdMarker sets the VersionIdMarker field's value.
-func (s *ListObjectVersionsInput) SetVersionIdMarker(v string) *ListObjectVersionsInput {
-	s.VersionIdMarker = &v
-	return s
 }
 
 type ListObjectVersionsOutput struct {
@@ -9462,88 +6527,9 @@ func (s ListObjectVersionsOutput) GoString() string {
 	return s.String()
 }
 
-// SetCommonPrefixes sets the CommonPrefixes field's value.
-func (s *ListObjectVersionsOutput) SetCommonPrefixes(v []*CommonPrefix) *ListObjectVersionsOutput {
-	s.CommonPrefixes = v
-	return s
-}
-
-// SetDeleteMarkers sets the DeleteMarkers field's value.
-func (s *ListObjectVersionsOutput) SetDeleteMarkers(v []*DeleteMarkerEntry) *ListObjectVersionsOutput {
-	s.DeleteMarkers = v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListObjectVersionsOutput) SetDelimiter(v string) *ListObjectVersionsOutput {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListObjectVersionsOutput) SetEncodingType(v string) *ListObjectVersionsOutput {
-	s.EncodingType = &v
-	return s
-}
-
-// SetIsTruncated sets the IsTruncated field's value.
-func (s *ListObjectVersionsOutput) SetIsTruncated(v bool) *ListObjectVersionsOutput {
-	s.IsTruncated = &v
-	return s
-}
-
-// SetKeyMarker sets the KeyMarker field's value.
-func (s *ListObjectVersionsOutput) SetKeyMarker(v string) *ListObjectVersionsOutput {
-	s.KeyMarker = &v
-	return s
-}
-
-// SetMaxKeys sets the MaxKeys field's value.
-func (s *ListObjectVersionsOutput) SetMaxKeys(v int64) *ListObjectVersionsOutput {
-	s.MaxKeys = &v
-	return s
-}
-
-// SetName sets the Name field's value.
-func (s *ListObjectVersionsOutput) SetName(v string) *ListObjectVersionsOutput {
-	s.Name = &v
-	return s
-}
-
-// SetNextKeyMarker sets the NextKeyMarker field's value.
-func (s *ListObjectVersionsOutput) SetNextKeyMarker(v string) *ListObjectVersionsOutput {
-	s.NextKeyMarker = &v
-	return s
-}
-
-// SetNextVersionIdMarker sets the NextVersionIdMarker field's value.
-func (s *ListObjectVersionsOutput) SetNextVersionIdMarker(v string) *ListObjectVersionsOutput {
-	s.NextVersionIdMarker = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListObjectVersionsOutput) SetPrefix(v string) *ListObjectVersionsOutput {
-	s.Prefix = &v
-	return s
-}
-
-// SetVersionIdMarker sets the VersionIdMarker field's value.
-func (s *ListObjectVersionsOutput) SetVersionIdMarker(v string) *ListObjectVersionsOutput {
-	s.VersionIdMarker = &v
-	return s
-}
-
-// SetVersions sets the Versions field's value.
-func (s *ListObjectVersionsOutput) SetVersions(v []*ObjectVersion) *ListObjectVersionsOutput {
-	s.Versions = v
-	return s
-}
-
 type ListObjectsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// A delimiter is a character you use to group keys.
@@ -9566,11 +6552,6 @@ type ListObjectsInput struct {
 
 	// Limits the response to keys that begin with the specified prefix.
 	Prefix *string `location:"querystring" locationName:"prefix" type:"string"`
-
-	// Confirms that the requester knows that she or he will be charged for the
-	// list objects request. Bucket owners need not specify this parameter in their
-	// requests.
-	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string" enum:"RequestPayer"`
 }
 
 // String returns the string representation
@@ -9594,48 +6575,6 @@ func (s *ListObjectsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *ListObjectsInput) SetBucket(v string) *ListObjectsInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListObjectsInput) SetDelimiter(v string) *ListObjectsInput {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListObjectsInput) SetEncodingType(v string) *ListObjectsInput {
-	s.EncodingType = &v
-	return s
-}
-
-// SetMarker sets the Marker field's value.
-func (s *ListObjectsInput) SetMarker(v string) *ListObjectsInput {
-	s.Marker = &v
-	return s
-}
-
-// SetMaxKeys sets the MaxKeys field's value.
-func (s *ListObjectsInput) SetMaxKeys(v int64) *ListObjectsInput {
-	s.MaxKeys = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListObjectsInput) SetPrefix(v string) *ListObjectsInput {
-	s.Prefix = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *ListObjectsInput) SetRequestPayer(v string) *ListObjectsInput {
-	s.RequestPayer = &v
-	return s
 }
 
 type ListObjectsOutput struct {
@@ -9682,72 +6621,10 @@ func (s ListObjectsOutput) GoString() string {
 	return s.String()
 }
 
-// SetCommonPrefixes sets the CommonPrefixes field's value.
-func (s *ListObjectsOutput) SetCommonPrefixes(v []*CommonPrefix) *ListObjectsOutput {
-	s.CommonPrefixes = v
-	return s
-}
-
-// SetContents sets the Contents field's value.
-func (s *ListObjectsOutput) SetContents(v []*Object) *ListObjectsOutput {
-	s.Contents = v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListObjectsOutput) SetDelimiter(v string) *ListObjectsOutput {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListObjectsOutput) SetEncodingType(v string) *ListObjectsOutput {
-	s.EncodingType = &v
-	return s
-}
-
-// SetIsTruncated sets the IsTruncated field's value.
-func (s *ListObjectsOutput) SetIsTruncated(v bool) *ListObjectsOutput {
-	s.IsTruncated = &v
-	return s
-}
-
-// SetMarker sets the Marker field's value.
-func (s *ListObjectsOutput) SetMarker(v string) *ListObjectsOutput {
-	s.Marker = &v
-	return s
-}
-
-// SetMaxKeys sets the MaxKeys field's value.
-func (s *ListObjectsOutput) SetMaxKeys(v int64) *ListObjectsOutput {
-	s.MaxKeys = &v
-	return s
-}
-
-// SetName sets the Name field's value.
-func (s *ListObjectsOutput) SetName(v string) *ListObjectsOutput {
-	s.Name = &v
-	return s
-}
-
-// SetNextMarker sets the NextMarker field's value.
-func (s *ListObjectsOutput) SetNextMarker(v string) *ListObjectsOutput {
-	s.NextMarker = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListObjectsOutput) SetPrefix(v string) *ListObjectsOutput {
-	s.Prefix = &v
-	return s
-}
-
 type ListObjectsV2Input struct {
 	_ struct{} `type:"structure"`
 
 	// Name of the bucket to list.
-	//
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// ContinuationToken indicates Amazon S3 that the list is being continued on
@@ -9772,11 +6649,6 @@ type ListObjectsV2Input struct {
 
 	// Limits the response to keys that begin with the specified prefix.
 	Prefix *string `location:"querystring" locationName:"prefix" type:"string"`
-
-	// Confirms that the requester knows that she or he will be charged for the
-	// list objects request in V2 style. Bucket owners need not specify this parameter
-	// in their requests.
-	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string" enum:"RequestPayer"`
 
 	// StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts
 	// listing after this specified key. StartAfter can be any key in the bucket
@@ -9804,60 +6676,6 @@ func (s *ListObjectsV2Input) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *ListObjectsV2Input) SetBucket(v string) *ListObjectsV2Input {
-	s.Bucket = &v
-	return s
-}
-
-// SetContinuationToken sets the ContinuationToken field's value.
-func (s *ListObjectsV2Input) SetContinuationToken(v string) *ListObjectsV2Input {
-	s.ContinuationToken = &v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListObjectsV2Input) SetDelimiter(v string) *ListObjectsV2Input {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListObjectsV2Input) SetEncodingType(v string) *ListObjectsV2Input {
-	s.EncodingType = &v
-	return s
-}
-
-// SetFetchOwner sets the FetchOwner field's value.
-func (s *ListObjectsV2Input) SetFetchOwner(v bool) *ListObjectsV2Input {
-	s.FetchOwner = &v
-	return s
-}
-
-// SetMaxKeys sets the MaxKeys field's value.
-func (s *ListObjectsV2Input) SetMaxKeys(v int64) *ListObjectsV2Input {
-	s.MaxKeys = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListObjectsV2Input) SetPrefix(v string) *ListObjectsV2Input {
-	s.Prefix = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *ListObjectsV2Input) SetRequestPayer(v string) *ListObjectsV2Input {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetStartAfter sets the StartAfter field's value.
-func (s *ListObjectsV2Input) SetStartAfter(v string) *ListObjectsV2Input {
-	s.StartAfter = &v
-	return s
 }
 
 type ListObjectsV2Output struct {
@@ -9921,85 +6739,11 @@ func (s ListObjectsV2Output) GoString() string {
 	return s.String()
 }
 
-// SetCommonPrefixes sets the CommonPrefixes field's value.
-func (s *ListObjectsV2Output) SetCommonPrefixes(v []*CommonPrefix) *ListObjectsV2Output {
-	s.CommonPrefixes = v
-	return s
-}
-
-// SetContents sets the Contents field's value.
-func (s *ListObjectsV2Output) SetContents(v []*Object) *ListObjectsV2Output {
-	s.Contents = v
-	return s
-}
-
-// SetContinuationToken sets the ContinuationToken field's value.
-func (s *ListObjectsV2Output) SetContinuationToken(v string) *ListObjectsV2Output {
-	s.ContinuationToken = &v
-	return s
-}
-
-// SetDelimiter sets the Delimiter field's value.
-func (s *ListObjectsV2Output) SetDelimiter(v string) *ListObjectsV2Output {
-	s.Delimiter = &v
-	return s
-}
-
-// SetEncodingType sets the EncodingType field's value.
-func (s *ListObjectsV2Output) SetEncodingType(v string) *ListObjectsV2Output {
-	s.EncodingType = &v
-	return s
-}
-
-// SetIsTruncated sets the IsTruncated field's value.
-func (s *ListObjectsV2Output) SetIsTruncated(v bool) *ListObjectsV2Output {
-	s.IsTruncated = &v
-	return s
-}
-
-// SetKeyCount sets the KeyCount field's value.
-func (s *ListObjectsV2Output) SetKeyCount(v int64) *ListObjectsV2Output {
-	s.KeyCount = &v
-	return s
-}
-
-// SetMaxKeys sets the MaxKeys field's value.
-func (s *ListObjectsV2Output) SetMaxKeys(v int64) *ListObjectsV2Output {
-	s.MaxKeys = &v
-	return s
-}
-
-// SetName sets the Name field's value.
-func (s *ListObjectsV2Output) SetName(v string) *ListObjectsV2Output {
-	s.Name = &v
-	return s
-}
-
-// SetNextContinuationToken sets the NextContinuationToken field's value.
-func (s *ListObjectsV2Output) SetNextContinuationToken(v string) *ListObjectsV2Output {
-	s.NextContinuationToken = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ListObjectsV2Output) SetPrefix(v string) *ListObjectsV2Output {
-	s.Prefix = &v
-	return s
-}
-
-// SetStartAfter sets the StartAfter field's value.
-func (s *ListObjectsV2Output) SetStartAfter(v string) *ListObjectsV2Output {
-	s.StartAfter = &v
-	return s
-}
-
 type ListPartsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Sets the maximum number of parts to return.
@@ -10016,8 +6760,6 @@ type ListPartsInput struct {
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string" enum:"RequestPayer"`
 
 	// Upload ID identifying the multipart upload whose parts are being listed.
-	//
-	// UploadId is a required field
 	UploadId *string `location:"querystring" locationName:"uploadId" type:"string" required:"true"`
 }
 
@@ -10051,42 +6793,6 @@ func (s *ListPartsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *ListPartsInput) SetBucket(v string) *ListPartsInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *ListPartsInput) SetKey(v string) *ListPartsInput {
-	s.Key = &v
-	return s
-}
-
-// SetMaxParts sets the MaxParts field's value.
-func (s *ListPartsInput) SetMaxParts(v int64) *ListPartsInput {
-	s.MaxParts = &v
-	return s
-}
-
-// SetPartNumberMarker sets the PartNumberMarker field's value.
-func (s *ListPartsInput) SetPartNumberMarker(v int64) *ListPartsInput {
-	s.PartNumberMarker = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *ListPartsInput) SetRequestPayer(v string) *ListPartsInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *ListPartsInput) SetUploadId(v string) *ListPartsInput {
-	s.UploadId = &v
-	return s
 }
 
 type ListPartsOutput struct {
@@ -10147,90 +6853,6 @@ func (s ListPartsOutput) GoString() string {
 	return s.String()
 }
 
-// SetAbortDate sets the AbortDate field's value.
-func (s *ListPartsOutput) SetAbortDate(v time.Time) *ListPartsOutput {
-	s.AbortDate = &v
-	return s
-}
-
-// SetAbortRuleId sets the AbortRuleId field's value.
-func (s *ListPartsOutput) SetAbortRuleId(v string) *ListPartsOutput {
-	s.AbortRuleId = &v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *ListPartsOutput) SetBucket(v string) *ListPartsOutput {
-	s.Bucket = &v
-	return s
-}
-
-// SetInitiator sets the Initiator field's value.
-func (s *ListPartsOutput) SetInitiator(v *Initiator) *ListPartsOutput {
-	s.Initiator = v
-	return s
-}
-
-// SetIsTruncated sets the IsTruncated field's value.
-func (s *ListPartsOutput) SetIsTruncated(v bool) *ListPartsOutput {
-	s.IsTruncated = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *ListPartsOutput) SetKey(v string) *ListPartsOutput {
-	s.Key = &v
-	return s
-}
-
-// SetMaxParts sets the MaxParts field's value.
-func (s *ListPartsOutput) SetMaxParts(v int64) *ListPartsOutput {
-	s.MaxParts = &v
-	return s
-}
-
-// SetNextPartNumberMarker sets the NextPartNumberMarker field's value.
-func (s *ListPartsOutput) SetNextPartNumberMarker(v int64) *ListPartsOutput {
-	s.NextPartNumberMarker = &v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *ListPartsOutput) SetOwner(v *Owner) *ListPartsOutput {
-	s.Owner = v
-	return s
-}
-
-// SetPartNumberMarker sets the PartNumberMarker field's value.
-func (s *ListPartsOutput) SetPartNumberMarker(v int64) *ListPartsOutput {
-	s.PartNumberMarker = &v
-	return s
-}
-
-// SetParts sets the Parts field's value.
-func (s *ListPartsOutput) SetParts(v []*Part) *ListPartsOutput {
-	s.Parts = v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *ListPartsOutput) SetRequestCharged(v string) *ListPartsOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *ListPartsOutput) SetStorageClass(v string) *ListPartsOutput {
-	s.StorageClass = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *ListPartsOutput) SetUploadId(v string) *ListPartsOutput {
-	s.UploadId = &v
-	return s
-}
-
 type LoggingEnabled struct {
 	_ struct{} `type:"structure"`
 
@@ -10279,24 +6901,6 @@ func (s *LoggingEnabled) Validate() error {
 	return nil
 }
 
-// SetTargetBucket sets the TargetBucket field's value.
-func (s *LoggingEnabled) SetTargetBucket(v string) *LoggingEnabled {
-	s.TargetBucket = &v
-	return s
-}
-
-// SetTargetGrants sets the TargetGrants field's value.
-func (s *LoggingEnabled) SetTargetGrants(v []*TargetGrant) *LoggingEnabled {
-	s.TargetGrants = v
-	return s
-}
-
-// SetTargetPrefix sets the TargetPrefix field's value.
-func (s *LoggingEnabled) SetTargetPrefix(v string) *LoggingEnabled {
-	s.TargetPrefix = &v
-	return s
-}
-
 type MultipartUpload struct {
 	_ struct{} `type:"structure"`
 
@@ -10328,42 +6932,6 @@ func (s MultipartUpload) GoString() string {
 	return s.String()
 }
 
-// SetInitiated sets the Initiated field's value.
-func (s *MultipartUpload) SetInitiated(v time.Time) *MultipartUpload {
-	s.Initiated = &v
-	return s
-}
-
-// SetInitiator sets the Initiator field's value.
-func (s *MultipartUpload) SetInitiator(v *Initiator) *MultipartUpload {
-	s.Initiator = v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *MultipartUpload) SetKey(v string) *MultipartUpload {
-	s.Key = &v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *MultipartUpload) SetOwner(v *Owner) *MultipartUpload {
-	s.Owner = v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *MultipartUpload) SetStorageClass(v string) *MultipartUpload {
-	s.StorageClass = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *MultipartUpload) SetUploadId(v string) *MultipartUpload {
-	s.UploadId = &v
-	return s
-}
-
 // Specifies when noncurrent object versions expire. Upon expiration, Amazon
 // S3 permanently deletes the noncurrent object versions. You set this lifecycle
 // configuration action on a bucket that has versioning enabled (or suspended)
@@ -10375,7 +6943,8 @@ type NoncurrentVersionExpiration struct {
 	// Specifies the number of days an object is noncurrent before Amazon S3 can
 	// perform the associated action. For information about the noncurrent days
 	// calculations, see How Amazon S3 Calculates When an Object Became Noncurrent
-	// (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+	// (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html) in
+	// the Amazon Simple Storage Service Developer Guide.
 	NoncurrentDays *int64 `type:"integer"`
 }
 
@@ -10389,12 +6958,6 @@ func (s NoncurrentVersionExpiration) GoString() string {
 	return s.String()
 }
 
-// SetNoncurrentDays sets the NoncurrentDays field's value.
-func (s *NoncurrentVersionExpiration) SetNoncurrentDays(v int64) *NoncurrentVersionExpiration {
-	s.NoncurrentDays = &v
-	return s
-}
-
 // Container for the transition rule that describes when noncurrent objects
 // transition to the STANDARD_IA or GLACIER storage class. If your bucket is
 // versioning-enabled (or versioning is suspended), you can set this action
@@ -10406,7 +6969,8 @@ type NoncurrentVersionTransition struct {
 	// Specifies the number of days an object is noncurrent before Amazon S3 can
 	// perform the associated action. For information about the noncurrent days
 	// calculations, see How Amazon S3 Calculates When an Object Became Noncurrent
-	// (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+	// (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html) in
+	// the Amazon Simple Storage Service Developer Guide.
 	NoncurrentDays *int64 `type:"integer"`
 
 	// The class of storage used to store the object.
@@ -10421,18 +6985,6 @@ func (s NoncurrentVersionTransition) String() string {
 // GoString returns the string representation
 func (s NoncurrentVersionTransition) GoString() string {
 	return s.String()
-}
-
-// SetNoncurrentDays sets the NoncurrentDays field's value.
-func (s *NoncurrentVersionTransition) SetNoncurrentDays(v int64) *NoncurrentVersionTransition {
-	s.NoncurrentDays = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *NoncurrentVersionTransition) SetStorageClass(v string) *NoncurrentVersionTransition {
-	s.StorageClass = &v
-	return s
 }
 
 // Container for specifying the notification configuration of the bucket. If
@@ -10497,24 +7049,6 @@ func (s *NotificationConfiguration) Validate() error {
 	return nil
 }
 
-// SetLambdaFunctionConfigurations sets the LambdaFunctionConfigurations field's value.
-func (s *NotificationConfiguration) SetLambdaFunctionConfigurations(v []*LambdaFunctionConfiguration) *NotificationConfiguration {
-	s.LambdaFunctionConfigurations = v
-	return s
-}
-
-// SetQueueConfigurations sets the QueueConfigurations field's value.
-func (s *NotificationConfiguration) SetQueueConfigurations(v []*QueueConfiguration) *NotificationConfiguration {
-	s.QueueConfigurations = v
-	return s
-}
-
-// SetTopicConfigurations sets the TopicConfigurations field's value.
-func (s *NotificationConfiguration) SetTopicConfigurations(v []*TopicConfiguration) *NotificationConfiguration {
-	s.TopicConfigurations = v
-	return s
-}
-
 type NotificationConfigurationDeprecated struct {
 	_ struct{} `type:"structure"`
 
@@ -10535,26 +7069,9 @@ func (s NotificationConfigurationDeprecated) GoString() string {
 	return s.String()
 }
 
-// SetCloudFunctionConfiguration sets the CloudFunctionConfiguration field's value.
-func (s *NotificationConfigurationDeprecated) SetCloudFunctionConfiguration(v *CloudFunctionConfiguration) *NotificationConfigurationDeprecated {
-	s.CloudFunctionConfiguration = v
-	return s
-}
-
-// SetQueueConfiguration sets the QueueConfiguration field's value.
-func (s *NotificationConfigurationDeprecated) SetQueueConfiguration(v *QueueConfigurationDeprecated) *NotificationConfigurationDeprecated {
-	s.QueueConfiguration = v
-	return s
-}
-
-// SetTopicConfiguration sets the TopicConfiguration field's value.
-func (s *NotificationConfigurationDeprecated) SetTopicConfiguration(v *TopicConfigurationDeprecated) *NotificationConfigurationDeprecated {
-	s.TopicConfiguration = v
-	return s
-}
-
 // Container for object key name filtering rules. For information about key
 // name filtering, go to Configuring Event Notifications (http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+// in the Amazon Simple Storage Service Developer Guide.
 type NotificationConfigurationFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -10570,12 +7087,6 @@ func (s NotificationConfigurationFilter) String() string {
 // GoString returns the string representation
 func (s NotificationConfigurationFilter) GoString() string {
 	return s.String()
-}
-
-// SetKey sets the Key field's value.
-func (s *NotificationConfigurationFilter) SetKey(v *KeyFilter) *NotificationConfigurationFilter {
-	s.Key = v
-	return s
 }
 
 type Object struct {
@@ -10605,48 +7116,10 @@ func (s Object) GoString() string {
 	return s.String()
 }
 
-// SetETag sets the ETag field's value.
-func (s *Object) SetETag(v string) *Object {
-	s.ETag = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *Object) SetKey(v string) *Object {
-	s.Key = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *Object) SetLastModified(v time.Time) *Object {
-	s.LastModified = &v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *Object) SetOwner(v *Owner) *Object {
-	s.Owner = v
-	return s
-}
-
-// SetSize sets the Size field's value.
-func (s *Object) SetSize(v int64) *Object {
-	s.Size = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *Object) SetStorageClass(v string) *Object {
-	s.StorageClass = &v
-	return s
-}
-
 type ObjectIdentifier struct {
 	_ struct{} `type:"structure"`
 
 	// Key name of the object to delete.
-	//
-	// Key is a required field
 	Key *string `min:"1" type:"string" required:"true"`
 
 	// VersionId for the specific version of the object to delete.
@@ -10677,18 +7150,6 @@ func (s *ObjectIdentifier) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetKey sets the Key field's value.
-func (s *ObjectIdentifier) SetKey(v string) *ObjectIdentifier {
-	s.Key = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *ObjectIdentifier) SetVersionId(v string) *ObjectIdentifier {
-	s.VersionId = &v
-	return s
 }
 
 type ObjectVersion struct {
@@ -10728,54 +7189,6 @@ func (s ObjectVersion) GoString() string {
 	return s.String()
 }
 
-// SetETag sets the ETag field's value.
-func (s *ObjectVersion) SetETag(v string) *ObjectVersion {
-	s.ETag = &v
-	return s
-}
-
-// SetIsLatest sets the IsLatest field's value.
-func (s *ObjectVersion) SetIsLatest(v bool) *ObjectVersion {
-	s.IsLatest = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *ObjectVersion) SetKey(v string) *ObjectVersion {
-	s.Key = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *ObjectVersion) SetLastModified(v time.Time) *ObjectVersion {
-	s.LastModified = &v
-	return s
-}
-
-// SetOwner sets the Owner field's value.
-func (s *ObjectVersion) SetOwner(v *Owner) *ObjectVersion {
-	s.Owner = v
-	return s
-}
-
-// SetSize sets the Size field's value.
-func (s *ObjectVersion) SetSize(v int64) *ObjectVersion {
-	s.Size = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *ObjectVersion) SetStorageClass(v string) *ObjectVersion {
-	s.StorageClass = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *ObjectVersion) SetVersionId(v string) *ObjectVersion {
-	s.VersionId = &v
-	return s
-}
-
 type Owner struct {
 	_ struct{} `type:"structure"`
 
@@ -10792,18 +7205,6 @@ func (s Owner) String() string {
 // GoString returns the string representation
 func (s Owner) GoString() string {
 	return s.String()
-}
-
-// SetDisplayName sets the DisplayName field's value.
-func (s *Owner) SetDisplayName(v string) *Owner {
-	s.DisplayName = &v
-	return s
-}
-
-// SetID sets the ID field's value.
-func (s *Owner) SetID(v string) *Owner {
-	s.ID = &v
-	return s
 }
 
 type Part struct {
@@ -10833,41 +7234,13 @@ func (s Part) GoString() string {
 	return s.String()
 }
 
-// SetETag sets the ETag field's value.
-func (s *Part) SetETag(v string) *Part {
-	s.ETag = &v
-	return s
-}
-
-// SetLastModified sets the LastModified field's value.
-func (s *Part) SetLastModified(v time.Time) *Part {
-	s.LastModified = &v
-	return s
-}
-
-// SetPartNumber sets the PartNumber field's value.
-func (s *Part) SetPartNumber(v int64) *Part {
-	s.PartNumber = &v
-	return s
-}
-
-// SetSize sets the Size field's value.
-func (s *Part) SetSize(v int64) *Part {
-	s.Size = &v
-	return s
-}
-
 type PutBucketAccelerateConfigurationInput struct {
 	_ struct{} `type:"structure" payload:"AccelerateConfiguration"`
 
 	// Specifies the Accelerate Configuration you want to set for the bucket.
-	//
-	// AccelerateConfiguration is a required field
 	AccelerateConfiguration *AccelerateConfiguration `locationName:"AccelerateConfiguration" type:"structure" required:"true"`
 
 	// Name of the bucket for which the accelerate configuration is set.
-	//
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 }
 
@@ -10897,18 +7270,6 @@ func (s *PutBucketAccelerateConfigurationInput) Validate() error {
 	return nil
 }
 
-// SetAccelerateConfiguration sets the AccelerateConfiguration field's value.
-func (s *PutBucketAccelerateConfigurationInput) SetAccelerateConfiguration(v *AccelerateConfiguration) *PutBucketAccelerateConfigurationInput {
-	s.AccelerateConfiguration = v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketAccelerateConfigurationInput) SetBucket(v string) *PutBucketAccelerateConfigurationInput {
-	s.Bucket = &v
-	return s
-}
-
 type PutBucketAccelerateConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -10931,7 +7292,6 @@ type PutBucketAclInput struct {
 
 	AccessControlPolicy *AccessControlPolicy `locationName:"AccessControlPolicy" type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Allows grantee the read, write, read ACP, and write ACP permissions on the
@@ -10979,54 +7339,6 @@ func (s *PutBucketAclInput) Validate() error {
 	return nil
 }
 
-// SetACL sets the ACL field's value.
-func (s *PutBucketAclInput) SetACL(v string) *PutBucketAclInput {
-	s.ACL = &v
-	return s
-}
-
-// SetAccessControlPolicy sets the AccessControlPolicy field's value.
-func (s *PutBucketAclInput) SetAccessControlPolicy(v *AccessControlPolicy) *PutBucketAclInput {
-	s.AccessControlPolicy = v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketAclInput) SetBucket(v string) *PutBucketAclInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetGrantFullControl sets the GrantFullControl field's value.
-func (s *PutBucketAclInput) SetGrantFullControl(v string) *PutBucketAclInput {
-	s.GrantFullControl = &v
-	return s
-}
-
-// SetGrantRead sets the GrantRead field's value.
-func (s *PutBucketAclInput) SetGrantRead(v string) *PutBucketAclInput {
-	s.GrantRead = &v
-	return s
-}
-
-// SetGrantReadACP sets the GrantReadACP field's value.
-func (s *PutBucketAclInput) SetGrantReadACP(v string) *PutBucketAclInput {
-	s.GrantReadACP = &v
-	return s
-}
-
-// SetGrantWrite sets the GrantWrite field's value.
-func (s *PutBucketAclInput) SetGrantWrite(v string) *PutBucketAclInput {
-	s.GrantWrite = &v
-	return s
-}
-
-// SetGrantWriteACP sets the GrantWriteACP field's value.
-func (s *PutBucketAclInput) SetGrantWriteACP(v string) *PutBucketAclInput {
-	s.GrantWriteACP = &v
-	return s
-}
-
 type PutBucketAclOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11044,10 +7356,8 @@ func (s PutBucketAclOutput) GoString() string {
 type PutBucketCorsInput struct {
 	_ struct{} `type:"structure" payload:"CORSConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// CORSConfiguration is a required field
 	CORSConfiguration *CORSConfiguration `locationName:"CORSConfiguration" type:"structure" required:"true"`
 }
 
@@ -11082,18 +7392,6 @@ func (s *PutBucketCorsInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketCorsInput) SetBucket(v string) *PutBucketCorsInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCORSConfiguration sets the CORSConfiguration field's value.
-func (s *PutBucketCorsInput) SetCORSConfiguration(v *CORSConfiguration) *PutBucketCorsInput {
-	s.CORSConfiguration = v
-	return s
-}
-
 type PutBucketCorsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11111,7 +7409,6 @@ func (s PutBucketCorsOutput) GoString() string {
 type PutBucketLifecycleConfigurationInput struct {
 	_ struct{} `type:"structure" payload:"LifecycleConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	LifecycleConfiguration *BucketLifecycleConfiguration `locationName:"LifecycleConfiguration" type:"structure"`
@@ -11145,18 +7442,6 @@ func (s *PutBucketLifecycleConfigurationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketLifecycleConfigurationInput) SetBucket(v string) *PutBucketLifecycleConfigurationInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetLifecycleConfiguration sets the LifecycleConfiguration field's value.
-func (s *PutBucketLifecycleConfigurationInput) SetLifecycleConfiguration(v *BucketLifecycleConfiguration) *PutBucketLifecycleConfigurationInput {
-	s.LifecycleConfiguration = v
-	return s
-}
-
 type PutBucketLifecycleConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11174,7 +7459,6 @@ func (s PutBucketLifecycleConfigurationOutput) GoString() string {
 type PutBucketLifecycleInput struct {
 	_ struct{} `type:"structure" payload:"LifecycleConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	LifecycleConfiguration *LifecycleConfiguration `locationName:"LifecycleConfiguration" type:"structure"`
@@ -11208,18 +7492,6 @@ func (s *PutBucketLifecycleInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketLifecycleInput) SetBucket(v string) *PutBucketLifecycleInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetLifecycleConfiguration sets the LifecycleConfiguration field's value.
-func (s *PutBucketLifecycleInput) SetLifecycleConfiguration(v *LifecycleConfiguration) *PutBucketLifecycleInput {
-	s.LifecycleConfiguration = v
-	return s
-}
-
 type PutBucketLifecycleOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11237,10 +7509,8 @@ func (s PutBucketLifecycleOutput) GoString() string {
 type PutBucketLoggingInput struct {
 	_ struct{} `type:"structure" payload:"BucketLoggingStatus"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// BucketLoggingStatus is a required field
 	BucketLoggingStatus *BucketLoggingStatus `locationName:"BucketLoggingStatus" type:"structure" required:"true"`
 }
 
@@ -11275,18 +7545,6 @@ func (s *PutBucketLoggingInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketLoggingInput) SetBucket(v string) *PutBucketLoggingInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetBucketLoggingStatus sets the BucketLoggingStatus field's value.
-func (s *PutBucketLoggingInput) SetBucketLoggingStatus(v *BucketLoggingStatus) *PutBucketLoggingInput {
-	s.BucketLoggingStatus = v
-	return s
-}
-
 type PutBucketLoggingOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11304,13 +7562,10 @@ func (s PutBucketLoggingOutput) GoString() string {
 type PutBucketNotificationConfigurationInput struct {
 	_ struct{} `type:"structure" payload:"NotificationConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Container for specifying the notification configuration of the bucket. If
 	// this element is empty, notifications are turned off on the bucket.
-	//
-	// NotificationConfiguration is a required field
 	NotificationConfiguration *NotificationConfiguration `locationName:"NotificationConfiguration" type:"structure" required:"true"`
 }
 
@@ -11345,18 +7600,6 @@ func (s *PutBucketNotificationConfigurationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketNotificationConfigurationInput) SetBucket(v string) *PutBucketNotificationConfigurationInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetNotificationConfiguration sets the NotificationConfiguration field's value.
-func (s *PutBucketNotificationConfigurationInput) SetNotificationConfiguration(v *NotificationConfiguration) *PutBucketNotificationConfigurationInput {
-	s.NotificationConfiguration = v
-	return s
-}
-
 type PutBucketNotificationConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11374,10 +7617,8 @@ func (s PutBucketNotificationConfigurationOutput) GoString() string {
 type PutBucketNotificationInput struct {
 	_ struct{} `type:"structure" payload:"NotificationConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// NotificationConfiguration is a required field
 	NotificationConfiguration *NotificationConfigurationDeprecated `locationName:"NotificationConfiguration" type:"structure" required:"true"`
 }
 
@@ -11407,18 +7648,6 @@ func (s *PutBucketNotificationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketNotificationInput) SetBucket(v string) *PutBucketNotificationInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetNotificationConfiguration sets the NotificationConfiguration field's value.
-func (s *PutBucketNotificationInput) SetNotificationConfiguration(v *NotificationConfigurationDeprecated) *PutBucketNotificationInput {
-	s.NotificationConfiguration = v
-	return s
-}
-
 type PutBucketNotificationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11436,12 +7665,9 @@ func (s PutBucketNotificationOutput) GoString() string {
 type PutBucketPolicyInput struct {
 	_ struct{} `type:"structure" payload:"Policy"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// The bucket policy as a JSON document.
-	//
-	// Policy is a required field
 	Policy *string `type:"string" required:"true"`
 }
 
@@ -11471,18 +7697,6 @@ func (s *PutBucketPolicyInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketPolicyInput) SetBucket(v string) *PutBucketPolicyInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetPolicy sets the Policy field's value.
-func (s *PutBucketPolicyInput) SetPolicy(v string) *PutBucketPolicyInput {
-	s.Policy = &v
-	return s
-}
-
 type PutBucketPolicyOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11500,13 +7714,10 @@ func (s PutBucketPolicyOutput) GoString() string {
 type PutBucketReplicationInput struct {
 	_ struct{} `type:"structure" payload:"ReplicationConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Container for replication rules. You can add as many as 1,000 rules. Total
 	// replication configuration size can be up to 2 MB.
-	//
-	// ReplicationConfiguration is a required field
 	ReplicationConfiguration *ReplicationConfiguration `locationName:"ReplicationConfiguration" type:"structure" required:"true"`
 }
 
@@ -11541,18 +7752,6 @@ func (s *PutBucketReplicationInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketReplicationInput) SetBucket(v string) *PutBucketReplicationInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetReplicationConfiguration sets the ReplicationConfiguration field's value.
-func (s *PutBucketReplicationInput) SetReplicationConfiguration(v *ReplicationConfiguration) *PutBucketReplicationInput {
-	s.ReplicationConfiguration = v
-	return s
-}
-
 type PutBucketReplicationOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11570,10 +7769,8 @@ func (s PutBucketReplicationOutput) GoString() string {
 type PutBucketRequestPaymentInput struct {
 	_ struct{} `type:"structure" payload:"RequestPaymentConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// RequestPaymentConfiguration is a required field
 	RequestPaymentConfiguration *RequestPaymentConfiguration `locationName:"RequestPaymentConfiguration" type:"structure" required:"true"`
 }
 
@@ -11608,18 +7805,6 @@ func (s *PutBucketRequestPaymentInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketRequestPaymentInput) SetBucket(v string) *PutBucketRequestPaymentInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetRequestPaymentConfiguration sets the RequestPaymentConfiguration field's value.
-func (s *PutBucketRequestPaymentInput) SetRequestPaymentConfiguration(v *RequestPaymentConfiguration) *PutBucketRequestPaymentInput {
-	s.RequestPaymentConfiguration = v
-	return s
-}
-
 type PutBucketRequestPaymentOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11637,10 +7822,8 @@ func (s PutBucketRequestPaymentOutput) GoString() string {
 type PutBucketTaggingInput struct {
 	_ struct{} `type:"structure" payload:"Tagging"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Tagging is a required field
 	Tagging *Tagging `locationName:"Tagging" type:"structure" required:"true"`
 }
 
@@ -11675,18 +7858,6 @@ func (s *PutBucketTaggingInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketTaggingInput) SetBucket(v string) *PutBucketTaggingInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetTagging sets the Tagging field's value.
-func (s *PutBucketTaggingInput) SetTagging(v *Tagging) *PutBucketTaggingInput {
-	s.Tagging = v
-	return s
-}
-
 type PutBucketTaggingOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11704,14 +7875,12 @@ func (s PutBucketTaggingOutput) GoString() string {
 type PutBucketVersioningInput struct {
 	_ struct{} `type:"structure" payload:"VersioningConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// The concatenation of the authentication device's serial number, a space,
 	// and the value that is displayed on your authentication device.
 	MFA *string `location:"header" locationName:"x-amz-mfa" type:"string"`
 
-	// VersioningConfiguration is a required field
 	VersioningConfiguration *VersioningConfiguration `locationName:"VersioningConfiguration" type:"structure" required:"true"`
 }
 
@@ -11741,24 +7910,6 @@ func (s *PutBucketVersioningInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketVersioningInput) SetBucket(v string) *PutBucketVersioningInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetMFA sets the MFA field's value.
-func (s *PutBucketVersioningInput) SetMFA(v string) *PutBucketVersioningInput {
-	s.MFA = &v
-	return s
-}
-
-// SetVersioningConfiguration sets the VersioningConfiguration field's value.
-func (s *PutBucketVersioningInput) SetVersioningConfiguration(v *VersioningConfiguration) *PutBucketVersioningInput {
-	s.VersioningConfiguration = v
-	return s
-}
-
 type PutBucketVersioningOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11776,10 +7927,8 @@ func (s PutBucketVersioningOutput) GoString() string {
 type PutBucketWebsiteInput struct {
 	_ struct{} `type:"structure" payload:"WebsiteConfiguration"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// WebsiteConfiguration is a required field
 	WebsiteConfiguration *WebsiteConfiguration `locationName:"WebsiteConfiguration" type:"structure" required:"true"`
 }
 
@@ -11814,18 +7963,6 @@ func (s *PutBucketWebsiteInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *PutBucketWebsiteInput) SetBucket(v string) *PutBucketWebsiteInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetWebsiteConfiguration sets the WebsiteConfiguration field's value.
-func (s *PutBucketWebsiteInput) SetWebsiteConfiguration(v *WebsiteConfiguration) *PutBucketWebsiteInput {
-	s.WebsiteConfiguration = v
-	return s
-}
-
 type PutBucketWebsiteOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -11848,7 +7985,6 @@ type PutObjectAclInput struct {
 
 	AccessControlPolicy *AccessControlPolicy `locationName:"AccessControlPolicy" type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Allows grantee the read, write, read ACP, and write ACP permissions on the
@@ -11867,7 +8003,6 @@ type PutObjectAclInput struct {
 	// Allows grantee to write the ACL for the applicable bucket.
 	GrantWriteACP *string `location:"header" locationName:"x-amz-grant-write-acp" type:"string"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -11914,72 +8049,6 @@ func (s *PutObjectAclInput) Validate() error {
 	return nil
 }
 
-// SetACL sets the ACL field's value.
-func (s *PutObjectAclInput) SetACL(v string) *PutObjectAclInput {
-	s.ACL = &v
-	return s
-}
-
-// SetAccessControlPolicy sets the AccessControlPolicy field's value.
-func (s *PutObjectAclInput) SetAccessControlPolicy(v *AccessControlPolicy) *PutObjectAclInput {
-	s.AccessControlPolicy = v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *PutObjectAclInput) SetBucket(v string) *PutObjectAclInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetGrantFullControl sets the GrantFullControl field's value.
-func (s *PutObjectAclInput) SetGrantFullControl(v string) *PutObjectAclInput {
-	s.GrantFullControl = &v
-	return s
-}
-
-// SetGrantRead sets the GrantRead field's value.
-func (s *PutObjectAclInput) SetGrantRead(v string) *PutObjectAclInput {
-	s.GrantRead = &v
-	return s
-}
-
-// SetGrantReadACP sets the GrantReadACP field's value.
-func (s *PutObjectAclInput) SetGrantReadACP(v string) *PutObjectAclInput {
-	s.GrantReadACP = &v
-	return s
-}
-
-// SetGrantWrite sets the GrantWrite field's value.
-func (s *PutObjectAclInput) SetGrantWrite(v string) *PutObjectAclInput {
-	s.GrantWrite = &v
-	return s
-}
-
-// SetGrantWriteACP sets the GrantWriteACP field's value.
-func (s *PutObjectAclInput) SetGrantWriteACP(v string) *PutObjectAclInput {
-	s.GrantWriteACP = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *PutObjectAclInput) SetKey(v string) *PutObjectAclInput {
-	s.Key = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *PutObjectAclInput) SetRequestPayer(v string) *PutObjectAclInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *PutObjectAclInput) SetVersionId(v string) *PutObjectAclInput {
-	s.VersionId = &v
-	return s
-}
-
 type PutObjectAclOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11998,12 +8067,6 @@ func (s PutObjectAclOutput) GoString() string {
 	return s.String()
 }
 
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *PutObjectAclOutput) SetRequestCharged(v string) *PutObjectAclOutput {
-	s.RequestCharged = &v
-	return s
-}
-
 type PutObjectInput struct {
 	_ struct{} `type:"structure" payload:"Body"`
 
@@ -12014,8 +8077,6 @@ type PutObjectInput struct {
 	Body io.ReadSeeker `type:"blob"`
 
 	// Name of the bucket to which the PUT operation was initiated.
-	//
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Specifies caching behavior along the request/reply chain.
@@ -12055,8 +8116,6 @@ type PutObjectInput struct {
 	GrantWriteACP *string `location:"header" locationName:"x-amz-grant-write-acp" type:"string"`
 
 	// Object key for which the PUT operation was initiated.
-	//
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// A map of metadata to store with the object in S3.
@@ -12131,150 +8190,6 @@ func (s *PutObjectInput) Validate() error {
 	return nil
 }
 
-// SetACL sets the ACL field's value.
-func (s *PutObjectInput) SetACL(v string) *PutObjectInput {
-	s.ACL = &v
-	return s
-}
-
-// SetBody sets the Body field's value.
-func (s *PutObjectInput) SetBody(v io.ReadSeeker) *PutObjectInput {
-	s.Body = v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *PutObjectInput) SetBucket(v string) *PutObjectInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCacheControl sets the CacheControl field's value.
-func (s *PutObjectInput) SetCacheControl(v string) *PutObjectInput {
-	s.CacheControl = &v
-	return s
-}
-
-// SetContentDisposition sets the ContentDisposition field's value.
-func (s *PutObjectInput) SetContentDisposition(v string) *PutObjectInput {
-	s.ContentDisposition = &v
-	return s
-}
-
-// SetContentEncoding sets the ContentEncoding field's value.
-func (s *PutObjectInput) SetContentEncoding(v string) *PutObjectInput {
-	s.ContentEncoding = &v
-	return s
-}
-
-// SetContentLanguage sets the ContentLanguage field's value.
-func (s *PutObjectInput) SetContentLanguage(v string) *PutObjectInput {
-	s.ContentLanguage = &v
-	return s
-}
-
-// SetContentLength sets the ContentLength field's value.
-func (s *PutObjectInput) SetContentLength(v int64) *PutObjectInput {
-	s.ContentLength = &v
-	return s
-}
-
-// SetContentType sets the ContentType field's value.
-func (s *PutObjectInput) SetContentType(v string) *PutObjectInput {
-	s.ContentType = &v
-	return s
-}
-
-// SetExpires sets the Expires field's value.
-func (s *PutObjectInput) SetExpires(v time.Time) *PutObjectInput {
-	s.Expires = &v
-	return s
-}
-
-// SetGrantFullControl sets the GrantFullControl field's value.
-func (s *PutObjectInput) SetGrantFullControl(v string) *PutObjectInput {
-	s.GrantFullControl = &v
-	return s
-}
-
-// SetGrantRead sets the GrantRead field's value.
-func (s *PutObjectInput) SetGrantRead(v string) *PutObjectInput {
-	s.GrantRead = &v
-	return s
-}
-
-// SetGrantReadACP sets the GrantReadACP field's value.
-func (s *PutObjectInput) SetGrantReadACP(v string) *PutObjectInput {
-	s.GrantReadACP = &v
-	return s
-}
-
-// SetGrantWriteACP sets the GrantWriteACP field's value.
-func (s *PutObjectInput) SetGrantWriteACP(v string) *PutObjectInput {
-	s.GrantWriteACP = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *PutObjectInput) SetKey(v string) *PutObjectInput {
-	s.Key = &v
-	return s
-}
-
-// SetMetadata sets the Metadata field's value.
-func (s *PutObjectInput) SetMetadata(v map[string]*string) *PutObjectInput {
-	s.Metadata = v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *PutObjectInput) SetRequestPayer(v string) *PutObjectInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *PutObjectInput) SetSSECustomerAlgorithm(v string) *PutObjectInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *PutObjectInput) SetSSECustomerKey(v string) *PutObjectInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *PutObjectInput) SetSSECustomerKeyMD5(v string) *PutObjectInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *PutObjectInput) SetSSEKMSKeyId(v string) *PutObjectInput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *PutObjectInput) SetServerSideEncryption(v string) *PutObjectInput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *PutObjectInput) SetStorageClass(v string) *PutObjectInput {
-	s.StorageClass = &v
-	return s
-}
-
-// SetWebsiteRedirectLocation sets the WebsiteRedirectLocation field's value.
-func (s *PutObjectInput) SetWebsiteRedirectLocation(v string) *PutObjectInput {
-	s.WebsiteRedirectLocation = &v
-	return s
-}
-
 type PutObjectOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12321,64 +8236,16 @@ func (s PutObjectOutput) GoString() string {
 	return s.String()
 }
 
-// SetETag sets the ETag field's value.
-func (s *PutObjectOutput) SetETag(v string) *PutObjectOutput {
-	s.ETag = &v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *PutObjectOutput) SetExpiration(v string) *PutObjectOutput {
-	s.Expiration = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *PutObjectOutput) SetRequestCharged(v string) *PutObjectOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *PutObjectOutput) SetSSECustomerAlgorithm(v string) *PutObjectOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *PutObjectOutput) SetSSECustomerKeyMD5(v string) *PutObjectOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *PutObjectOutput) SetSSEKMSKeyId(v string) *PutObjectOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *PutObjectOutput) SetServerSideEncryption(v string) *PutObjectOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *PutObjectOutput) SetVersionId(v string) *PutObjectOutput {
-	s.VersionId = &v
-	return s
-}
-
 // Container for specifying an configuration when you want Amazon S3 to publish
 // events to an Amazon Simple Queue Service (Amazon SQS) queue.
 type QueueConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Events is a required field
 	Events []*string `locationName:"Event" type:"list" flattened:"true" required:"true"`
 
 	// Container for object key name filtering rules. For information about key
 	// name filtering, go to Configuring Event Notifications (http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+	// in the Amazon Simple Storage Service Developer Guide.
 	Filter *NotificationConfigurationFilter `type:"structure"`
 
 	// Optional unique identifier for configurations in a notification configuration.
@@ -12387,8 +8254,6 @@ type QueueConfiguration struct {
 
 	// Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects
 	// events of specified type.
-	//
-	// QueueArn is a required field
 	QueueArn *string `locationName:"Queue" type:"string" required:"true"`
 }
 
@@ -12418,30 +8283,6 @@ func (s *QueueConfiguration) Validate() error {
 	return nil
 }
 
-// SetEvents sets the Events field's value.
-func (s *QueueConfiguration) SetEvents(v []*string) *QueueConfiguration {
-	s.Events = v
-	return s
-}
-
-// SetFilter sets the Filter field's value.
-func (s *QueueConfiguration) SetFilter(v *NotificationConfigurationFilter) *QueueConfiguration {
-	s.Filter = v
-	return s
-}
-
-// SetId sets the Id field's value.
-func (s *QueueConfiguration) SetId(v string) *QueueConfiguration {
-	s.Id = &v
-	return s
-}
-
-// SetQueueArn sets the QueueArn field's value.
-func (s *QueueConfiguration) SetQueueArn(v string) *QueueConfiguration {
-	s.QueueArn = &v
-	return s
-}
-
 type QueueConfigurationDeprecated struct {
 	_ struct{} `type:"structure"`
 
@@ -12465,30 +8306,6 @@ func (s QueueConfigurationDeprecated) String() string {
 // GoString returns the string representation
 func (s QueueConfigurationDeprecated) GoString() string {
 	return s.String()
-}
-
-// SetEvent sets the Event field's value.
-func (s *QueueConfigurationDeprecated) SetEvent(v string) *QueueConfigurationDeprecated {
-	s.Event = &v
-	return s
-}
-
-// SetEvents sets the Events field's value.
-func (s *QueueConfigurationDeprecated) SetEvents(v []*string) *QueueConfigurationDeprecated {
-	s.Events = v
-	return s
-}
-
-// SetId sets the Id field's value.
-func (s *QueueConfigurationDeprecated) SetId(v string) *QueueConfigurationDeprecated {
-	s.Id = &v
-	return s
-}
-
-// SetQueue sets the Queue field's value.
-func (s *QueueConfigurationDeprecated) SetQueue(v string) *QueueConfigurationDeprecated {
-	s.Queue = &v
-	return s
 }
 
 type Redirect struct {
@@ -12529,42 +8346,10 @@ func (s Redirect) GoString() string {
 	return s.String()
 }
 
-// SetHostName sets the HostName field's value.
-func (s *Redirect) SetHostName(v string) *Redirect {
-	s.HostName = &v
-	return s
-}
-
-// SetHttpRedirectCode sets the HttpRedirectCode field's value.
-func (s *Redirect) SetHttpRedirectCode(v string) *Redirect {
-	s.HttpRedirectCode = &v
-	return s
-}
-
-// SetProtocol sets the Protocol field's value.
-func (s *Redirect) SetProtocol(v string) *Redirect {
-	s.Protocol = &v
-	return s
-}
-
-// SetReplaceKeyPrefixWith sets the ReplaceKeyPrefixWith field's value.
-func (s *Redirect) SetReplaceKeyPrefixWith(v string) *Redirect {
-	s.ReplaceKeyPrefixWith = &v
-	return s
-}
-
-// SetReplaceKeyWith sets the ReplaceKeyWith field's value.
-func (s *Redirect) SetReplaceKeyWith(v string) *Redirect {
-	s.ReplaceKeyWith = &v
-	return s
-}
-
 type RedirectAllRequestsTo struct {
 	_ struct{} `type:"structure"`
 
 	// Name of the host where requests will be redirected.
-	//
-	// HostName is a required field
 	HostName *string `type:"string" required:"true"`
 
 	// Protocol to use (http, https) when redirecting requests. The default is the
@@ -12595,18 +8380,6 @@ func (s *RedirectAllRequestsTo) Validate() error {
 	return nil
 }
 
-// SetHostName sets the HostName field's value.
-func (s *RedirectAllRequestsTo) SetHostName(v string) *RedirectAllRequestsTo {
-	s.HostName = &v
-	return s
-}
-
-// SetProtocol sets the Protocol field's value.
-func (s *RedirectAllRequestsTo) SetProtocol(v string) *RedirectAllRequestsTo {
-	s.Protocol = &v
-	return s
-}
-
 // Container for replication rules. You can add as many as 1,000 rules. Total
 // replication configuration size can be up to 2 MB.
 type ReplicationConfiguration struct {
@@ -12614,14 +8387,10 @@ type ReplicationConfiguration struct {
 
 	// Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating
 	// the objects.
-	//
-	// Role is a required field
 	Role *string `type:"string" required:"true"`
 
 	// Container for information about a particular replication rule. Replication
 	// configuration must have at least one rule and can contain up to 1,000 rules.
-	//
-	// Rules is a required field
 	Rules []*ReplicationRule `locationName:"Rule" type:"list" flattened:"true" required:"true"`
 }
 
@@ -12661,22 +8430,9 @@ func (s *ReplicationConfiguration) Validate() error {
 	return nil
 }
 
-// SetRole sets the Role field's value.
-func (s *ReplicationConfiguration) SetRole(v string) *ReplicationConfiguration {
-	s.Role = &v
-	return s
-}
-
-// SetRules sets the Rules field's value.
-func (s *ReplicationConfiguration) SetRules(v []*ReplicationRule) *ReplicationConfiguration {
-	s.Rules = v
-	return s
-}
-
 type ReplicationRule struct {
 	_ struct{} `type:"structure"`
 
-	// Destination is a required field
 	Destination *Destination `type:"structure" required:"true"`
 
 	// Unique identifier for the rule. The value cannot be longer than 255 characters.
@@ -12685,13 +8441,9 @@ type ReplicationRule struct {
 	// Object keyname prefix identifying one or more objects to which the rule applies.
 	// Maximum prefix length can be up to 1,024 characters. Overlapping prefixes
 	// are not supported.
-	//
-	// Prefix is a required field
 	Prefix *string `type:"string" required:"true"`
 
 	// The rule is ignored if status is not Enabled.
-	//
-	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"ReplicationRuleStatus"`
 }
 
@@ -12729,36 +8481,10 @@ func (s *ReplicationRule) Validate() error {
 	return nil
 }
 
-// SetDestination sets the Destination field's value.
-func (s *ReplicationRule) SetDestination(v *Destination) *ReplicationRule {
-	s.Destination = v
-	return s
-}
-
-// SetID sets the ID field's value.
-func (s *ReplicationRule) SetID(v string) *ReplicationRule {
-	s.ID = &v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *ReplicationRule) SetPrefix(v string) *ReplicationRule {
-	s.Prefix = &v
-	return s
-}
-
-// SetStatus sets the Status field's value.
-func (s *ReplicationRule) SetStatus(v string) *ReplicationRule {
-	s.Status = &v
-	return s
-}
-
 type RequestPaymentConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies who pays for the download and request fees.
-	//
-	// Payer is a required field
 	Payer *string `type:"string" required:"true" enum:"Payer"`
 }
 
@@ -12785,19 +8511,11 @@ func (s *RequestPaymentConfiguration) Validate() error {
 	return nil
 }
 
-// SetPayer sets the Payer field's value.
-func (s *RequestPaymentConfiguration) SetPayer(v string) *RequestPaymentConfiguration {
-	s.Payer = &v
-	return s
-}
-
 type RestoreObjectInput struct {
 	_ struct{} `type:"structure" payload:"RestoreRequest"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -12845,36 +8563,6 @@ func (s *RestoreObjectInput) Validate() error {
 	return nil
 }
 
-// SetBucket sets the Bucket field's value.
-func (s *RestoreObjectInput) SetBucket(v string) *RestoreObjectInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *RestoreObjectInput) SetKey(v string) *RestoreObjectInput {
-	s.Key = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *RestoreObjectInput) SetRequestPayer(v string) *RestoreObjectInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetRestoreRequest sets the RestoreRequest field's value.
-func (s *RestoreObjectInput) SetRestoreRequest(v *RestoreRequest) *RestoreObjectInput {
-	s.RestoreRequest = v
-	return s
-}
-
-// SetVersionId sets the VersionId field's value.
-func (s *RestoreObjectInput) SetVersionId(v string) *RestoreObjectInput {
-	s.VersionId = &v
-	return s
-}
-
 type RestoreObjectOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12893,18 +8581,10 @@ func (s RestoreObjectOutput) GoString() string {
 	return s.String()
 }
 
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *RestoreObjectOutput) SetRequestCharged(v string) *RestoreObjectOutput {
-	s.RequestCharged = &v
-	return s
-}
-
 type RestoreRequest struct {
 	_ struct{} `type:"structure"`
 
 	// Lifetime of the active copy in days
-	//
-	// Days is a required field
 	Days *int64 `type:"integer" required:"true"`
 }
 
@@ -12931,12 +8611,6 @@ func (s *RestoreRequest) Validate() error {
 	return nil
 }
 
-// SetDays sets the Days field's value.
-func (s *RestoreRequest) SetDays(v int64) *RestoreRequest {
-	s.Days = &v
-	return s
-}
-
 type RoutingRule struct {
 	_ struct{} `type:"structure"`
 
@@ -12949,8 +8623,6 @@ type RoutingRule struct {
 	// Container for redirect information. You can redirect requests to another
 	// host, to another page, or with another protocol. In the event of an error,
 	// you can can specify a different error code to return.
-	//
-	// Redirect is a required field
 	Redirect *Redirect `type:"structure" required:"true"`
 }
 
@@ -12975,18 +8647,6 @@ func (s *RoutingRule) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetCondition sets the Condition field's value.
-func (s *RoutingRule) SetCondition(v *Condition) *RoutingRule {
-	s.Condition = v
-	return s
-}
-
-// SetRedirect sets the Redirect field's value.
-func (s *RoutingRule) SetRedirect(v *Redirect) *RoutingRule {
-	s.Redirect = v
-	return s
 }
 
 type Rule struct {
@@ -13016,14 +8676,10 @@ type Rule struct {
 	NoncurrentVersionTransition *NoncurrentVersionTransition `type:"structure"`
 
 	// Prefix identifying one or more objects to which the rule applies.
-	//
-	// Prefix is a required field
 	Prefix *string `type:"string" required:"true"`
 
 	// If 'Enabled', the rule is currently being applied. If 'Disabled', the rule
 	// is not currently being applied.
-	//
-	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"ExpirationStatus"`
 
 	Transition *Transition `type:"structure"`
@@ -13055,65 +8711,13 @@ func (s *Rule) Validate() error {
 	return nil
 }
 
-// SetAbortIncompleteMultipartUpload sets the AbortIncompleteMultipartUpload field's value.
-func (s *Rule) SetAbortIncompleteMultipartUpload(v *AbortIncompleteMultipartUpload) *Rule {
-	s.AbortIncompleteMultipartUpload = v
-	return s
-}
-
-// SetExpiration sets the Expiration field's value.
-func (s *Rule) SetExpiration(v *LifecycleExpiration) *Rule {
-	s.Expiration = v
-	return s
-}
-
-// SetID sets the ID field's value.
-func (s *Rule) SetID(v string) *Rule {
-	s.ID = &v
-	return s
-}
-
-// SetNoncurrentVersionExpiration sets the NoncurrentVersionExpiration field's value.
-func (s *Rule) SetNoncurrentVersionExpiration(v *NoncurrentVersionExpiration) *Rule {
-	s.NoncurrentVersionExpiration = v
-	return s
-}
-
-// SetNoncurrentVersionTransition sets the NoncurrentVersionTransition field's value.
-func (s *Rule) SetNoncurrentVersionTransition(v *NoncurrentVersionTransition) *Rule {
-	s.NoncurrentVersionTransition = v
-	return s
-}
-
-// SetPrefix sets the Prefix field's value.
-func (s *Rule) SetPrefix(v string) *Rule {
-	s.Prefix = &v
-	return s
-}
-
-// SetStatus sets the Status field's value.
-func (s *Rule) SetStatus(v string) *Rule {
-	s.Status = &v
-	return s
-}
-
-// SetTransition sets the Transition field's value.
-func (s *Rule) SetTransition(v *Transition) *Rule {
-	s.Transition = v
-	return s
-}
-
 type Tag struct {
 	_ struct{} `type:"structure"`
 
 	// Name of the tag.
-	//
-	// Key is a required field
 	Key *string `min:"1" type:"string" required:"true"`
 
 	// Value of the tag.
-	//
-	// Value is a required field
 	Value *string `type:"string" required:"true"`
 }
 
@@ -13146,22 +8750,9 @@ func (s *Tag) Validate() error {
 	return nil
 }
 
-// SetKey sets the Key field's value.
-func (s *Tag) SetKey(v string) *Tag {
-	s.Key = &v
-	return s
-}
-
-// SetValue sets the Value field's value.
-func (s *Tag) SetValue(v string) *Tag {
-	s.Value = &v
-	return s
-}
-
 type Tagging struct {
 	_ struct{} `type:"structure"`
 
-	// TagSet is a required field
 	TagSet []*Tag `locationNameList:"Tag" type:"list" required:"true"`
 }
 
@@ -13198,12 +8789,6 @@ func (s *Tagging) Validate() error {
 	return nil
 }
 
-// SetTagSet sets the TagSet field's value.
-func (s *Tagging) SetTagSet(v []*Tag) *Tagging {
-	s.TagSet = v
-	return s
-}
-
 type TargetGrant struct {
 	_ struct{} `type:"structure"`
 
@@ -13238,28 +8823,16 @@ func (s *TargetGrant) Validate() error {
 	return nil
 }
 
-// SetGrantee sets the Grantee field's value.
-func (s *TargetGrant) SetGrantee(v *Grantee) *TargetGrant {
-	s.Grantee = v
-	return s
-}
-
-// SetPermission sets the Permission field's value.
-func (s *TargetGrant) SetPermission(v string) *TargetGrant {
-	s.Permission = &v
-	return s
-}
-
 // Container for specifying the configuration when you want Amazon S3 to publish
 // events to an Amazon Simple Notification Service (Amazon SNS) topic.
 type TopicConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Events is a required field
 	Events []*string `locationName:"Event" type:"list" flattened:"true" required:"true"`
 
 	// Container for object key name filtering rules. For information about key
 	// name filtering, go to Configuring Event Notifications (http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+	// in the Amazon Simple Storage Service Developer Guide.
 	Filter *NotificationConfigurationFilter `type:"structure"`
 
 	// Optional unique identifier for configurations in a notification configuration.
@@ -13268,8 +8841,6 @@ type TopicConfiguration struct {
 
 	// Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects
 	// events of specified type.
-	//
-	// TopicArn is a required field
 	TopicArn *string `locationName:"Topic" type:"string" required:"true"`
 }
 
@@ -13299,30 +8870,6 @@ func (s *TopicConfiguration) Validate() error {
 	return nil
 }
 
-// SetEvents sets the Events field's value.
-func (s *TopicConfiguration) SetEvents(v []*string) *TopicConfiguration {
-	s.Events = v
-	return s
-}
-
-// SetFilter sets the Filter field's value.
-func (s *TopicConfiguration) SetFilter(v *NotificationConfigurationFilter) *TopicConfiguration {
-	s.Filter = v
-	return s
-}
-
-// SetId sets the Id field's value.
-func (s *TopicConfiguration) SetId(v string) *TopicConfiguration {
-	s.Id = &v
-	return s
-}
-
-// SetTopicArn sets the TopicArn field's value.
-func (s *TopicConfiguration) SetTopicArn(v string) *TopicConfiguration {
-	s.TopicArn = &v
-	return s
-}
-
 type TopicConfigurationDeprecated struct {
 	_ struct{} `type:"structure"`
 
@@ -13350,30 +8897,6 @@ func (s TopicConfigurationDeprecated) GoString() string {
 	return s.String()
 }
 
-// SetEvent sets the Event field's value.
-func (s *TopicConfigurationDeprecated) SetEvent(v string) *TopicConfigurationDeprecated {
-	s.Event = &v
-	return s
-}
-
-// SetEvents sets the Events field's value.
-func (s *TopicConfigurationDeprecated) SetEvents(v []*string) *TopicConfigurationDeprecated {
-	s.Events = v
-	return s
-}
-
-// SetId sets the Id field's value.
-func (s *TopicConfigurationDeprecated) SetId(v string) *TopicConfigurationDeprecated {
-	s.Id = &v
-	return s
-}
-
-// SetTopic sets the Topic field's value.
-func (s *TopicConfigurationDeprecated) SetTopic(v string) *TopicConfigurationDeprecated {
-	s.Topic = &v
-	return s
-}
-
 type Transition struct {
 	_ struct{} `type:"structure"`
 
@@ -13399,34 +8922,13 @@ func (s Transition) GoString() string {
 	return s.String()
 }
 
-// SetDate sets the Date field's value.
-func (s *Transition) SetDate(v time.Time) *Transition {
-	s.Date = &v
-	return s
-}
-
-// SetDays sets the Days field's value.
-func (s *Transition) SetDays(v int64) *Transition {
-	s.Days = &v
-	return s
-}
-
-// SetStorageClass sets the StorageClass field's value.
-func (s *Transition) SetStorageClass(v string) *Transition {
-	s.StorageClass = &v
-	return s
-}
-
 type UploadPartCopyInput struct {
 	_ struct{} `type:"structure"`
 
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// The name of the source bucket and key name of the source object, separated
 	// by a slash (/). Must be URL-encoded.
-	//
-	// CopySource is a required field
 	CopySource *string `location:"header" locationName:"x-amz-copy-source" type:"string" required:"true"`
 
 	// Copies the object if its entity tag (ETag) matches the specified tag.
@@ -13462,13 +8964,10 @@ type UploadPartCopyInput struct {
 	// key was transmitted without error.
 	CopySourceSSECustomerKeyMD5 *string `location:"header" locationName:"x-amz-copy-source-server-side-encryption-customer-key-MD5" type:"string"`
 
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Part number of part being copied. This is a positive integer between 1 and
 	// 10,000.
-	//
-	// PartNumber is a required field
 	PartNumber *int64 `location:"querystring" locationName:"partNumber" type:"integer" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -13494,8 +8993,6 @@ type UploadPartCopyInput struct {
 	SSECustomerKeyMD5 *string `location:"header" locationName:"x-amz-server-side-encryption-customer-key-MD5" type:"string"`
 
 	// Upload ID identifying the multipart upload whose part is being copied.
-	//
-	// UploadId is a required field
 	UploadId *string `location:"querystring" locationName:"uploadId" type:"string" required:"true"`
 }
 
@@ -13535,108 +9032,6 @@ func (s *UploadPartCopyInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *UploadPartCopyInput) SetBucket(v string) *UploadPartCopyInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetCopySource sets the CopySource field's value.
-func (s *UploadPartCopyInput) SetCopySource(v string) *UploadPartCopyInput {
-	s.CopySource = &v
-	return s
-}
-
-// SetCopySourceIfMatch sets the CopySourceIfMatch field's value.
-func (s *UploadPartCopyInput) SetCopySourceIfMatch(v string) *UploadPartCopyInput {
-	s.CopySourceIfMatch = &v
-	return s
-}
-
-// SetCopySourceIfModifiedSince sets the CopySourceIfModifiedSince field's value.
-func (s *UploadPartCopyInput) SetCopySourceIfModifiedSince(v time.Time) *UploadPartCopyInput {
-	s.CopySourceIfModifiedSince = &v
-	return s
-}
-
-// SetCopySourceIfNoneMatch sets the CopySourceIfNoneMatch field's value.
-func (s *UploadPartCopyInput) SetCopySourceIfNoneMatch(v string) *UploadPartCopyInput {
-	s.CopySourceIfNoneMatch = &v
-	return s
-}
-
-// SetCopySourceIfUnmodifiedSince sets the CopySourceIfUnmodifiedSince field's value.
-func (s *UploadPartCopyInput) SetCopySourceIfUnmodifiedSince(v time.Time) *UploadPartCopyInput {
-	s.CopySourceIfUnmodifiedSince = &v
-	return s
-}
-
-// SetCopySourceRange sets the CopySourceRange field's value.
-func (s *UploadPartCopyInput) SetCopySourceRange(v string) *UploadPartCopyInput {
-	s.CopySourceRange = &v
-	return s
-}
-
-// SetCopySourceSSECustomerAlgorithm sets the CopySourceSSECustomerAlgorithm field's value.
-func (s *UploadPartCopyInput) SetCopySourceSSECustomerAlgorithm(v string) *UploadPartCopyInput {
-	s.CopySourceSSECustomerAlgorithm = &v
-	return s
-}
-
-// SetCopySourceSSECustomerKey sets the CopySourceSSECustomerKey field's value.
-func (s *UploadPartCopyInput) SetCopySourceSSECustomerKey(v string) *UploadPartCopyInput {
-	s.CopySourceSSECustomerKey = &v
-	return s
-}
-
-// SetCopySourceSSECustomerKeyMD5 sets the CopySourceSSECustomerKeyMD5 field's value.
-func (s *UploadPartCopyInput) SetCopySourceSSECustomerKeyMD5(v string) *UploadPartCopyInput {
-	s.CopySourceSSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *UploadPartCopyInput) SetKey(v string) *UploadPartCopyInput {
-	s.Key = &v
-	return s
-}
-
-// SetPartNumber sets the PartNumber field's value.
-func (s *UploadPartCopyInput) SetPartNumber(v int64) *UploadPartCopyInput {
-	s.PartNumber = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *UploadPartCopyInput) SetRequestPayer(v string) *UploadPartCopyInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *UploadPartCopyInput) SetSSECustomerAlgorithm(v string) *UploadPartCopyInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *UploadPartCopyInput) SetSSECustomerKey(v string) *UploadPartCopyInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *UploadPartCopyInput) SetSSECustomerKeyMD5(v string) *UploadPartCopyInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *UploadPartCopyInput) SetUploadId(v string) *UploadPartCopyInput {
-	s.UploadId = &v
-	return s
 }
 
 type UploadPartCopyOutput struct {
@@ -13681,48 +9076,6 @@ func (s UploadPartCopyOutput) GoString() string {
 	return s.String()
 }
 
-// SetCopyPartResult sets the CopyPartResult field's value.
-func (s *UploadPartCopyOutput) SetCopyPartResult(v *CopyPartResult) *UploadPartCopyOutput {
-	s.CopyPartResult = v
-	return s
-}
-
-// SetCopySourceVersionId sets the CopySourceVersionId field's value.
-func (s *UploadPartCopyOutput) SetCopySourceVersionId(v string) *UploadPartCopyOutput {
-	s.CopySourceVersionId = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *UploadPartCopyOutput) SetRequestCharged(v string) *UploadPartCopyOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *UploadPartCopyOutput) SetSSECustomerAlgorithm(v string) *UploadPartCopyOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *UploadPartCopyOutput) SetSSECustomerKeyMD5(v string) *UploadPartCopyOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *UploadPartCopyOutput) SetSSEKMSKeyId(v string) *UploadPartCopyOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *UploadPartCopyOutput) SetServerSideEncryption(v string) *UploadPartCopyOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
 type UploadPartInput struct {
 	_ struct{} `type:"structure" payload:"Body"`
 
@@ -13730,8 +9083,6 @@ type UploadPartInput struct {
 	Body io.ReadSeeker `type:"blob"`
 
 	// Name of the bucket to which the multipart upload was initiated.
-	//
-	// Bucket is a required field
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
 	// Size of the body in bytes. This parameter is useful when the size of the
@@ -13739,14 +9090,10 @@ type UploadPartInput struct {
 	ContentLength *int64 `location:"header" locationName:"Content-Length" type:"long"`
 
 	// Object key for which the multipart upload was initiated.
-	//
-	// Key is a required field
 	Key *string `location:"uri" locationName:"Key" min:"1" type:"string" required:"true"`
 
 	// Part number of part being uploaded. This is a positive integer between 1
 	// and 10,000.
-	//
-	// PartNumber is a required field
 	PartNumber *int64 `location:"querystring" locationName:"partNumber" type:"integer" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -13772,8 +9119,6 @@ type UploadPartInput struct {
 	SSECustomerKeyMD5 *string `location:"header" locationName:"x-amz-server-side-encryption-customer-key-MD5" type:"string"`
 
 	// Upload ID identifying the multipart upload whose part is being uploaded.
-	//
-	// UploadId is a required field
 	UploadId *string `location:"querystring" locationName:"uploadId" type:"string" required:"true"`
 }
 
@@ -13810,66 +9155,6 @@ func (s *UploadPartInput) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetBody sets the Body field's value.
-func (s *UploadPartInput) SetBody(v io.ReadSeeker) *UploadPartInput {
-	s.Body = v
-	return s
-}
-
-// SetBucket sets the Bucket field's value.
-func (s *UploadPartInput) SetBucket(v string) *UploadPartInput {
-	s.Bucket = &v
-	return s
-}
-
-// SetContentLength sets the ContentLength field's value.
-func (s *UploadPartInput) SetContentLength(v int64) *UploadPartInput {
-	s.ContentLength = &v
-	return s
-}
-
-// SetKey sets the Key field's value.
-func (s *UploadPartInput) SetKey(v string) *UploadPartInput {
-	s.Key = &v
-	return s
-}
-
-// SetPartNumber sets the PartNumber field's value.
-func (s *UploadPartInput) SetPartNumber(v int64) *UploadPartInput {
-	s.PartNumber = &v
-	return s
-}
-
-// SetRequestPayer sets the RequestPayer field's value.
-func (s *UploadPartInput) SetRequestPayer(v string) *UploadPartInput {
-	s.RequestPayer = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *UploadPartInput) SetSSECustomerAlgorithm(v string) *UploadPartInput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKey sets the SSECustomerKey field's value.
-func (s *UploadPartInput) SetSSECustomerKey(v string) *UploadPartInput {
-	s.SSECustomerKey = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *UploadPartInput) SetSSECustomerKeyMD5(v string) *UploadPartInput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetUploadId sets the UploadId field's value.
-func (s *UploadPartInput) SetUploadId(v string) *UploadPartInput {
-	s.UploadId = &v
-	return s
 }
 
 type UploadPartOutput struct {
@@ -13911,42 +9196,6 @@ func (s UploadPartOutput) GoString() string {
 	return s.String()
 }
 
-// SetETag sets the ETag field's value.
-func (s *UploadPartOutput) SetETag(v string) *UploadPartOutput {
-	s.ETag = &v
-	return s
-}
-
-// SetRequestCharged sets the RequestCharged field's value.
-func (s *UploadPartOutput) SetRequestCharged(v string) *UploadPartOutput {
-	s.RequestCharged = &v
-	return s
-}
-
-// SetSSECustomerAlgorithm sets the SSECustomerAlgorithm field's value.
-func (s *UploadPartOutput) SetSSECustomerAlgorithm(v string) *UploadPartOutput {
-	s.SSECustomerAlgorithm = &v
-	return s
-}
-
-// SetSSECustomerKeyMD5 sets the SSECustomerKeyMD5 field's value.
-func (s *UploadPartOutput) SetSSECustomerKeyMD5(v string) *UploadPartOutput {
-	s.SSECustomerKeyMD5 = &v
-	return s
-}
-
-// SetSSEKMSKeyId sets the SSEKMSKeyId field's value.
-func (s *UploadPartOutput) SetSSEKMSKeyId(v string) *UploadPartOutput {
-	s.SSEKMSKeyId = &v
-	return s
-}
-
-// SetServerSideEncryption sets the ServerSideEncryption field's value.
-func (s *UploadPartOutput) SetServerSideEncryption(v string) *UploadPartOutput {
-	s.ServerSideEncryption = &v
-	return s
-}
-
 type VersioningConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -13967,18 +9216,6 @@ func (s VersioningConfiguration) String() string {
 // GoString returns the string representation
 func (s VersioningConfiguration) GoString() string {
 	return s.String()
-}
-
-// SetMFADelete sets the MFADelete field's value.
-func (s *VersioningConfiguration) SetMFADelete(v string) *VersioningConfiguration {
-	s.MFADelete = &v
-	return s
-}
-
-// SetStatus sets the Status field's value.
-func (s *VersioningConfiguration) SetStatus(v string) *VersioningConfiguration {
-	s.Status = &v
-	return s
 }
 
 type WebsiteConfiguration struct {
@@ -14038,103 +9275,62 @@ func (s *WebsiteConfiguration) Validate() error {
 	return nil
 }
 
-// SetErrorDocument sets the ErrorDocument field's value.
-func (s *WebsiteConfiguration) SetErrorDocument(v *ErrorDocument) *WebsiteConfiguration {
-	s.ErrorDocument = v
-	return s
-}
-
-// SetIndexDocument sets the IndexDocument field's value.
-func (s *WebsiteConfiguration) SetIndexDocument(v *IndexDocument) *WebsiteConfiguration {
-	s.IndexDocument = v
-	return s
-}
-
-// SetRedirectAllRequestsTo sets the RedirectAllRequestsTo field's value.
-func (s *WebsiteConfiguration) SetRedirectAllRequestsTo(v *RedirectAllRequestsTo) *WebsiteConfiguration {
-	s.RedirectAllRequestsTo = v
-	return s
-}
-
-// SetRoutingRules sets the RoutingRules field's value.
-func (s *WebsiteConfiguration) SetRoutingRules(v []*RoutingRule) *WebsiteConfiguration {
-	s.RoutingRules = v
-	return s
-}
-
 const (
-	// BucketAccelerateStatusEnabled is a BucketAccelerateStatus enum value
+	// @enum BucketAccelerateStatus
 	BucketAccelerateStatusEnabled = "Enabled"
-
-	// BucketAccelerateStatusSuspended is a BucketAccelerateStatus enum value
+	// @enum BucketAccelerateStatus
 	BucketAccelerateStatusSuspended = "Suspended"
 )
 
 const (
-	// BucketCannedACLPrivate is a BucketCannedACL enum value
+	// @enum BucketCannedACL
 	BucketCannedACLPrivate = "private"
-
-	// BucketCannedACLPublicRead is a BucketCannedACL enum value
+	// @enum BucketCannedACL
 	BucketCannedACLPublicRead = "public-read"
-
-	// BucketCannedACLPublicReadWrite is a BucketCannedACL enum value
+	// @enum BucketCannedACL
 	BucketCannedACLPublicReadWrite = "public-read-write"
-
-	// BucketCannedACLAuthenticatedRead is a BucketCannedACL enum value
+	// @enum BucketCannedACL
 	BucketCannedACLAuthenticatedRead = "authenticated-read"
 )
 
 const (
-	// BucketLocationConstraintEu is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintEu = "EU"
-
-	// BucketLocationConstraintEuWest1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintEuWest1 = "eu-west-1"
-
-	// BucketLocationConstraintUsWest1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintUsWest1 = "us-west-1"
-
-	// BucketLocationConstraintUsWest2 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintUsWest2 = "us-west-2"
-
-	// BucketLocationConstraintApSouth1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintApSouth1 = "ap-south-1"
-
-	// BucketLocationConstraintApSoutheast1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintApSoutheast1 = "ap-southeast-1"
-
-	// BucketLocationConstraintApSoutheast2 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintApSoutheast2 = "ap-southeast-2"
-
-	// BucketLocationConstraintApNortheast1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintApNortheast1 = "ap-northeast-1"
-
-	// BucketLocationConstraintSaEast1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintSaEast1 = "sa-east-1"
-
-	// BucketLocationConstraintCnNorth1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintCnNorth1 = "cn-north-1"
-
-	// BucketLocationConstraintEuCentral1 is a BucketLocationConstraint enum value
+	// @enum BucketLocationConstraint
 	BucketLocationConstraintEuCentral1 = "eu-central-1"
 )
 
 const (
-	// BucketLogsPermissionFullControl is a BucketLogsPermission enum value
+	// @enum BucketLogsPermission
 	BucketLogsPermissionFullControl = "FULL_CONTROL"
-
-	// BucketLogsPermissionRead is a BucketLogsPermission enum value
+	// @enum BucketLogsPermission
 	BucketLogsPermissionRead = "READ"
-
-	// BucketLogsPermissionWrite is a BucketLogsPermission enum value
+	// @enum BucketLogsPermission
 	BucketLogsPermissionWrite = "WRITE"
 )
 
 const (
-	// BucketVersioningStatusEnabled is a BucketVersioningStatus enum value
+	// @enum BucketVersioningStatus
 	BucketVersioningStatusEnabled = "Enabled"
-
-	// BucketVersioningStatusSuspended is a BucketVersioningStatus enum value
+	// @enum BucketVersioningStatus
 	BucketVersioningStatusSuspended = "Suspended"
 )
 
@@ -14145,178 +9341,147 @@ const (
 // XML 1.0, you can add this parameter to request that Amazon S3 encode the
 // keys in the response.
 const (
-	// EncodingTypeUrl is a EncodingType enum value
+	// @enum EncodingType
 	EncodingTypeUrl = "url"
 )
 
 // Bucket event for which to send notifications.
 const (
-	// EventS3ReducedRedundancyLostObject is a Event enum value
+	// @enum Event
 	EventS3ReducedRedundancyLostObject = "s3:ReducedRedundancyLostObject"
-
-	// EventS3ObjectCreated is a Event enum value
+	// @enum Event
 	EventS3ObjectCreated = "s3:ObjectCreated:*"
-
-	// EventS3ObjectCreatedPut is a Event enum value
+	// @enum Event
 	EventS3ObjectCreatedPut = "s3:ObjectCreated:Put"
-
-	// EventS3ObjectCreatedPost is a Event enum value
+	// @enum Event
 	EventS3ObjectCreatedPost = "s3:ObjectCreated:Post"
-
-	// EventS3ObjectCreatedCopy is a Event enum value
+	// @enum Event
 	EventS3ObjectCreatedCopy = "s3:ObjectCreated:Copy"
-
-	// EventS3ObjectCreatedCompleteMultipartUpload is a Event enum value
+	// @enum Event
 	EventS3ObjectCreatedCompleteMultipartUpload = "s3:ObjectCreated:CompleteMultipartUpload"
-
-	// EventS3ObjectRemoved is a Event enum value
+	// @enum Event
 	EventS3ObjectRemoved = "s3:ObjectRemoved:*"
-
-	// EventS3ObjectRemovedDelete is a Event enum value
+	// @enum Event
 	EventS3ObjectRemovedDelete = "s3:ObjectRemoved:Delete"
-
-	// EventS3ObjectRemovedDeleteMarkerCreated is a Event enum value
+	// @enum Event
 	EventS3ObjectRemovedDeleteMarkerCreated = "s3:ObjectRemoved:DeleteMarkerCreated"
 )
 
 const (
-	// ExpirationStatusEnabled is a ExpirationStatus enum value
+	// @enum ExpirationStatus
 	ExpirationStatusEnabled = "Enabled"
-
-	// ExpirationStatusDisabled is a ExpirationStatus enum value
+	// @enum ExpirationStatus
 	ExpirationStatusDisabled = "Disabled"
 )
 
 const (
-	// FilterRuleNamePrefix is a FilterRuleName enum value
+	// @enum FilterRuleName
 	FilterRuleNamePrefix = "prefix"
-
-	// FilterRuleNameSuffix is a FilterRuleName enum value
+	// @enum FilterRuleName
 	FilterRuleNameSuffix = "suffix"
 )
 
 const (
-	// MFADeleteEnabled is a MFADelete enum value
+	// @enum MFADelete
 	MFADeleteEnabled = "Enabled"
-
-	// MFADeleteDisabled is a MFADelete enum value
+	// @enum MFADelete
 	MFADeleteDisabled = "Disabled"
 )
 
 const (
-	// MFADeleteStatusEnabled is a MFADeleteStatus enum value
+	// @enum MFADeleteStatus
 	MFADeleteStatusEnabled = "Enabled"
-
-	// MFADeleteStatusDisabled is a MFADeleteStatus enum value
+	// @enum MFADeleteStatus
 	MFADeleteStatusDisabled = "Disabled"
 )
 
 const (
-	// MetadataDirectiveCopy is a MetadataDirective enum value
+	// @enum MetadataDirective
 	MetadataDirectiveCopy = "COPY"
-
-	// MetadataDirectiveReplace is a MetadataDirective enum value
+	// @enum MetadataDirective
 	MetadataDirectiveReplace = "REPLACE"
 )
 
 const (
-	// ObjectCannedACLPrivate is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLPrivate = "private"
-
-	// ObjectCannedACLPublicRead is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLPublicRead = "public-read"
-
-	// ObjectCannedACLPublicReadWrite is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLPublicReadWrite = "public-read-write"
-
-	// ObjectCannedACLAuthenticatedRead is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLAuthenticatedRead = "authenticated-read"
-
-	// ObjectCannedACLAwsExecRead is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLAwsExecRead = "aws-exec-read"
-
-	// ObjectCannedACLBucketOwnerRead is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLBucketOwnerRead = "bucket-owner-read"
-
-	// ObjectCannedACLBucketOwnerFullControl is a ObjectCannedACL enum value
+	// @enum ObjectCannedACL
 	ObjectCannedACLBucketOwnerFullControl = "bucket-owner-full-control"
 )
 
 const (
-	// ObjectStorageClassStandard is a ObjectStorageClass enum value
+	// @enum ObjectStorageClass
 	ObjectStorageClassStandard = "STANDARD"
-
-	// ObjectStorageClassReducedRedundancy is a ObjectStorageClass enum value
+	// @enum ObjectStorageClass
 	ObjectStorageClassReducedRedundancy = "REDUCED_REDUNDANCY"
-
-	// ObjectStorageClassGlacier is a ObjectStorageClass enum value
+	// @enum ObjectStorageClass
 	ObjectStorageClassGlacier = "GLACIER"
 )
 
 const (
-	// ObjectVersionStorageClassStandard is a ObjectVersionStorageClass enum value
+	// @enum ObjectVersionStorageClass
 	ObjectVersionStorageClassStandard = "STANDARD"
 )
 
 const (
-	// PayerRequester is a Payer enum value
+	// @enum Payer
 	PayerRequester = "Requester"
-
-	// PayerBucketOwner is a Payer enum value
+	// @enum Payer
 	PayerBucketOwner = "BucketOwner"
 )
 
 const (
-	// PermissionFullControl is a Permission enum value
+	// @enum Permission
 	PermissionFullControl = "FULL_CONTROL"
-
-	// PermissionWrite is a Permission enum value
+	// @enum Permission
 	PermissionWrite = "WRITE"
-
-	// PermissionWriteAcp is a Permission enum value
+	// @enum Permission
 	PermissionWriteAcp = "WRITE_ACP"
-
-	// PermissionRead is a Permission enum value
+	// @enum Permission
 	PermissionRead = "READ"
-
-	// PermissionReadAcp is a Permission enum value
+	// @enum Permission
 	PermissionReadAcp = "READ_ACP"
 )
 
 const (
-	// ProtocolHttp is a Protocol enum value
+	// @enum Protocol
 	ProtocolHttp = "http"
-
-	// ProtocolHttps is a Protocol enum value
+	// @enum Protocol
 	ProtocolHttps = "https"
 )
 
 const (
-	// ReplicationRuleStatusEnabled is a ReplicationRuleStatus enum value
+	// @enum ReplicationRuleStatus
 	ReplicationRuleStatusEnabled = "Enabled"
-
-	// ReplicationRuleStatusDisabled is a ReplicationRuleStatus enum value
+	// @enum ReplicationRuleStatus
 	ReplicationRuleStatusDisabled = "Disabled"
 )
 
 const (
-	// ReplicationStatusComplete is a ReplicationStatus enum value
+	// @enum ReplicationStatus
 	ReplicationStatusComplete = "COMPLETE"
-
-	// ReplicationStatusPending is a ReplicationStatus enum value
+	// @enum ReplicationStatus
 	ReplicationStatusPending = "PENDING"
-
-	// ReplicationStatusFailed is a ReplicationStatus enum value
+	// @enum ReplicationStatus
 	ReplicationStatusFailed = "FAILED"
-
-	// ReplicationStatusReplica is a ReplicationStatus enum value
+	// @enum ReplicationStatus
 	ReplicationStatusReplica = "REPLICA"
 )
 
 // If present, indicates that the requester was successfully charged for the
 // request.
 const (
-	// RequestChargedRequester is a RequestCharged enum value
+	// @enum RequestCharged
 	RequestChargedRequester = "requester"
 )
 
@@ -14325,44 +9490,38 @@ const (
 // Documentation on downloading objects from requester pays buckets can be found
 // at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 const (
-	// RequestPayerRequester is a RequestPayer enum value
+	// @enum RequestPayer
 	RequestPayerRequester = "requester"
 )
 
 const (
-	// ServerSideEncryptionAes256 is a ServerSideEncryption enum value
+	// @enum ServerSideEncryption
 	ServerSideEncryptionAes256 = "AES256"
-
-	// ServerSideEncryptionAwsKms is a ServerSideEncryption enum value
+	// @enum ServerSideEncryption
 	ServerSideEncryptionAwsKms = "aws:kms"
 )
 
 const (
-	// StorageClassStandard is a StorageClass enum value
+	// @enum StorageClass
 	StorageClassStandard = "STANDARD"
-
-	// StorageClassReducedRedundancy is a StorageClass enum value
+	// @enum StorageClass
 	StorageClassReducedRedundancy = "REDUCED_REDUNDANCY"
-
-	// StorageClassStandardIa is a StorageClass enum value
+	// @enum StorageClass
 	StorageClassStandardIa = "STANDARD_IA"
 )
 
 const (
-	// TransitionStorageClassGlacier is a TransitionStorageClass enum value
+	// @enum TransitionStorageClass
 	TransitionStorageClassGlacier = "GLACIER"
-
-	// TransitionStorageClassStandardIa is a TransitionStorageClass enum value
+	// @enum TransitionStorageClass
 	TransitionStorageClassStandardIa = "STANDARD_IA"
 )
 
 const (
-	// TypeCanonicalUser is a Type enum value
+	// @enum Type
 	TypeCanonicalUser = "CanonicalUser"
-
-	// TypeAmazonCustomerByEmail is a Type enum value
+	// @enum Type
 	TypeAmazonCustomerByEmail = "AmazonCustomerByEmail"
-
-	// TypeGroup is a Type enum value
+	// @enum Type
 	TypeGroup = "Group"
 )

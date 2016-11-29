@@ -272,10 +272,6 @@ type Response struct {
 	// Index holds the cluster-level index at the time the Response was generated.
 	// This index is not tied to the Node(s) contained in this Response.
 	Index uint64 `json:"-"`
-
-	// ClusterID holds the cluster-level ID reported by the server.  This
-	// should be different for different etcd clusters.
-	ClusterID string `json:"-"`
 }
 
 type Node struct {
@@ -669,7 +665,6 @@ func unmarshalSuccessfulKeysResponse(header http.Header, body []byte) (*Response
 			return nil, err
 		}
 	}
-	res.ClusterID = header.Get("X-Etcd-Cluster-ID")
 	return &res, nil
 }
 

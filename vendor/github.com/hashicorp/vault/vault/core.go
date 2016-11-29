@@ -13,12 +13,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/armon/go-metrics"
 	log "github.com/mgutz/logxi/v1"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
+	"github.com/armon/go-metrics"
 	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/go-uuid"
@@ -88,9 +88,6 @@ var (
 	// It's var not const so that tests can manipulate it.
 	manualStepDownSleepPeriod = 10 * time.Second
 )
-
-// ReloadFunc are functions that are called when a reload is requested.
-type ReloadFunc func(map[string]string) error
 
 // NonFatalError is an error that can be returned during NewCore that should be
 // displayed but not cause a program exit
@@ -245,12 +242,6 @@ type Core struct {
 	// cachingDisabled indicates whether caches are disabled
 	cachingDisabled bool
 
-	// reloadFuncs is a map containing reload functions
-	reloadFuncs map[string][]ReloadFunc
-
-	// reloadFuncsLock controlls access to the funcs
-	reloadFuncsLock sync.RWMutex
-
 	//
 	// Cluster information
 	//
@@ -331,9 +322,6 @@ type CoreConfig struct {
 	MaxLeaseTTL time.Duration `json:"max_lease_ttl" structs:"max_lease_ttl" mapstructure:"max_lease_ttl"`
 
 	ClusterName string `json:"cluster_name" structs:"cluster_name" mapstructure:"cluster_name"`
-
-	ReloadFuncs     *map[string][]ReloadFunc
-	ReloadFuncsLock *sync.RWMutex
 }
 
 // NewCore is used to construct a new core
@@ -427,14 +415,6 @@ func NewCore(conf *CoreConfig) (*Core, error) {
 		c.ha = conf.HAPhysical
 	}
 
-	// We create the funcs here, then populate the given config with it so that
-	// the caller can share state
-	conf.ReloadFuncsLock = &c.reloadFuncsLock
-	c.reloadFuncsLock.Lock()
-	c.reloadFuncs = make(map[string][]ReloadFunc)
-	c.reloadFuncsLock.Unlock()
-	conf.ReloadFuncs = &c.reloadFuncs
-
 	// Setup the backends
 	logicalBackends := make(map[string]logical.Factory)
 	for k, f := range conf.LogicalBackends {
@@ -446,7 +426,7 @@ func NewCore(conf *CoreConfig) (*Core, error) {
 	}
 	logicalBackends["cubbyhole"] = CubbyholeBackendFactory
 	logicalBackends["system"] = func(config *logical.BackendConfig) (logical.Backend, error) {
-		return NewSystemBackend(c, config)
+		return NewSystemBackend(c, config), nil
 	}
 	c.logicalBackends = logicalBackends
 
@@ -490,23 +470,6 @@ func (c *Core) Shutdown() error {
 
 	// Seal the Vault, causes a leader stepdown
 	return c.sealInternal()
-}
-
-// LookupToken returns the properties of the token from the token store. This
-// is particularly useful to fetch the accessor of the client token and get it
-// populated in the logical request along with the client token. The accessor
-// of the client token can get audit logged.
-func (c *Core) LookupToken(token string) (*TokenEntry, error) {
-	if token == "" {
-		return nil, fmt.Errorf("missing client token")
-	}
-
-	// Many tests don't have a token store running
-	if c.tokenStore == nil {
-		return nil, nil
-	}
-
-	return c.tokenStore.Lookup(token)
 }
 
 func (c *Core) fetchACLandTokenEntry(req *logical.Request) (*ACL, *TokenEntry, error) {
@@ -1552,28 +1515,4 @@ func (c *Core) BarrierKeyLength() (min, max int) {
 	min, max = c.barrier.KeyLength()
 	max += shamir.ShareOverhead
 	return
-}
-
-func (c *Core) ValidateWrappingToken(token string) (bool, error) {
-	if token == "" {
-		return false, fmt.Errorf("token is empty")
-	}
-
-	te, err := c.tokenStore.Lookup(token)
-	if err != nil {
-		return false, err
-	}
-	if te == nil {
-		return false, nil
-	}
-
-	if len(te.Policies) != 1 {
-		return false, nil
-	}
-
-	if te.Policies[0] != responseWrappingPolicyName {
-		return false, nil
-	}
-
-	return true, nil
 }

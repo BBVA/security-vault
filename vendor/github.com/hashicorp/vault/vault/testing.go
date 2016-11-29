@@ -346,10 +346,6 @@ func (n *noopAudit) LogResponse(a *logical.Auth, r *logical.Request, re *logical
 	return nil
 }
 
-func (n *noopAudit) Reload() error {
-	return nil
-}
-
 type rawHTTP struct{}
 
 func (n *rawHTTP) HandleRequest(req *logical.Request) (*logical.Response, error) {
@@ -373,7 +369,7 @@ func (n *rawHTTP) SpecialPaths() *logical.Paths {
 func (n *rawHTTP) System() logical.SystemView {
 	return logical.StaticSystemView{
 		DefaultLeaseTTLVal: time.Hour * 24,
-		MaxLeaseTTLVal:     time.Hour * 24 * 32,
+		MaxLeaseTTLVal:     time.Hour * 24 * 30,
 	}
 }
 
@@ -584,11 +580,6 @@ func TestCluster(t *testing.T, handlers []http.Handler, base *CoreConfig, unseal
 	}
 
 	// Create three cores with the same physical and different redirect/cluster addrs
-	// N.B.: On OSX, instead of random ports, it assigns new ports to new
-	// listeners sequentially. Aside from being a bad idea in a security sense,
-	// it also broke tests that assumed it was OK to just use the port above
-	// the redirect addr. This has now been changed to 10 ports above, but if
-	// we ever do more than three nodes in a cluster it may need to be bumped.
 	coreConfig := &CoreConfig{
 		Physical:           physical.NewInmem(logger),
 		HAPhysical:         physical.NewInmemHA(logger),
@@ -596,9 +587,11 @@ func TestCluster(t *testing.T, handlers []http.Handler, base *CoreConfig, unseal
 		CredentialBackends: make(map[string]logical.Factory),
 		AuditBackends:      make(map[string]audit.Factory),
 		RedirectAddr:       fmt.Sprintf("https://127.0.0.1:%d", c1lns[0].Address.Port),
-		ClusterAddr:        fmt.Sprintf("https://127.0.0.1:%d", c1lns[0].Address.Port+10),
+		ClusterAddr:        fmt.Sprintf("https://127.0.0.1:%d", c1lns[0].Address.Port+1),
 		DisableMlock:       true,
 	}
+
+	coreConfig.LogicalBackends["generic"] = PassthroughBackendFactory
 
 	if base != nil {
 		// Used to set something non-working to test fallback
@@ -634,7 +627,7 @@ func TestCluster(t *testing.T, handlers []http.Handler, base *CoreConfig, unseal
 
 	coreConfig.RedirectAddr = fmt.Sprintf("https://127.0.0.1:%d", c2lns[0].Address.Port)
 	if coreConfig.ClusterAddr != "" {
-		coreConfig.ClusterAddr = fmt.Sprintf("https://127.0.0.1:%d", c2lns[0].Address.Port+10)
+		coreConfig.ClusterAddr = fmt.Sprintf("https://127.0.0.1:%d", c2lns[0].Address.Port+1)
 	}
 	c2, err := NewCore(coreConfig)
 	if err != nil {
@@ -643,7 +636,7 @@ func TestCluster(t *testing.T, handlers []http.Handler, base *CoreConfig, unseal
 
 	coreConfig.RedirectAddr = fmt.Sprintf("https://127.0.0.1:%d", c3lns[0].Address.Port)
 	if coreConfig.ClusterAddr != "" {
-		coreConfig.ClusterAddr = fmt.Sprintf("https://127.0.0.1:%d", c3lns[0].Address.Port+10)
+		coreConfig.ClusterAddr = fmt.Sprintf("https://127.0.0.1:%d", c3lns[0].Address.Port+1)
 	}
 	c3, err := NewCore(coreConfig)
 	if err != nil {
@@ -658,7 +651,7 @@ func TestCluster(t *testing.T, handlers []http.Handler, base *CoreConfig, unseal
 		for i, ln := range lns {
 			ret[i] = &net.TCPAddr{
 				IP:   ln.Address.IP,
-				Port: ln.Address.Port + 10,
+				Port: ln.Address.Port + 1,
 			}
 		}
 		return ret

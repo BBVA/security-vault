@@ -179,12 +179,7 @@ type Options struct {
 //         SharedConfigState: SharedConfigEnable,
 //     })
 func NewSessionWithOptions(opts Options) (*Session, error) {
-	var envCfg envConfig
-	if opts.SharedConfigState == SharedConfigEnable {
-		envCfg = loadSharedEnvConfig()
-	} else {
-		envCfg = loadEnvConfig()
-	}
+	envCfg := loadEnvConfig()
 
 	if len(opts.Profile) > 0 {
 		envCfg.Profile = opts.Profile

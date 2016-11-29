@@ -48,10 +48,7 @@ func Handler(core *vault.Core) http.Handler {
 	mux.Handle("/v1/sys/rekey/update", handleRequestForwarding(core, handleSysRekeyUpdate(core, false)))
 	mux.Handle("/v1/sys/rekey-recovery-key/init", handleRequestForwarding(core, handleSysRekeyInit(core, true)))
 	mux.Handle("/v1/sys/rekey-recovery-key/update", handleRequestForwarding(core, handleSysRekeyUpdate(core, true)))
-	mux.Handle("/v1/sys/wrapping/lookup", handleRequestForwarding(core, handleLogical(core, false, wrappingVerificationFunc)))
-	mux.Handle("/v1/sys/wrapping/rewrap", handleRequestForwarding(core, handleLogical(core, false, wrappingVerificationFunc)))
-	mux.Handle("/v1/sys/wrapping/unwrap", handleRequestForwarding(core, handleLogical(core, false, wrappingVerificationFunc)))
-	mux.Handle("/v1/sys/capabilities-self", handleRequestForwarding(core, handleLogical(core, true, nil)))
+	mux.Handle("/v1/sys/capabilities-self", handleRequestForwarding(core, handleLogical(core, true, sysCapabilitiesSelfCallback)))
 	mux.Handle("/v1/sys/", handleRequestForwarding(core, handleLogical(core, true, nil)))
 	mux.Handle("/v1/", handleRequestForwarding(core, handleLogical(core, false, nil)))
 
@@ -61,35 +58,15 @@ func Handler(core *vault.Core) http.Handler {
 	return handler
 }
 
-// A lookup on a token that is about to expire returns nil, which means by the
-// time we can validate a wrapping token lookup will return nil since it will
-// be revoked after the call. So we have to do the validation here.
-func wrappingVerificationFunc(core *vault.Core, req *logical.Request) error {
-	if req == nil {
+// ClientToken is required in the handler of sys/capabilities-self endpoint in
+// system backend. But the ClientToken gets obfuscated before the request gets
+// forwarded to any logical backend. So, setting the ClientToken in the data
+// field for this request.
+func sysCapabilitiesSelfCallback(req *logical.Request) error {
+	if req == nil || req.Data == nil {
 		return fmt.Errorf("invalid request")
 	}
-
-	var token string
-	if req.Data != nil && req.Data["token"] != nil {
-		if tokenStr, ok := req.Data["token"].(string); !ok {
-			return fmt.Errorf("could not decode token in request body")
-		} else if tokenStr == "" {
-			return fmt.Errorf("empty token in request body")
-		} else {
-			token = tokenStr
-		}
-	} else {
-		token = req.ClientToken
-	}
-
-	valid, err := core.ValidateWrappingToken(token)
-	if err != nil {
-		return fmt.Errorf("error validating wrapping token: %v", err)
-	}
-	if !valid {
-		return fmt.Errorf("wrapping token is not valid or does not exist")
-	}
-
+	req.Data["token"] = req.ClientToken
 	return nil
 }
 
@@ -245,19 +222,10 @@ func respondStandby(core *vault.Core, w http.ResponseWriter, reqURL *url.URL) {
 }
 
 // requestAuth adds the token to the logical.Request if it exists.
-func requestAuth(core *vault.Core, r *http.Request, req *logical.Request) *logical.Request {
+func requestAuth(r *http.Request, req *logical.Request) *logical.Request {
 	// Attach the header value if we have it
 	if v := r.Header.Get(AuthHeaderName); v != "" {
 		req.ClientToken = v
-
-		// Also attach the accessor if we have it. This doesn't fail if it
-		// doesn't exist because the request may be to an unauthenticated
-		// endpoint/login endpoint where a bad current token doesn't matter, or
-		// a token from a Vault version pre-accessors.
-		te, err := core.LookupToken(v)
-		if err == nil && te != nil {
-			req.ClientTokenAccessor = te.Accessor
-		}
 	}
 
 	return req

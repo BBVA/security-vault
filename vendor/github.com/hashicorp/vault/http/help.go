@@ -27,13 +27,11 @@ func handleHelp(core *vault.Core, w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	lreq := requestAuth(core, req, &logical.Request{
+	resp, err := core.HandleRequest(requestAuth(req, &logical.Request{
 		Operation:  logical.HelpOperation,
 		Path:       path,
 		Connection: getConnection(req),
-	})
-
-	resp, err := core.HandleRequest(lreq)
+	}))
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err)
 		return

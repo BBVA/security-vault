@@ -18,10 +18,6 @@ var endpointsMap = endpointStruct{
 		"*/*": {
 			Endpoint: "{service}.{region}.amazonaws.com",
 		},
-		"*/budgets": {
-			Endpoint:      "budgets.amazonaws.com",
-			SigningRegion: "us-east-1",
-		},
 		"*/cloudfront": {
 			Endpoint:      "cloudfront.amazonaws.com",
 			SigningRegion: "us-east-1",

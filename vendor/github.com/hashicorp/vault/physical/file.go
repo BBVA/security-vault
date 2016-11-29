@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 
 	log "github.com/mgutz/logxi/v1"
@@ -40,55 +39,47 @@ func newFileBackend(conf map[string]string, logger log.Logger) (Backend, error) 
 	}, nil
 }
 
-func (b *FileBackend) Delete(path string) error {
-	if path == "" {
-		return nil
-	}
-
+func (b *FileBackend) Delete(k string) error {
 	b.l.Lock()
 	defer b.l.Unlock()
 
-	basePath, key := b.path(path)
-	fullPath := filepath.Join(basePath, key)
+	path, key := b.path(k)
+	fullPath := filepath.Join(path, key)
 
+	// If the path doesn't exist return success; this is in line with Vault's
+	// expected behavior and we don't want to check for an empty directory if
+	// we couldn't even find the path in the first place.
 	err := os.Remove(fullPath)
-	if err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("Failed to remove %q: %v", fullPath, err)
-	}
-
-	err = b.cleanupLogicalPath(path)
-
-	return err
-}
-
-// cleanupLogicalPath is used to remove all empty nodes, begining with deepest
-// one, aborting on first non-empty one, up to top-level node.
-func (b *FileBackend) cleanupLogicalPath(path string) error {
-	nodes := strings.Split(path, fmt.Sprintf("%c", os.PathSeparator))
-	for i := len(nodes) - 1; i > 0; i-- {
-		fullPath := filepath.Join(b.Path, filepath.Join(nodes[:i]...))
-
-		dir, err := os.Open(fullPath)
-		if err != nil {
-			if os.IsNotExist(err) {
-				return nil
-			} else {
-				return err
-			}
-		}
-
-		list, err := dir.Readdir(1)
-		dir.Close()
-		if err != nil && err != io.EOF {
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		} else {
 			return err
 		}
+	}
 
-		// If we have no entries, it's an empty directory; remove it
-		if err == io.EOF || list == nil || len(list) == 0 {
-			err = os.Remove(fullPath)
-			if err != nil {
-				return err
-			}
+	// Check for the directory being empty and remove if so, with another
+	// additional guard for the path not existing
+	dir, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		} else {
+			return err
+		}
+	}
+
+	list, err := dir.Readdir(1)
+	dir.Close()
+	if err != nil && err != io.EOF {
+		return err
+	}
+
+	// If we have no entries, it's an empty directory; remove it
+	if err == io.EOF || list == nil || len(list) == 0 {
+		err = os.Remove(path)
+		if err != nil {
+			return err
 		}
 	}
 

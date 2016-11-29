@@ -42,7 +42,7 @@ func NewVaultSecretApi(mainConfig config.ConfigHandler) (*VaultSecretApi, error)
 }
 
 func (api *VaultSecretApi) GetSecretFiles(commonName string) (*Secrets, error) {
-	fmt.Println("Generating secret\n")
+	fmt.Println("Generating secret")
 	params := make(map[string]interface{})
 	params["common_name"] = commonName
 

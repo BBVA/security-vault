@@ -109,12 +109,6 @@ type TransportCredentials interface {
 	ServerHandshake(net.Conn) (net.Conn, AuthInfo, error)
 	// Info provides the ProtocolInfo of this TransportCredentials.
 	Info() ProtocolInfo
-	// Clone makes a copy of this TransportCredentials.
-	Clone() TransportCredentials
-	// OverrideServerName overrides the server name used to verify the hostname on the returned certificates from the server.
-	// gRPC internals also use it to override the virtual hosting name if it is set.
-	// It must be called before dialing. Currently, this is only used by grpclb.
-	OverrideServerName(string) error
 }
 
 // TLSInfo contains the auth information for a TLS authenticated connection.
@@ -140,6 +134,16 @@ func (c tlsCreds) Info() ProtocolInfo {
 		SecurityVersion:  "1.2",
 		ServerName:       c.config.ServerName,
 	}
+}
+
+// GetRequestMetadata returns nil, nil since TLS credentials does not have
+// metadata.
+func (c *tlsCreds) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
+	return nil, nil
+}
+
+func (c *tlsCreds) RequireTransportSecurity() bool {
+	return true
 }
 
 func (c *tlsCreds) ClientHandshake(ctx context.Context, addr string, rawConn net.Conn) (_ net.Conn, _ AuthInfo, err error) {
@@ -178,15 +182,6 @@ func (c *tlsCreds) ServerHandshake(rawConn net.Conn) (net.Conn, AuthInfo, error)
 	return conn, TLSInfo{conn.ConnectionState()}, nil
 }
 
-func (c *tlsCreds) Clone() TransportCredentials {
-	return NewTLS(c.config)
-}
-
-func (c *tlsCreds) OverrideServerName(serverNameOverride string) error {
-	c.config.ServerName = serverNameOverride
-	return nil
-}
-
 // NewTLS uses c to construct a TransportCredentials based on TLS.
 func NewTLS(c *tls.Config) TransportCredentials {
 	tc := &tlsCreds{cloneTLSConfig(c)}
@@ -195,16 +190,16 @@ func NewTLS(c *tls.Config) TransportCredentials {
 }
 
 // NewClientTLSFromCert constructs a TLS from the input certificate for client.
-// serverNameOverride is for testing only. If set to a non empty string,
-// it will override the virtual host name of authority (e.g. :authority header field) in requests.
-func NewClientTLSFromCert(cp *x509.CertPool, serverNameOverride string) TransportCredentials {
-	return NewTLS(&tls.Config{ServerName: serverNameOverride, RootCAs: cp})
+// serverNameOverwrite is for testing only. If set to a non empty string,
+// it will overwrite the virtual host name of authority (e.g. :authority header field) in requests.
+func NewClientTLSFromCert(cp *x509.CertPool, serverNameOverwrite string) TransportCredentials {
+	return NewTLS(&tls.Config{ServerName: serverNameOverwrite, RootCAs: cp})
 }
 
 // NewClientTLSFromFile constructs a TLS from the input certificate file for client.
-// serverNameOverride is for testing only. If set to a non empty string,
-// it will override the virtual host name of authority (e.g. :authority header field) in requests.
-func NewClientTLSFromFile(certFile, serverNameOverride string) (TransportCredentials, error) {
+// serverNameOverwrite is for testing only. If set to a non empty string,
+// it will overwrite the virtual host name of authority (e.g. :authority header field) in requests.
+func NewClientTLSFromFile(certFile, serverNameOverwrite string) (TransportCredentials, error) {
 	b, err := ioutil.ReadFile(certFile)
 	if err != nil {
 		return nil, err
@@ -213,7 +208,7 @@ func NewClientTLSFromFile(certFile, serverNameOverride string) (TransportCredent
 	if !cp.AppendCertsFromPEM(b) {
 		return nil, fmt.Errorf("credentials: failed to append certificates")
 	}
-	return NewTLS(&tls.Config{ServerName: serverNameOverride, RootCAs: cp}), nil
+	return NewTLS(&tls.Config{ServerName: serverNameOverwrite, RootCAs: cp}), nil
 }
 
 // NewServerTLSFromCert constructs a TLS from the input certificate for server.

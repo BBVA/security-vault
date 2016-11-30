@@ -12,6 +12,7 @@ import (
 
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 	"descinet.bbva.es/cloudframe-security-vault/persistence"
+	"io"
 )
 
 type Connector interface {
@@ -19,11 +20,16 @@ type Connector interface {
 	eventHandler(msg *events.Message)
 }
 
+type DockerClient interface {
+	Events(ctx context.Context, options types.EventsOptions) (io.ReadCloser, error)
+	CopyToContainer(ctx context.Context, container, path string, content io.Reader, options types.CopyToContainerOptions) error
+}
+
 type DockerConnector struct {
 	secretApiHandler SecretApi.SecretApi
-	cli              *client.Client
+	cli              DockerClient
 	path             string
-	dockerClient     func() (*client.Client, error)
+	dockerClient     func() (DockerClient, error)
 	persistenceChannel chan persistence.LeaseEvent
 }
 
@@ -70,7 +76,7 @@ func (c *DockerConnector) Start() error {
 
 }
 
-func getDockerClient() (*client.Client, error) {
+func getDockerClient() (DockerClient, error) {
 	defaultHeaders := map[string]string{"User-Agent": "engine-api-cli-1.0"}
 	return client.NewClient("unix:///var/run/docker.sock", "v1.22", nil, defaultHeaders)
 }

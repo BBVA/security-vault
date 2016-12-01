@@ -5,8 +5,8 @@ import (
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"descinet.bbva.es/cloudframe-security-vault/persistence"
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
-	"github.com/facebookgo/inject"
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+	"github.com/facebookgo/inject"
 )
 
 func main() {
@@ -25,19 +25,23 @@ func main() {
 		panic(err.Error())
 	}
 
-
 	persistenceCfg := &persistence.PersistenceManager{}
-	if err := inject.Populate(persistenceCfg,&filesystem.DefaultFileUtils{}); err != nil {
+	if err := inject.Populate(persistenceCfg, &filesystem.DefaultFileUtils{}); err != nil {
 		panic(err.Error())
 	}
-	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg,persistenceCfg)
+	persistenceChannel, persistenceManager := persistence.NewPersistenceManager(cfg, persistenceCfg)
 	if err := persistenceManager.RecoverLeases(); err != nil {
 		panic(err.Error())
 	}
 
 	go persistenceManager.Run()
 
-	connector := EventConnector.NewConnector(secretApiHandler, cfg, persistenceChannel)
+	cli, err := EventConnector.GetDockerClient()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	connector := EventConnector.NewConnector(secretApiHandler, cfg, cli, persistenceChannel)
 
 	connector.Start()
 

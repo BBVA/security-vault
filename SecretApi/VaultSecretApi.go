@@ -1,10 +1,11 @@
 package SecretApi
 
 import (
-	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 	"fmt"
-	vault "github.com/hashicorp/vault/api"
 	"path/filepath"
+
+	"descinet.bbva.es/cloudframe-security-vault/utils/config"
+	vault "github.com/hashicorp/vault/api"
 )
 
 type VaultSecretApi struct {
@@ -35,9 +36,9 @@ func NewVaultSecretApi(mainConfig config.ConfigHandler) (*VaultSecretApi, error)
 	client.SetAddress(mainConfig.GetVaultServer())
 
 	return &VaultSecretApi{
-		client:             client,
-		role:               mainConfig.GetRole(),
-		config:             mainConfig,
+		client: client,
+		role:   mainConfig.GetRole(),
+		config: mainConfig,
 	}, nil
 }
 
@@ -54,12 +55,12 @@ func (api *VaultSecretApi) GetSecretFiles(commonName string) (*Secrets, error) {
 	}
 
 	return &Secrets{
-		Public: secrets.Data["certificate"].(string),
-		Private: secrets.Data["private_key"].(string),
-		Cacert: secrets.Data["issuing_ca"].(string),
-		LeaseID: secrets.LeaseID,
+		Public:        secrets.Data["certificate"].(string),
+		Private:       secrets.Data["private_key"].(string),
+		Cacert:        secrets.Data["issuing_ca"].(string),
+		LeaseID:       secrets.LeaseID,
 		LeaseDuration: secrets.LeaseDuration,
-		Renewable: secrets.Renewable,
+		Renewable:     secrets.Renewable,
 	}, nil
 
 }

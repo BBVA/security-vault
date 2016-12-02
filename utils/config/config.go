@@ -1,9 +1,9 @@
 package config
 
 import (
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"errors"
 	"fmt"
-	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type ConfigHandler interface {
@@ -26,7 +26,7 @@ func (c *Config) ReadConfig() error {
 	fmt.Println("Reading environment...")
 
 	configMap := make(map[string]string)
-	
+
 	configMap["vaultServer"] = c.FileUtils.Getenv("VAULT_SERVER")
 	configMap["tokenPath"] = c.FileUtils.Getenv("TOKEN_PATH")
 	configMap["secretPath"] = c.FileUtils.Getenv("SECRET_PATH")
@@ -76,7 +76,7 @@ func (c Config) Get(key string) (string, error) {
 	}
 }
 
-func (c Config)validateConfiguration() error {
+func (c Config) validateConfiguration() error {
 	for k, v := range c.cfg {
 		if len(v) == 0 {
 			return errors.New(fmt.Sprintf("Undefined configuration: %s", k))

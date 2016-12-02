@@ -48,7 +48,7 @@ func (f *FakeDirUtils) ReadDir(dir string) ([]os.FileInfo, error) {
 }
 
 type FakeFileInfo struct {
-	name string
+	name  string
 	isDir bool
 }
 

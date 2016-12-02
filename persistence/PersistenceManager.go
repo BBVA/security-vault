@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"path/filepath"
-        "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
+
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
+	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 )
 
 type LeaseInfo struct {
@@ -28,10 +29,10 @@ type PersistenceManager struct {
 	config             config.ConfigHandler
 	persistenceChannel chan LeaseEvent
 	leases             map[string]LeaseInfo
-	FileUtils filesystem.FileUtils `inject:""`
+	FileUtils          filesystem.FileUtils `inject:""`
 }
 
-func NewPersistenceManager(cfg config.ConfigHandler,persistenceCfg *PersistenceManager) (chan LeaseEvent, *PersistenceManager) {
+func NewPersistenceManager(cfg config.ConfigHandler, persistenceCfg *PersistenceManager) (chan LeaseEvent, *PersistenceManager) {
 
 	leases := make(map[string]LeaseInfo)
 	persistenceChannel := make(chan LeaseEvent)
@@ -75,7 +76,7 @@ func (p *PersistenceManager) RecoverLeases() error {
 
 func (p *PersistenceManager) Run() {
 	path := p.config.GetPersistencePath()
-	Infinity:
+Infinity:
 	for {
 		select {
 		case event := <-p.persistenceChannel:

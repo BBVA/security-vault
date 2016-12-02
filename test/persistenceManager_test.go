@@ -268,7 +268,7 @@ func TestPersistenceManager_Run(t *testing.T) {
 
 		go persistenceManager.Run()
 
-		for _,event := range fixture.events {
+		for _, event := range fixture.events {
 			persistenceChannel <- event
 		}
 
@@ -280,4 +280,3 @@ func TestPersistenceManager_Run(t *testing.T) {
 		fixture.fileUtils.remove.Report(t, i)
 	}
 }
-

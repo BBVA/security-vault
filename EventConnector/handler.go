@@ -1,15 +1,16 @@
 package EventConnector
 
 import (
+	"bytes"
 	"fmt"
+	"time"
+
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
+	"descinet.bbva.es/cloudframe-security-vault/utils/archive"
 	. "github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/events"
 	"golang.org/x/net/context"
-	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
-	"bytes"
-	"descinet.bbva.es/cloudframe-security-vault/persistence"
-	"descinet.bbva.es/cloudframe-security-vault/utils/archive"
-	"time"
 )
 
 func (c *DockerConnector) eventHandler(msg *events.Message) {
@@ -39,7 +40,7 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 			timestamp := time.Now().Unix()
 
 			c.persistenceChannel <- persistence.LeaseEvent{
-				EventType:   "start",
+				EventType:  "start",
 				Identifier: msg.ID,
 				Lease: persistence.LeaseInfo{
 					LeaseID:   secrets.LeaseID,
@@ -55,9 +56,9 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 		}
 
 		event := persistence.LeaseEvent{
-			EventType:   "stop",
+			EventType:  "stop",
 			Identifier: msg.ID,
-			Lease:       persistence.LeaseInfo{},
+			Lease:      persistence.LeaseInfo{},
 		}
 		c.persistenceChannel <- event
 	}

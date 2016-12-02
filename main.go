@@ -41,8 +41,12 @@ func main() {
 		panic(err.Error())
 	}
 
-	connector := EventConnector.NewConnector(secretApiHandler, cfg, cli, persistenceChannel)
+	connector, err := EventConnector.NewConnector(secretApiHandler, cfg, cli, persistenceChannel)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	connector.Start()
+	defer connector.Stop()
 
 }

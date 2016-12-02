@@ -31,20 +31,11 @@ type DockerConnector struct {
 	secretApiHandler   SecretApi.SecretApi
 	cli                DockerClient
 	path               string
+	eventStream        io.ReadCloser
 	persistenceChannel chan persistence.LeaseEvent
 }
 
-func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHandler, client DockerClient, persistenceChannel chan persistence.LeaseEvent) *DockerConnector {
-	return &DockerConnector{
-		secretApiHandler:   secretApiHandler,
-		cli:                client,
-		path:               config.GetSecretPath(),
-		persistenceChannel: persistenceChannel,
-	}
-}
-
-func (c *DockerConnector) Start() error {
-
+func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHandler, client DockerClient, persistenceChannel chan persistence.LeaseEvent) (*DockerConnector, error) {
 	filterArgs := filters.NewArgs()
 	filterArgs.Add("event", "start")
 	filterArgs.Add("event", "stop")
@@ -53,22 +44,37 @@ func (c *DockerConnector) Start() error {
 		Filters: filterArgs,
 	}
 
-	eventsResp, err := c.cli.Events(context.Background(), eventOptions)
+	eventsResp, err := client.Events(context.Background(), eventOptions)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer eventsResp.Close()
 
+	return &DockerConnector{
+		secretApiHandler:   secretApiHandler,
+		cli:                client,
+		path:               config.GetSecretPath(),
+		eventStream:        eventsResp,
+		persistenceChannel: persistenceChannel,
+	}, nil
+}
+
+func (c *DockerConnector) Start() error {
 	log.Println("Entering event listening Loop")
-	d := json.NewDecoder(eventsResp)
+	d := json.NewDecoder(c.eventStream)
 	for {
 		msg := &events.Message{}
-		d.Decode(msg)
+		err := d.Decode(msg)
+		if err != nil {
+			return err
+		}
 
 		go c.eventHandler(msg)
 
 	}
+}
 
+func (c *DockerConnector) Stop() error {
+	return c.eventStream.Close()
 }
 
 func GetDockerClient() (DockerClient, error) {

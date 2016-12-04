@@ -30,7 +30,7 @@ type PersistenceManager struct {
 	persistenceChannel chan LeaseEvent
 	leases             map[string]LeaseInfo
 	leaseMutex	   sync.RWMutex
-	FileUtils filesystem.FileUtils `inject:""`
+	FileUtils          filesystem.FileUtils `inject:""`
 }
 
 func NewPersistenceManager(cfg config.ConfigHandler,persistenceCfg *PersistenceManager) (chan LeaseEvent, *PersistenceManager) {

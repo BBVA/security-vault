@@ -1,18 +1,20 @@
 package EventConnector
 
 import (
-	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"encoding/json"
+	"log"
+
+	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
 	"github.com/docker/engine-api/client"
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/events"
 	"github.com/docker/engine-api/types/filters"
 	"golang.org/x/net/context"
-	"log"
 
-	"descinet.bbva.es/cloudframe-security-vault/utils/config"
-	"descinet.bbva.es/cloudframe-security-vault/persistence"
 	"io"
+
+	"descinet.bbva.es/cloudframe-security-vault/persistence"
+	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 )
 
 type Connector interface {
@@ -26,30 +28,14 @@ type DockerClient interface {
 }
 
 type DockerConnector struct {
-	secretApiHandler SecretApi.SecretApi
-	cli              DockerClient
-	path             string
-	dockerClient     func() (DockerClient, error)
+	secretApiHandler   SecretApi.SecretApi
+	cli                DockerClient
+	path               string
+	eventStream        io.ReadCloser
 	persistenceChannel chan persistence.LeaseEvent
 }
 
-func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHandler, persistenceChannel chan persistence.LeaseEvent) *DockerConnector {
-	return &DockerConnector{
-		secretApiHandler: secretApiHandler,
-		path:             config.GetSecretPath(),
-		dockerClient:     getDockerClient,
-		persistenceChannel: persistenceChannel,
-	}
-}
-
-func (c *DockerConnector) Start() error {
-
-	cli, err := c.dockerClient()
-	if err != nil {
-		log.Printf("Could not get Docker client: %s", err)
-	}
-	c.cli = cli
-
+func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHandler, client DockerClient, persistenceChannel chan persistence.LeaseEvent) (*DockerConnector, error) {
 	filterArgs := filters.NewArgs()
 	filterArgs.Add("event", "start")
 	filterArgs.Add("event", "stop")
@@ -58,25 +44,40 @@ func (c *DockerConnector) Start() error {
 		Filters: filterArgs,
 	}
 
-	eventsResp, err := cli.Events(context.Background(), eventOptions)
+	eventsResp, err := client.Events(context.Background(), eventOptions)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer eventsResp.Close()
 
+	return &DockerConnector{
+		secretApiHandler:   secretApiHandler,
+		cli:                client,
+		path:               config.GetSecretPath(),
+		eventStream:        eventsResp,
+		persistenceChannel: persistenceChannel,
+	}, nil
+}
+
+func (c *DockerConnector) Start() error {
 	log.Println("Entering event listening Loop")
-	d := json.NewDecoder(eventsResp)
+	d := json.NewDecoder(c.eventStream)
 	for {
 		msg := &events.Message{}
-		d.Decode(msg)
+		err := d.Decode(msg)
+		if err != nil {
+			return err
+		}
 
 		go c.eventHandler(msg)
 
 	}
-
 }
 
-func getDockerClient() (DockerClient, error) {
+func (c *DockerConnector) Stop() error {
+	return c.eventStream.Close()
+}
+
+func GetDockerClient() (DockerClient, error) {
 	defaultHeaders := map[string]string{"User-Agent": "engine-api-cli-1.0"}
 	return client.NewClient("unix:///var/run/docker.sock", "v1.22", nil, defaultHeaders)
 }

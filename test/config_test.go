@@ -1,11 +1,11 @@
 package test
 
 import (
-	"testing"
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
+	"errors"
 	"github.com/facebookgo/inject"
 	"reflect"
-	"errors"
+	"testing"
 )
 
 func TestConfig_ReadConfig(t *testing.T) {
@@ -24,10 +24,10 @@ func TestConfig_ReadConfig(t *testing.T) {
 			fileUtils: FakeFileUtils{
 				readEnv: ReadEnvTestMetrics{
 					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
+						"VAULT_SERVER":     "test",
+						"TOKEN_PATH":       "test",
+						"SECRET_PATH":      "test",
+						"ROLE":             "test",
 						"PERSISTENCE_PATH": "",
 					},
 					MethodCallMetrics: DefaultReadEnvCallMetrics(),
@@ -40,9 +40,9 @@ func TestConfig_ReadConfig(t *testing.T) {
 				readEnv: ReadEnvTestMetrics{
 					content: map[string]string{
 						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
-						"ROLE": "test",
+						"TOKEN_PATH":   "test",
+						"SECRET_PATH":  "test",
+						"ROLE":         "test",
 					},
 					MethodCallMetrics: DefaultReadEnvCallMetrics(),
 				},
@@ -53,9 +53,9 @@ func TestConfig_ReadConfig(t *testing.T) {
 			fileUtils: FakeFileUtils{
 				readEnv: ReadEnvTestMetrics{
 					content: map[string]string{
-						"VAULT_SERVER": "test",
-						"TOKEN_PATH": "test",
-						"SECRET_PATH": "test",
+						"VAULT_SERVER":     "test",
+						"TOKEN_PATH":       "test",
+						"SECRET_PATH":      "test",
 						"PERSISTENCE_PATH": "test",
 					},
 					MethodCallMetrics: DefaultReadEnvCallMetrics(),
@@ -63,7 +63,6 @@ func TestConfig_ReadConfig(t *testing.T) {
 			},
 			expectedResponse: errors.New("Undefined configuration: role"),
 		},
-
 	}
 
 	for i, fixture := range fixtures {
@@ -91,24 +90,24 @@ func TestConfig_GetToken(t *testing.T) {
 			fileUtils: FakeFileUtils{
 				readEnv: DefaultReadEnvMetrics(),
 				readFile: ReadFileTestMetrics{
-					content: "token",
+					content:           "token",
 					MethodCallMetrics: DefaultReadFileCallMetrics(),
 				},
 			},
 			expectedContent: "token",
-			expectedError: nil,
+			expectedError:   nil,
 		},
 		{
 			fileUtils: FakeFileUtils{
 				readEnv: DefaultReadEnvMetrics(),
 				readFile: ReadFileTestMetrics{
-					content: "",
-					error: errors.New("error"),
+					content:           "",
+					error:             errors.New("error"),
 					MethodCallMetrics: DefaultReadFileCallMetrics(),
 				},
 			},
 			expectedContent: "",
-			expectedError: errors.New("error"),
+			expectedError:   errors.New("error"),
 		},
 	}
 
@@ -124,7 +123,7 @@ func TestConfig_GetToken(t *testing.T) {
 		token, err := cfg.GetToken()
 		fixture.fileUtils.readFile.Report(t, i)
 
-		if (token != fixture.expectedContent) {
+		if token != fixture.expectedContent {
 			t.Errorf("%d - Expected Token %v, Received %v\n", i, fixture.expectedContent, token)
 		}
 
@@ -145,17 +144,17 @@ func TestConfig_Get(t *testing.T) {
 			fileUtils: FakeFileUtils{
 				readEnv: DefaultReadEnvMetrics(),
 			},
-			testKey: "role",
+			testKey:         "role",
 			expectedContent: "test",
-			expectedError: nil,
+			expectedError:   nil,
 		},
 		{
 			fileUtils: FakeFileUtils{
 				readEnv: DefaultReadEnvMetrics(),
 			},
-			testKey: "undefined",
+			testKey:         "undefined",
 			expectedContent: "",
-			expectedError: errors.New("Missing Key: undefined"),
+			expectedError:   errors.New("Missing Key: undefined"),
 		},
 	}
 
@@ -170,7 +169,7 @@ func TestConfig_Get(t *testing.T) {
 
 		value, err := cfg.Get(fixture.testKey)
 
-		if (value != fixture.expectedContent) {
+		if value != fixture.expectedContent {
 			t.Errorf("%d - Expected Value %v, Received %v\n", i, fixture.expectedContent, value)
 		}
 
@@ -182,14 +181,14 @@ func TestConfig_Get(t *testing.T) {
 
 func DefaultReadEnvCallMetrics() MethodCallMetrics {
 	return MethodCallMetrics{
-		method: "Readenv",
+		method:        "Readenv",
 		expectedCalls: 5,
 	}
 }
 
 func DefaultReadFileCallMetrics() MethodCallMetrics {
 	return MethodCallMetrics{
-		method: "ReadFile",
+		method:        "ReadFile",
 		expectedCalls: 1,
 	}
 }
@@ -197,10 +196,10 @@ func DefaultReadFileCallMetrics() MethodCallMetrics {
 func DefaultReadEnvMetrics() ReadEnvTestMetrics {
 	return ReadEnvTestMetrics{
 		content: map[string]string{
-			"VAULT_SERVER": "test",
-			"TOKEN_PATH": "test",
-			"SECRET_PATH": "test",
-			"ROLE": "test",
+			"VAULT_SERVER":     "test",
+			"TOKEN_PATH":       "test",
+			"SECRET_PATH":      "test",
+			"ROLE":             "test",
 			"PERSISTENCE_PATH": "test",
 		},
 		MethodCallMetrics: DefaultReadEnvCallMetrics(),

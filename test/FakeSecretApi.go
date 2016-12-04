@@ -1,11 +1,9 @@
 package test
 
-import (
-	"bytes"
-)
+import "descinet.bbva.es/cloudframe-security-vault/SecretApi"
 
 type GetSecretFilesTestMetrics struct {
-	secrets *bytes.Buffer
+	secrets SecretApi.Secrets
 	error   error
 	MethodCallMetrics
 }
@@ -20,9 +18,9 @@ type FakeSecretApi struct {
 	deleteSecretsTestMetrics  DeleteSecretsTestMetrics
 }
 
-func (f *FakeSecretApi) GetSecretFiles() (*bytes.Buffer, error) {
+func (f *FakeSecretApi) GetSecretFiles(string) (*SecretApi.Secrets, error) {
 	f.getSecretFilesTestMetrics.Call()
-	return f.getSecretFilesTestMetrics.secrets, f.getSecretFilesTestMetrics.error
+	return &f.getSecretFilesTestMetrics.secrets, f.getSecretFilesTestMetrics.error
 
 }
 

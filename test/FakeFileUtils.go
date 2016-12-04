@@ -22,7 +22,7 @@ type ReadEnvTestMetrics struct {
 }
 type ReadDirTestMetrics struct {
 	content []os.FileInfo
-	error error
+	error   error
 	MethodCallMetrics
 }
 type RemoveTestMetrics struct {
@@ -35,7 +35,7 @@ type FakeFileUtils struct {
 	readFile  ReadFileTestMetrics
 	readEnv   ReadEnvTestMetrics
 	readDir   ReadDirTestMetrics
-	remove	  RemoveTestMetrics
+	remove    RemoveTestMetrics
 }
 
 func (f *FakeFileUtils) WriteFile(file string, content []byte, perm os.FileMode) error {
@@ -51,7 +51,7 @@ func (f *FakeFileUtils) ReadFile(file string) ([]byte, error) {
 
 func (f *FakeFileUtils) Getenv(env string) string {
 	f.readEnv.Call()
-	value, ok := f.readEnv.content[env];
+	value, ok := f.readEnv.content[env]
 	if ok {
 		return value
 	} else {

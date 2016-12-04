@@ -9,7 +9,7 @@ type FileUtils interface {
 	WriteFile(file string, content []byte, perm os.FileMode) error
 	ReadFile(file string) ([]byte, error)
 	ReadDir(path string) ([]os.FileInfo, error)
-	Remove (name string) error
+	Remove(name string) error
 	Getenv(string) string
 }
 

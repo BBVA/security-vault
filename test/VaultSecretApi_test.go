@@ -3,13 +3,13 @@ package test
 import (
 	"testing"
 
-	"descinet.bbva.es/cloudframe-security-vault/utils/config"
-	"github.com/facebookgo/inject"
 	"descinet.bbva.es/cloudframe-security-vault/SecretApi"
-	"net/http/httptest"
-	"net/http"
-	"reflect"
+	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 	"errors"
+	"github.com/facebookgo/inject"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
 	"strings"
 )
 
@@ -40,29 +40,26 @@ func TestFakeExampleSecretApi_GetSecretFiles(t *testing.T) {
 
 	fixtures := []GetSecretFilesFixture{
 		{
-			vaultBody: response,
-			vaultResponse:http.StatusOK,
-			role: "test",
+			vaultBody:     response,
+			vaultResponse: http.StatusOK,
+			role:          "test",
 			secrets: &SecretApi.Secrets{
-				Cacert: "issuing-ca",
-				Private: "private-key",
-				Public: "public",
+				Cacert:        "issuing-ca",
+				Private:       "private-key",
+				Public:        "public",
 				LeaseDuration: 21600,
-				LeaseID: "pki/issue/cloudframe-dot-wtf/7ad6cfa5-f04f-c62a-d477-f33210475d05",
-				Renewable: false,
+				LeaseID:       "pki/issue/cloudframe-dot-wtf/7ad6cfa5-f04f-c62a-d477-f33210475d05",
+				Renewable:     false,
 			},
 			expectedResponse: nil,
-
 		},
 		{
-			vaultBody: []byte("{}"),
-			vaultResponse:http.StatusNotFound,
-			role: "test",
-			secrets: nil,
+			vaultBody:        []byte("{}"),
+			vaultResponse:    http.StatusNotFound,
+			role:             "test",
+			secrets:          nil,
 			expectedResponse: errors.New("Error making API request."),
-
 		},
-
 	}
 
 	for i, fixture := range fixtures {
@@ -104,17 +101,17 @@ func setupConfiguration(address, token string) (config.ConfigHandler, error) {
 	fileUtils := FakeFileUtils{
 		readEnv: ReadEnvTestMetrics{
 			content: map[string]string{
-				"VAULT_SERVER": address,
-				"TOKEN_PATH": "test",
-				"SECRET_PATH": "test",
-				"ROLE": "test",
+				"VAULT_SERVER":     address,
+				"TOKEN_PATH":       "test",
+				"SECRET_PATH":      "test",
+				"ROLE":             "test",
 				"PERSISTENCE_PATH": "test",
 			},
 			MethodCallMetrics: DefaultReadEnvCallMetrics(),
 		},
 		readFile: ReadFileTestMetrics{
-			content: token,
-			error: nil,
+			content:           token,
+			error:             nil,
 			MethodCallMetrics: DefaultReadFileCallMetrics(),
 		},
 	}

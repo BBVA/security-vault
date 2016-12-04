@@ -6,6 +6,7 @@ import (
 	"path/filepath"
         "descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
+	"sync"
 )
 
 type LeaseInfo struct {
@@ -28,6 +29,7 @@ type PersistenceManager struct {
 	config             config.ConfigHandler
 	persistenceChannel chan LeaseEvent
 	leases             map[string]LeaseInfo
+	leaseMutex	   sync.RWMutex
 	FileUtils filesystem.FileUtils `inject:""`
 }
 
@@ -66,8 +68,9 @@ func (p *PersistenceManager) RecoverLeases() error {
 			return err
 		}
 		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", file.Name(), lease.LeaseID, lease.LeaseTime, lease.Renewable, lease.Timestamp)
-
+		p.leaseMutex.Lock()
 		p.leases[file.Name()] = lease
+		p.leaseMutex.Unlock()
 	}
 
 	return nil
@@ -84,7 +87,9 @@ func (p *PersistenceManager) Run() {
 			switch event.EventType {
 			case "start":
 				fmt.Println("Start event processing")
+				p.leaseMutex.Lock()
 				p.leases[event.Identifier] = event.Lease
+				p.leaseMutex.Unlock()
 				bytes, err := json.Marshal(&event.Lease)
 				if err != nil {
 					panic(err.Error())
@@ -96,10 +101,11 @@ func (p *PersistenceManager) Run() {
 				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", event.Identifier, event.Lease.LeaseID, event.Lease.LeaseTime, event.Lease.Renewable, event.Lease.Timestamp)
 			case "stop":
 				fmt.Println("Stop event processing")
+				p.leaseMutex.Lock()
 				_, ok := p.leases[event.Identifier]
 				if ok {
 					delete(p.leases, event.Identifier)
-
+					p.leaseMutex.Unlock()
 					file := filepath.Join(path, event.Identifier)
 					if err := p.FileUtils.Remove(file); err != nil {
 						panic(err.Error())

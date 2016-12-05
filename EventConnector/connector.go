@@ -39,6 +39,7 @@ func NewConnector(secretApiHandler SecretApi.SecretApi, config config.ConfigHand
 	filterArgs := filters.NewArgs()
 	filterArgs.Add("event", "start")
 	filterArgs.Add("event", "stop")
+	filterArgs.Add("event", "die")
 
 	eventOptions := types.EventsOptions{
 		Filters: filterArgs,

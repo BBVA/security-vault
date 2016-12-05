@@ -113,7 +113,7 @@ func (p *PersistenceManager) Run() {
 					}
 					fmt.Printf("Deleted file: %s\n", file)
 				}
-			case "die":
+			case "dieHard":
 				fmt.Printf("Die switch triggered\n. Stopping persistance manager")
 				break Infinity
 			}

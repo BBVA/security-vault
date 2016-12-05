@@ -273,7 +273,7 @@ func TestPersistenceManager_Run(t *testing.T) {
 		}
 
 		persistenceChannel <- persistence.LeaseEvent{
-			EventType: "die",
+			EventType: "dieHard",
 		}
 		fixture.fileUtils.readEnv.Report(t, i)
 		fixture.fileUtils.writeFile.Report(t, i)

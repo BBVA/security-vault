@@ -15,8 +15,8 @@ import (
 
 func (c *DockerConnector) eventHandler(msg *events.Message) {
 	fmt.Printf("Received:\n Action %v\nActor %v\nFrom %v\nID %v\nStatus %v\nTime %v\nTimenano %v\nType %v\n", msg.Action, msg.Actor, msg.From, msg.ID, msg.Status, msg.Time, msg.TimeNano, msg.Type)
-	switch msg.Action {
-	case "start":
+	switch {
+	case msg.Action == "start":
 		id, ok := msg.Actor.Attributes["common_name"]
 		if ok {
 			fmt.Println("label detected!")
@@ -25,7 +25,7 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 			}
 
 		}
-	case "stop":
+	case (msg.Action == "stop" || msg.Action == "die"):
 		if err := c.secretApiHandler.DeleteSecrets(msg.ID); err != nil {
 			panic(err.Error())
 		}

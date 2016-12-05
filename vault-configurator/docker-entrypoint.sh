@@ -26,4 +26,4 @@ vault mount pki
 vault mount-tune -max-lease-ttl=87600h pki
 vault write pki/root/generate/internal common_name=ca.cloudframe.wtf ttl=87600h
 vault write pki/config/urls issuing_certificates="http://vault-server:8200/v1/pki/ca" crl_distribution_points="http://vault-server:8200/v1/pki/crl"
-vault write pki/roles/cloudframe-dot-wtf allowed_domains="cloudframe.wtf" allow_subdomains="true" max_ttl="72h"
+vault write pki/roles/cloudframe-dot-wtf allowed_domains="cloudframe.wtf" allow_subdomains="true" max_ttl="10m"

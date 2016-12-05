@@ -14,6 +14,7 @@ type LeaseInfo struct {
 	LeaseTime int    `json:"lease_time"`
 	Renewable bool   `json:"renewable"`
 	Timestamp int64  `json:"timestamp"`
+	CommonName string `json:"common_name"`
 }
 type LeaseEvent struct {
 	EventType  string
@@ -28,8 +29,8 @@ type PersistenceObject struct {
 type PersistenceManager struct {
 	config             config.ConfigHandler
 	persistenceChannel chan LeaseEvent
-	leases             map[string]LeaseInfo
-	leaseMutex	   sync.RWMutex
+	Leases             map[string]LeaseInfo
+	LeaseMutex	   sync.RWMutex
 	FileUtils          filesystem.FileUtils `inject:""`
 }
 
@@ -39,7 +40,7 @@ func NewPersistenceManager(cfg config.ConfigHandler,persistenceCfg *PersistenceM
 	persistenceChannel := make(chan LeaseEvent)
 
 	return persistenceChannel, &PersistenceManager{
-		leases:             leases,
+		Leases:             leases,
 		persistenceChannel: persistenceChannel,
 		config:             cfg,
 		FileUtils:          persistenceCfg.FileUtils,
@@ -68,9 +69,9 @@ func (p *PersistenceManager) RecoverLeases() error {
 			return err
 		}
 		fmt.Printf("Succesfully read persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", file.Name(), lease.LeaseID, lease.LeaseTime, lease.Renewable, lease.Timestamp)
-		p.leaseMutex.Lock()
-		p.leases[file.Name()] = lease
-		p.leaseMutex.Unlock()
+		p.LeaseMutex.Lock()
+		p.Leases[file.Name()] = lease
+		p.LeaseMutex.Unlock()
 	}
 
 	return nil
@@ -87,9 +88,9 @@ func (p *PersistenceManager) Run() {
 			switch event.EventType {
 			case "start":
 				fmt.Println("Start event processing")
-				p.leaseMutex.Lock()
-				p.leases[event.Identifier] = event.Lease
-				p.leaseMutex.Unlock()
+				p.LeaseMutex.Lock()
+				p.Leases[event.Identifier] = event.Lease
+				p.LeaseMutex.Unlock()
 				bytes, err := json.Marshal(&event.Lease)
 				if err != nil {
 					panic(err.Error())
@@ -101,11 +102,11 @@ func (p *PersistenceManager) Run() {
 				fmt.Printf("Succesfully write persistence information for containerID: %s\nleaseID: %s\nleasetime: %v\nrenewable: %v\ntimestamp: v%\n", event.Identifier, event.Lease.LeaseID, event.Lease.LeaseTime, event.Lease.Renewable, event.Lease.Timestamp)
 			case "stop":
 				fmt.Println("Stop event processing")
-				p.leaseMutex.Lock()
-				_, ok := p.leases[event.Identifier]
+				p.LeaseMutex.Lock()
+				_, ok := p.Leases[event.Identifier]
 				if ok {
-					delete(p.leases, event.Identifier)
-					p.leaseMutex.Unlock()
+					delete(p.Leases, event.Identifier)
+					p.LeaseMutex.Unlock()
 					file := filepath.Join(path, event.Identifier)
 					if err := p.FileUtils.Remove(file); err != nil {
 						panic(err.Error())

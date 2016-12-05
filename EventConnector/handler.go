@@ -20,35 +20,10 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 		id, ok := msg.Actor.Attributes["common_name"]
 		if ok {
 			fmt.Println("label detected!")
-			secrets, err := c.secretApiHandler.GetSecretFiles(id)
-			if err != nil {
+			if err := c.CopySecretsToContainer(id, msg.ID); err != nil {
 				panic(err.Error())
 			}
 
-			tarball, err := secretsToTarball(secrets)
-			if err != nil {
-				panic(err.Error())
-			}
-
-			opts := CopyToContainerOptions{
-				AllowOverwriteDirWithFile: false,
-			}
-			if err := c.cli.CopyToContainer(context.Background(), msg.ID, c.path, tarball, opts); err != nil {
-				panic(err.Error())
-			}
-
-			timestamp := time.Now().Unix()
-
-			c.persistenceChannel <- persistence.LeaseEvent{
-				EventType:  "start",
-				Identifier: msg.ID,
-				Lease: persistence.LeaseInfo{
-					LeaseID:   secrets.LeaseID,
-					LeaseTime: secrets.LeaseDuration,
-					Renewable: secrets.Renewable,
-					Timestamp: timestamp,
-				},
-			}
 		}
 	case "stop":
 		if err := c.secretApiHandler.DeleteSecrets(msg.ID); err != nil {
@@ -62,6 +37,41 @@ func (c *DockerConnector) eventHandler(msg *events.Message) {
 		}
 		c.persistenceChannel <- event
 	}
+}
+
+func (c *DockerConnector) CopySecretsToContainer(common_name string,containerID string ) error {
+
+	secrets, err := c.secretApiHandler.GetSecretFiles(common_name)
+	if err != nil {
+		return err
+	}
+
+	tarball, err := secretsToTarball(secrets)
+	if err != nil {
+		return err
+	}
+
+	opts := CopyToContainerOptions{
+		AllowOverwriteDirWithFile: false,
+	}
+	if err := c.cli.CopyToContainer(context.Background(), containerID, c.path, tarball, opts); err != nil {
+		return err
+	}
+
+	timestamp := time.Now().Unix()
+
+	c.persistenceChannel <- persistence.LeaseEvent{
+		EventType:  "start",
+		Identifier: containerID,
+		Lease: persistence.LeaseInfo{
+			CommonName: common_name,
+			LeaseID:   secrets.LeaseID,
+			LeaseTime: secrets.LeaseDuration,
+			Renewable: secrets.Renewable,
+			Timestamp: timestamp,
+		},
+	}
+	return nil
 }
 
 func secretsToTarball(secrets *SecretApi.Secrets) (*bytes.Buffer, error) {

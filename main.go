@@ -7,6 +7,7 @@ import (
 	"descinet.bbva.es/cloudframe-security-vault/utils/config"
 	"descinet.bbva.es/cloudframe-security-vault/utils/filesystem"
 	"github.com/facebookgo/inject"
+	"descinet.bbva.es/cloudframe-security-vault/leases"
 )
 
 func main() {
@@ -46,7 +47,10 @@ func main() {
 		panic(err.Error())
 	}
 
+	go leaseManager.Run(persistenceManager,connector)
 	connector.Start()
 	defer connector.Stop()
+
+
 
 }

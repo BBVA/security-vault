@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-export CONTAINER_NAME="security-vault"
-export SERVICE_NAME="cloudframe-${CONTAINER_NAME}"
-export SOURCE_PACKAGE="descinet.bbva.es"
-export AT_DOCKER_NAME="security-vault-at"  # defined in ../deploy/acceptance-test/docker-compose.yml
+export CONTAINER_NAME="security-vault"                  # Name of the container
+export SERVICE_NAME="${CONTAINER_NAME}"      # Name of the service, advised to match project folder
+export SOURCE_PACKAGE="descinet.bbva.es"                # Package where the project resides in the GOPATH
+export AT_DOCKER_NAME="security-vault-at"               # Acceptance Tests container name defined in ../deploy/acceptance-test/docker-compose.yml
 export VAULT_CONFIGURATOR_DOCKER_NAME="vault-configurator"
 export VERSION="0.2.0"
 
-export REGISTRY_URL="894431722748.dkr.ecr.us-east-1.amazonaws.com"
-export STACK_NAME="security-vault"
-export RANCHER_CATALOG_URI="https://descinet.bbva.es/stash/scm/cloudframe/rancher-security-catalog.git"
-export GO_BUILDER=golang:1.7-wheezy
+export REGISTRY_URL="#PLACEHOLDER#"                     # Docker registry url
+export STACK_NAME="security-vault"                      # Rancher stack name
+export RANCHER_CATALOG_URI="#PLACEHOLDER#"              # Rancher catalog url
+export GO_BUILDER=golang:1.7-wheezy                     # Container used to build the application
 
-export GO_PIPELINE_COUNTER=${GO_PIPELINE_COUNTER:-dev}
+export GO_PIPELINE_COUNTER=${GO_PIPELINE_COUNTER:-dev}  # Build number from GOCD pipeline, can be substituted by any build number from any CI tool
 
 function getVersion {
     if [ ! -f "../version" ]; then
